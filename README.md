@@ -4,9 +4,7 @@ My Paperwork
 
 ## Install the dependencies
 ```bash
-yarn
-# or
-npm install
+bun install
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
@@ -17,17 +15,17 @@ quasar dev
 
 ### Lint the files
 ```bash
-yarn lint
+bun lint
 # or
-npm run lint
+bun run lint
 ```
 
 
 ### Format the files
 ```bash
-yarn format
+bun format
 # or
-npm run format
+bun run format
 ```
 
 
