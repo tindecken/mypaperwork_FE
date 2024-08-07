@@ -2,7 +2,7 @@
   "name": "mypaperwork-fe",
   "version": "0.0.1",
   "description": "My Paperwork",
-  "productName": "Mypaperwork",
+  "productName": "My Paperwork",
   "author": "Tindecken <tindecken@gmail.com>",
   "private": true,
   "scripts": {
