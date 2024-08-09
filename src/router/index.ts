@@ -20,7 +20,9 @@ import routes from './routes';
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
-    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory);
+    : process.env.VUE_ROUTER_MODE === 'history'
+    ? createWebHistory
+    : createWebHashHistory;
 
   const Router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
@@ -30,6 +32,25 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
+  });
+
+  Router.beforeEach((to, from, next) => {
+    const user = localStorage.getItem('user');
+    let IsAuthenticated = false;
+    if (user) {
+      const userObject = JSON.parse(user);
+      IsAuthenticated = !!userObject.Token;
+    }
+
+    if (to.meta.requiresAuth && !IsAuthenticated) {
+      // if require login but no token --> go to login
+      next({ path: 'login' });
+    } else if (to.meta.requiresUnAuth && IsAuthenticated) {
+      // if no require and has token --> home
+      next({ path: '/' });
+    } else {
+      next();
+    }
   });
 
   return Router;

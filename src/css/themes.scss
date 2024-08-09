@@ -1,0 +1,122 @@
+@use 'sass:map';
+
+$themes: (
+  'quasar': (
+    primary: #1976d2,
+    secondary: #26a69a,
+    accent: #9c27b0,
+    info: #00bcd4,
+    warning: #ffc107,
+    positive: #00c853,
+    negative: #b71c1c,
+  ),
+  'orange': (
+    primary: #ff8c00,
+    secondary: #007bb3,
+    positive: #12b390,
+    negative: #ff4b0d,
+    dark: #413d45,
+    medium: #89868b,
+    light: #cfced0,
+    backdrop: #f4f2ed,
+    active: #fff8f1,
+
+    marginal-bg: #ffbc00,
+    marginal-text: #fff,
+    marginal-btn: rgba(#fff, 0.56),
+    marginal-btn-active: #fff,
+  ),
+  'blue': (
+    primary: #0078b3,
+    secondary: #b38b09,
+    positive: #09b38f,
+    negative: #b33c12,
+    dark: #413d45,
+    medium: #89868b,
+    light: #cfced0,
+    backdrop: #f4f2ed,
+    active: #fff8f1,
+
+    marginal-bg: #0078b3,
+    marginal-text: #fff,
+    marginal-btn: rgba(#fff, 0.56),
+    marginal-btn-active: #fff,
+  ),
+  'high-contrast': (
+    primary: #000,
+    secondary: #000,
+    positive: #000,
+    negative: #000,
+    dark: #000,
+    medium: #000,
+    light: #000,
+    backdrop: #fff,
+    active: #fff,
+
+    marginal-bg: #fff,
+    marginal-text: #000,
+    marginal-btn: rgba(#000, 0.7),
+    marginal-btn-active: #000,
+  ),
+  'synthware': (
+    primary: #ba68c8,
+    secondary: #26c6da,
+    accent: #ffd600,
+    info: #b2ebf2,
+    warning: #ff9100,
+    positive: #00e676,
+    negative: #ff7043,
+    dark: #413d45,
+    light: #cfced0,
+  ),
+  'ocean': (
+    primary: #c8e6c9,
+    secondary: #b2dfdb,
+    accent: #e1bee7,
+    info: #90caf9,
+    warning: #fff59d,
+    positive: #c5e1a5,
+    negative: #ffcc80,
+    dark: #413d45,
+    light: #cfced0,
+  ),
+  'pastels': (
+    primary: #f8bbd0,
+    secondary: #9fa8da,
+    accent: #e6ee9c,
+    info: #80deea,
+    warning: #ffcc80,
+    positive: #00e676,
+    negative: #ef9a9a,
+    dark: #413d45,
+    light: #cfced0,
+  ),
+  'sunset': (
+    primary: #4527a0,
+    secondary: #e65100,
+    accent: #7cb342,
+    info: #00838f,
+    warning: #f9a825,
+    positive: #2e7d32,
+    negative: #b71c1c,
+    dark: #413d45,
+    light: #cfced0,
+  ),
+);
+
+@each $theme, $colors in $themes {
+  [data-theme='#{$theme}'] {
+    @each $name, $color in $colors {
+      .bg-#{$name} {
+        background: $color !important;
+      }
+      .text-#{$name} {
+        color: $color !important;
+      }
+    }
+    .q-field__control,
+    .q-item--active {
+      color: map.get($colors, primary) !important;
+    }
+  }
+}
