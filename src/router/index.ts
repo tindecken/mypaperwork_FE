@@ -36,16 +36,16 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     const user = localStorage.getItem('user');
-    let IsAuthenticated = false;
+    let isAuthenticated = false;
     if (user) {
       const userObject = JSON.parse(user);
-      IsAuthenticated = !!userObject.Token;
+      isAuthenticated = !!userObject.token;
     }
 
-    if (to.meta.requiresAuth && !IsAuthenticated) {
+    if (to.meta.requiresAuth && !isAuthenticated) {
       // if require login but no token --> go to login
       next({ path: 'login' });
-    } else if (to.meta.requiresUnAuth && IsAuthenticated) {
+    } else if (to.meta.requiresUnAuth && isAuthenticated) {
       // if no require and has token --> home
       next({ path: '/' });
     } else {

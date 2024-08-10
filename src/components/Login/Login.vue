@@ -10,7 +10,7 @@
         >
           <q-input
             filled
-            v-model="username"
+            v-model="userName"
             label="User Name"
             lazy-rules
             :rules="[
@@ -64,13 +64,13 @@ import { GenericResponseData } from 'src/Models/GenericResponseData';
 const $q = useQuasar();
 const $route = useRoute();
 const $router = useRouter();
-const username = ref('');
+const userName = ref('');
 const password = ref('');
 const userStore = useUserStore();
 const onClickLogin = async () => {
   const payload: AuthenticateRequestModel = {
-    Username: username.value,
-    Password: password.value,
+    userName: userName.value,
+    password: password.value,
   };
   userStore
     .login(payload)
@@ -84,14 +84,15 @@ const onClickLogin = async () => {
       });
     })
     .catch((err: GenericResponseData | any) => {
+      console.log('err', err);
       $q.notify({
         type: 'negative',
-        message: err.message || err.Message,
+        message: err.message || err.title,
       });
     });
 };
 function onReset() {
-  username.value = '';
+  userName.value = '';
   password.value = '';
 }
 </script>

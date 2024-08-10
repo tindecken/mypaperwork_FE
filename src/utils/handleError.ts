@@ -10,9 +10,9 @@ export default function handleError(error: Error | AxiosError) {
     } else {
       // Error not handled by the server, example "Network Error"
       throw {
-        Message: e.message,
-        Success: false,
-        StatusCode: 500,
+        message: e.message,
+        success: false,
+        statusCode: 500,
       };
     }
   } else {

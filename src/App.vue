@@ -7,6 +7,7 @@ import { useUserStore } from 'src/stores/userStore';
 import { onBeforeMount, watch } from 'vue';
 import { Dark } from 'quasar';
 import { useGlobalStore } from 'src/stores/globalStore';
+import { AuthenticateResponse } from './Models/Authentication/AuthenticateResponse';
 
 const globalStore = useGlobalStore();
 const userStore = useUserStore();
@@ -15,9 +16,9 @@ globalStore.$subscribe(() => {
   localStorage.setItem(
     'global',
     JSON.stringify({
-      DarkTheme: globalStore.darkTheme,
-      SelectedTheme: globalStore.selectedTheme,
-      Themes: globalStore.themes,
+      darkTheme: globalStore.darkTheme,
+      selectedTheme: globalStore.selectedTheme,
+      themes: globalStore.themes,
     })
   );
   Dark.set(globalStore.darkTheme);
@@ -26,11 +27,12 @@ userStore.$subscribe(() => {
   localStorage.setItem(
     'user',
     JSON.stringify({
-      Id: userStore.Id,
-      UserName: userStore.UserName,
-      Email: userStore.Email,
-      SystemRole: userStore.SystemRole,
-      Token: userStore.Token,
+      id: userStore.id,
+      userName: userStore.userName,
+      email: userStore.email,
+      systemRole: userStore.systemRole,
+      token: userStore.token,
+      name: userStore.name,
     })
   );
 });
@@ -51,24 +53,25 @@ watch(
 onBeforeMount(() => {
   const userStorage = localStorage.getItem('user');
   if (userStorage) {
-    const userObj = JSON.parse(userStorage);
-    userStore.Id = userObj.id;
-    userStore.UserName = userObj.UserName;
-    userStore.Email = userObj.Email;
-    userStore.Role = userObj.Role;
-    userStore.Token = userObj.Token;
+    const userObj = JSON.parse(userStorage) as AuthenticateResponse;
+    userStore.id = userObj.id;
+    userStore.userName = userObj.userName;
+    userStore.email = userObj.email;
+    userStore.systemRole = userObj.systemRole;
+    userStore.token = userObj.token;
+    userStore.name = userObj.name;
   }
   const globalStorage = localStorage.getItem('global');
 
   if (globalStorage) {
-    if (JSON.parse(globalStorage).hasOwnProperty('DarkTheme')) {
-      globalStore.darkTheme = JSON.parse(globalStorage).DarkTheme;
+    if (JSON.parse(globalStorage).hasOwnProperty('darkTheme')) {
+      globalStore.darkTheme = JSON.parse(globalStorage).darkTheme;
     }
-    if (JSON.parse(globalStorage).hasOwnProperty('Themes')) {
-      globalStore.themes = JSON.parse(globalStorage).Themes;
+    if (JSON.parse(globalStorage).hasOwnProperty('themes')) {
+      globalStore.themes = JSON.parse(globalStorage).themes;
     }
-    if (JSON.parse(globalStorage).hasOwnProperty('SelectedTheme')) {
-      globalStore.selectedTheme = JSON.parse(globalStorage).SelectedTheme;
+    if (JSON.parse(globalStorage).hasOwnProperty('selectedTheme')) {
+      globalStore.selectedTheme = JSON.parse(globalStorage).selectedTheme;
     }
   }
 });

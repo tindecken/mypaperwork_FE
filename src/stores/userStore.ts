@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', {
       email: '',
       systemRole: null as UserRole | null,
       token: '',
-    };
+    } as AuthenticateResponse;
   },
   getters: {
     IsAuthenticated: (state) => !!state.Token,
@@ -29,8 +29,8 @@ export const useUserStore = defineStore('user', {
         const axiosResponse = await api.post(
           '/authentication/login',
           {
-            Username: authenticateRequestModel.Username,
-            Password: authenticateRequestModel.Password,
+            userName: authenticateRequestModel.userName,
+            password: authenticateRequestModel.password,
           },
           {
             headers: {
@@ -39,9 +39,7 @@ export const useUserStore = defineStore('user', {
           }
         );
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('responseData', responseData);
         const auRes = responseData.data as AuthenticateResponse;
-        console.log('auRes', auRes);
         this.$patch({
           id: auRes.id,
           userName: auRes.userName,
