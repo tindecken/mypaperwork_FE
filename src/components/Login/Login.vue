@@ -80,7 +80,7 @@ const onClickLogin = async () => {
       // suggest for me
       $q.notify({
         type: 'positive',
-        message: response?.Message,
+        message: response?.message,
       });
     })
     .catch((err: GenericResponseData | any) => {

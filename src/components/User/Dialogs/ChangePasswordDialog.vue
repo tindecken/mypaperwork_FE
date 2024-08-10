@@ -151,7 +151,7 @@ function changePassword() {
     .then((response: GenericResponseData | undefined) => {
       $q.notify({
         type: 'positive',
-        message: `${response?.Message}. Return login page.`,
+        message: `${response?.message}. Return login page.`,
       });
       userStore.$reset();
       const redirectUrl = `/${$route.query.redirect || 'login'}`;

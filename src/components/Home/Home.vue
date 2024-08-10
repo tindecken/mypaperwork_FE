@@ -2,8 +2,14 @@
   <q-layout view="hHh LpR fFf">
     <q-header bordered class="bg-primary text-white">
       <q-toolbar style="height: 24px">
-        <q-btn dense flat round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" />
-        <q-toolbar-title> SOL 2 Auto Test Management {{ $q.version }} </q-toolbar-title>
+        <q-btn
+          dense
+          flat
+          round
+          icon="menu"
+          @click="leftDrawerOpen = !leftDrawerOpen"
+        />
+        <q-toolbar-title> My Paperwork {{ $q.version }} </q-toolbar-title>
         <user></user>
       </q-toolbar>
     </q-header>
@@ -13,7 +19,12 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-    <q-footer reveal bordered class="bg-primary text-white row inline justify-between" style="height: 24px">
+    <q-footer
+      reveal
+      bordered
+      class="bg-primary text-white row inline justify-between"
+      style="height: 24px"
+    >
       <app-footer></app-footer>
     </q-footer>
   </q-layout>

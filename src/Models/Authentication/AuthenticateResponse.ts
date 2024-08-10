@@ -1,9 +1,10 @@
 import { UserRole } from '../UserRole';
 
 export interface AuthenticateResponse {
-  Id: number;
-  Email: string;
-  Role?: UserRole;
-  UserName: string;
-  Token: string;
+  id: string;
+  email: string;
+  systemRole: UserRole;
+  userName: string;
+  token: string;
+  name: string;
 }

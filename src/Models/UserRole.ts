@@ -1,5 +1,7 @@
 export enum UserRole {
+  SysAdmin,
+  SysUser,
   Admin,
   Developer,
-  ViewUser,
+  Viewer,
 }

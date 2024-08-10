@@ -1,11 +1,11 @@
 export interface GenericResponseData {
-  Data?: object;
-  Error?: object;
-  Message: string;
-  TotalRecords?: number;
-  TotalFilteredRecords?: number;
-  PageNumber?: number;
-  PageSize?: number;
-  Success: boolean;
-  StatusCode?: number;
+  data?: object;
+  error?: object;
+  message: string;
+  totalRecords?: number;
+  totalFilteredRecords?: number;
+  pageNumber?: number;
+  pageSize?: number;
+  success: boolean;
+  statusCode?: number;
 }

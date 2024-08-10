@@ -1,7 +1,7 @@
 export interface Paging {
-  PageNumber: number;
-  PageSize: number;
-  FilterValue?: string;
-  SortBy?: string;
-  IsSortDescending?: boolean;
+  pageNumber: number;
+  pageSize: number;
+  filterValue?: string;
+  sortBy?: string;
+  isSortDescending?: boolean;
 }

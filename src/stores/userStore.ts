@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { AuthenticateRequestModel } from 'src/Models/Authentication/AuthenticateRequestModel';
-import { api } from 'boot/axios';
+import { api } from '../boot/axios';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import handleError from 'src/utils/handleError';
 import { AuthenticateResponse } from 'src/Models/Authentication/AuthenticateResponse';
@@ -10,11 +10,12 @@ import { ChangePasswordRequestModel } from 'src/Models/User/ChangePasswordReques
 export const useUserStore = defineStore('user', {
   state: () => {
     return {
-      Id: 0,
-      UserName: '',
-      Email: '',
-      Role: null as UserRole | null,
-      Token: '',
+      id: '',
+      name: '',
+      userName: '',
+      email: '',
+      systemRole: null as UserRole | null,
+      token: '',
     };
   },
   getters: {
@@ -26,7 +27,7 @@ export const useUserStore = defineStore('user', {
     ): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.post(
-          '/Authentication/login',
+          '/authentication/login',
           {
             Username: authenticateRequestModel.Username,
             Password: authenticateRequestModel.Password,
@@ -38,16 +39,19 @@ export const useUserStore = defineStore('user', {
           }
         );
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        const auRes = responseData.Data as AuthenticateResponse;
+        console.log('responseData', responseData);
+        const auRes = responseData.data as AuthenticateResponse;
+        console.log('auRes', auRes);
         this.$patch({
-          Id: auRes.Id,
-          UserName: auRes.UserName,
-          Email: auRes.Email,
-          Role: auRes.Role,
-          Token: auRes.Token,
+          id: auRes.id,
+          userName: auRes.userName,
+          email: auRes.email,
+          systemRole: auRes.systemRole,
+          token: auRes.token,
+          name: auRes.name,
         });
         return responseData;
-      } catch (error: unknown) {
+      } catch (error: any) {
         this.$reset();
         handleError(error);
       }
@@ -68,7 +72,7 @@ export const useUserStore = defineStore('user', {
         );
         const responseData = (await axiosResponse.data) as GenericResponseData;
         return responseData;
-      } catch (error: unknown) {
+      } catch (error: any) {
         this.$reset();
         handleError(error);
       }
