@@ -1,6 +1,6 @@
 export interface ChangePasswordRequestModel {
-  UserId: number;
-  CurrentPassword: string;
-  NewPassword: string;
-  ConfirmNewPassword: string;
+  userId: string;
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
 }

@@ -140,10 +140,10 @@ const $router = useRouter();
 
 function changePassword() {
   const changePasswordRequestData = {
-    UserId: userStore.Id,
-    CurrentPassword: currentPassword.value,
-    NewPassword: newPassword.value,
-    ConfirmNewPassword: confirmPassword.value,
+    userId: userStore.id,
+    currentPassword: currentPassword.value,
+    newPassword: newPassword.value,
+    confirmNewPassword: confirmPassword.value,
   } as ChangePasswordRequestModel;
   console.log('changePasswordRequestData', changePasswordRequestData);
   userStore
@@ -162,7 +162,7 @@ function changePassword() {
       console.log('error', err);
       $q.notify({
         type: 'negative',
-        message: err.message || err.Message,
+        message: err.message || err.title,
       });
     });
 }
