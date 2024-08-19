@@ -75,9 +75,9 @@ const onClickLogin = async () => {
   userStore
     .login(payload)
     .then((response: GenericResponseData | undefined) => {
-      const redirectUrl = `/${$route.query.redirect || 'home'}`;
+      console.log('response', response);
+      const redirectUrl = `/${$route.query.redirect || 'selectfile'}`;
       void $router.replace(redirectUrl);
-      // suggest for me
       $q.notify({
         type: 'positive',
         message: response?.message,
