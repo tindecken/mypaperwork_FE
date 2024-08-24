@@ -11,16 +11,16 @@ export const usersTable = sqliteTable('users', {
   isDeleted: integer('isDeleted').notNull().default(0),
 });
 
-export const usersFiles = sqliteTable('userFiles', {
+export const usersFilesTable = sqliteTable('userFiles', {
   id: text('id').primaryKey(),
   userId: text('userId')
     .notNull()
     .references(() => usersTable.id, { onDelete: 'cascade' }),
-  role: text('role').notNull(),
-  isSelected: integer('isSelected').notNull().default(0),
   fileId: text('fileId')
     .notNull()
     .references(() => filesTable.id, { onDelete: 'cascade' }),
+  role: text('role').notNull(),
+  isSelected: integer('isSelected').notNull().default(0),
   createdAt: text('createdAt')
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
@@ -29,7 +29,7 @@ export const usersFiles = sqliteTable('userFiles', {
   updatedBy: text('updatedBy'),
 });
 
-export const userSettingsTale = sqliteTable('userSettings', {
+export const usersSettingsTable = sqliteTable('usersSettings', {
   id: text('id').primaryKey(),
   userId: text('userId')
     .notNull()
@@ -138,7 +138,7 @@ export const logsTable = sqliteTable('logs', {
 
 export const settingsTable = sqliteTable('settings', {
   id: text('id').primaryKey(),
-  key: text('key').notNull(),
+  key: text('key').unique().notNull(),
   value: text('value').notNull(),
   createdAt: text('createdAt')
     .default(sql`(CURRENT_TIMESTAMP)`)
@@ -151,3 +151,9 @@ export const settingsTable = sqliteTable('settings', {
 
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
+
+export type InsertFile = typeof filesTable.$inferInsert;
+export type SelectFile = typeof filesTable.$inferSelect;
+
+export type InsertUsersFiles = typeof usersFilesTable.$inferInsert;
+export type SelectUsersFiles = typeof usersFilesTable.$inferSelect;

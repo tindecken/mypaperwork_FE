@@ -84,17 +84,6 @@ CREATE TABLE `settings` (
 	`isDeleted` integer DEFAULT 0 NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `userSettings` (
-	`id` text PRIMARY KEY NOT NULL,
-	`userId` text NOT NULL,
-	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-	`createdBy` text,
-	`updatedAt` integer,
-	`updatedBy` text,
-	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`userId`) REFERENCES `settings`(`id`) ON UPDATE no action ON DELETE cascade
-);
---> statement-breakpoint
 CREATE TABLE `userFiles` (
 	`id` text PRIMARY KEY NOT NULL,
 	`userId` text NOT NULL,
@@ -109,6 +98,17 @@ CREATE TABLE `userFiles` (
 	FOREIGN KEY (`fileId`) REFERENCES `files`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE TABLE `usersSettings` (
+	`id` text PRIMARY KEY NOT NULL,
+	`userId` text NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`createdBy` text,
+	`updatedAt` integer,
+	`updatedBy` text,
+	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`userId`) REFERENCES `settings`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
 CREATE TABLE `users` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
@@ -119,4 +119,5 @@ CREATE TABLE `users` (
 	`isDeleted` integer DEFAULT 0 NOT NULL
 );
 --> statement-breakpoint
+CREATE UNIQUE INDEX `users_userName_unique` ON `users` (`userName`);--> statement-breakpoint
 CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);
