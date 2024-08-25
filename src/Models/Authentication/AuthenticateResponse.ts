@@ -3,7 +3,7 @@ import { UserRole } from '../UserRole';
 export interface AuthenticateResponse {
   id: string;
   email: string;
-  systemRole: UserRole;
+  systemRole: string;
   userName: string;
   token: string;
   name: string;

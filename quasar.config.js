@@ -51,7 +51,7 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
       target: {
-        browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
+        browser: ['esnext'],
         node: 'node16',
       },
 
@@ -103,14 +103,7 @@ module.exports = configure(function (/* ctx */) {
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
       // Quasar plugins
-      plugins: [
-        'Notify',
-        'LocalStorage',
-        'SessionStorage',
-        'Dialog',
-        'Loading',
-        'LoadingBar',
-      ],
+      plugins: ['Notify', 'LocalStorage', 'SessionStorage', 'Dialog', 'Loading', 'LoadingBar'],
 
       config: {
         notify: {
