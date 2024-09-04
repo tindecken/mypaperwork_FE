@@ -6,6 +6,7 @@ import handleError from 'src/utils/handleError';
 import { AuthenticateResponse } from 'src/Models/Authentication/AuthenticateResponse';
 import { UserRole } from 'src/Models/UserRole';
 import { ChangePasswordRequestModel } from 'src/Models/User/ChangePasswordRequestModel';
+import { useJwt } from '@vueuse/integrations/useJwt';
 
 export const useUserStore = defineStore('user', {
   state: () => {
@@ -19,15 +20,13 @@ export const useUserStore = defineStore('user', {
     } as AuthenticateResponse;
   },
   getters: {
-    IsAuthenticated: (state) => !!state.Token,
+    IsAuthenticated: (state) => !!state.token,
   },
   actions: {
-    async login(
-      authenticateRequestModel: AuthenticateRequestModel
-    ): Promise<GenericResponseData | undefined> {
+    async login(authenticateRequestModel: AuthenticateRequestModel): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.post(
-          '/authentication/login',
+          '/auth/login',
           {
             userName: authenticateRequestModel.userName,
             password: authenticateRequestModel.password,
@@ -40,6 +39,11 @@ export const useUserStore = defineStore('user', {
         );
         const responseData = (await axiosResponse.data) as GenericResponseData;
         const auRes = responseData.data as AuthenticateResponse;
+        const { header, payload } = useJwt(auRes.token);
+        console.log('header:', header);
+        console.log('payload:', payload);
+        // extract jwt token and set it to local storage
+
         this.$patch({
           id: auRes.id,
           userName: auRes.userName,
@@ -54,20 +58,14 @@ export const useUserStore = defineStore('user', {
         handleError(error);
       }
     },
-    async changePassword(
-      changePasswordRequestModel: ChangePasswordRequestModel
-    ): Promise<GenericResponseData | undefined> {
+    async changePassword(changePasswordRequestModel: ChangePasswordRequestModel): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.post(
-          '/User/changepassword',
-          changePasswordRequestModel,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${this.Token}`,
-            },
-          }
-        );
+        const axiosResponse = await api.post('/User/changepassword', changePasswordRequestModel, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.token}`,
+          },
+        });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         return responseData;
       } catch (error: any) {

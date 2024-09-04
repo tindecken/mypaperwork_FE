@@ -4,9 +4,7 @@
       <q-list style="min-width: 100px">
         <q-item clickable v-close-popup @click="changePassword()">
           <q-item-section>
-            <span
-              ><q-icon name="password" class="q-mr-sm" />Change Password</span
-            >
+            <span><q-icon name="password" class="q-mr-sm" />Change Password</span>
           </q-item-section>
         </q-item>
         <q-item clickable v-close-popup @click="logout">
