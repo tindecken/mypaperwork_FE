@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
-import { useUserStore } from '../../stores/userStore';
+import { useUserStore } from 'stores/userStore';
 import { useRoute, useRouter } from 'vue-router';
 import ChangePasswordDialog from './Dialogs/ChangePasswordDialog.vue';
 const $route = useRoute();
