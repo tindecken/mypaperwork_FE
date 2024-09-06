@@ -4,20 +4,24 @@ import { api } from '../boot/axios';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import handleError from 'src/utils/handleError';
 import { AuthenticateResponse } from 'src/Models/Authentication/AuthenticateResponse';
-import { UserRole } from 'src/Models/UserRole';
 import { ChangePasswordRequestModel } from 'src/Models/User/ChangePasswordRequestModel';
 import { useJwt } from '@vueuse/integrations/useJwt';
+import { UserInfoInterface } from 'src/Models/UserInfoInterface';
 
 export const useUserStore = defineStore('user', {
   state: () => {
     return {
-      id: '',
-      name: '',
-      userName: '',
-      email: '',
-      systemRole: null as UserRole | null,
       token: '',
-    } as AuthenticateResponse;
+      userInfo: {
+        email: '',
+        name: '',
+        systemRole: '',
+        userId: '',
+        userName: '',
+        selectedFileId: '',
+        role: '',
+      } as UserInfoInterface,
+    };
   },
   getters: {
     IsAuthenticated: (state) => !!state.token,
@@ -39,18 +43,22 @@ export const useUserStore = defineStore('user', {
         );
         const responseData = (await axiosResponse.data) as GenericResponseData;
         const auRes = responseData.data as AuthenticateResponse;
-        const { header, payload } = useJwt(auRes.token);
-        console.log('header:', header);
-        console.log('payload:', payload);
+        const decodedJwt = useJwt(auRes.token);
+        const payload = decodedJwt.payload.value as UserInfoInterface;
+        console.log('payload', payload);
         // extract jwt token and set it to local storage
 
         this.$patch({
-          id: auRes.id,
-          userName: auRes.userName,
-          email: auRes.email,
-          systemRole: auRes.systemRole,
+          userInfo: {
+            email: payload.email,
+            systemRole: payload.systemRole,
+            userName: payload.userName,
+            userId: payload.userId,
+            name: payload.name,
+            selectedFileId: payload.selectedFileId,
+            role: payload.role,
+          },
           token: auRes.token,
-          name: auRes.name,
         });
         return responseData;
       } catch (error: any) {

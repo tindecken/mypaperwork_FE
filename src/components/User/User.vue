@@ -1,5 +1,5 @@
 <template>
-  <q-btn flat :label="userStore.userName">
+  <q-btn flat :label="userStore.userInfo.userName">
     <q-menu>
       <q-list style="min-width: 100px">
         <q-item clickable v-close-popup @click="changePassword()">

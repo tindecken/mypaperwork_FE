@@ -1,4 +1,4 @@
-export interface TokenInterface {
+export interface UserInfoInterface {
   email: string;
   exp: number;
   iat: number;
