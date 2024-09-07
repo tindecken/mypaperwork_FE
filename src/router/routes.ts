@@ -43,6 +43,13 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/test',
+    component: () => import('src/components/Test/Test.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: '/:catchAll(.*)*',
     redirect: '/login',
   },

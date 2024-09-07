@@ -45,9 +45,6 @@ export const useUserStore = defineStore('user', {
         const auRes = responseData.data as AuthenticateResponse;
         const decodedJwt = useJwt(auRes.token);
         const payload = decodedJwt.payload.value as UserInfoInterface;
-        console.log('payload', payload);
-        // extract jwt token and set it to local storage
-
         this.$patch({
           userInfo: {
             email: payload.email,
