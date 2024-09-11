@@ -40,9 +40,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onBeforeMount, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import AppFooter from '../AppFooter/AppFooter.vue';
 import User from '../User/User.vue';
+import { useUserStore } from 'src/stores/userStore';
+const $route = useRoute();
+const $router = useRouter();
+const userStore = useUserStore();
+
+onBeforeMount(() => {
+  if (userStore.userInfo.selectedFileId) {
+    console.log('Selected file:', userStore.userInfo.selectedFileId);
+    const redirectUrl = `/${$route.query.redirect || 'home'}`;
+    void $router.replace(redirectUrl);
+  }
+});
 </script>
 
 <style lang="sass" scoped>

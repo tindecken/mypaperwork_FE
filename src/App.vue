@@ -27,12 +27,14 @@ userStore.$subscribe(() => {
   localStorage.setItem(
     'user',
     JSON.stringify({
-      id: userStore.id,
-      userName: userStore.userName,
-      email: userStore.email,
-      systemRole: userStore.systemRole,
       token: userStore.token,
-      name: userStore.name,
+      userId: userStore.userInfo.userId,
+      userName: userStore.userInfo.userName,
+      email: userStore.userInfo.email,
+      systemRole: userStore.userInfo.systemRole,
+      name: userStore.userInfo.name,
+      selectedFileId: userStore.userInfo.selectedFileId,
+      role: userStore.userInfo.role,
     })
   );
 });
@@ -41,10 +43,7 @@ watch(
   globalStore,
   (newGlobalStore) => {
     if (newGlobalStore.selectedTheme) {
-      document.body.setAttribute(
-        'data-theme',
-        newGlobalStore.selectedTheme.value
-      );
+      document.body.setAttribute('data-theme', newGlobalStore.selectedTheme.value);
     }
   },
   { deep: true }
@@ -53,13 +52,15 @@ watch(
 onBeforeMount(() => {
   const userStorage = localStorage.getItem('user');
   if (userStorage) {
-    const userObj = JSON.parse(userStorage) as AuthenticateResponse;
-    userStore.id = userObj.id;
-    userStore.userName = userObj.userName;
-    userStore.email = userObj.email;
-    userStore.systemRole = userObj.systemRole;
+    const userObj = JSON.parse(userStorage);
+    userStore.userInfo.userId = userObj.userId;
+    userStore.userInfo.userName = userObj.userName;
+    userStore.userInfo.email = userObj.email;
+    userStore.userInfo.systemRole = userObj.systemRole;
+    userStore.userInfo.name = userObj.name;
+    userStore.userInfo.selectedFileId = userObj.selectedFileId;
+    userStore.userInfo.role = userObj.role;
     userStore.token = userObj.token;
-    userStore.name = userObj.name;
   }
   const globalStorage = localStorage.getItem('global');
 
