@@ -12,10 +12,30 @@
     </q-drawer>
     <q-page-container>
       <div class="row q-pa-md q-gutter-md">
-        <q-card class="my-card" v-for="pw in papperworks" :key="pw.id">
-          <q-card-section>
-            <q-item-label>{{ pw.name }}</q-item-label>
-            <q-item-label>{{ pw.description }}</q-item-label>
+        <q-card class="my-card" v-for="pw in papperworks" :key="pw.id" @click="openPaperwork(pw)">
+          <q-card-section class="row justify-between">
+            <q-item-label class="self-center">{{ pw.name }}</q-item-label>
+            <q-btn size="sm" flat round icon="more_vert" class="self-center">
+              <q-menu>
+                <q-list style="min-width: 100px" dense>
+                  <q-item clickable v-close-popup>
+                    <q-item-section>Edit</q-item-section>
+                  </q-item>
+
+                  <q-separator />
+                  <q-item clickable v-close-popup>
+                    <q-item-section>Move</q-item-section>
+                  </q-item>
+                  <q-item clickable v-close-popup>
+                    <q-item-section>Copy</q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item clickable v-close-popup>
+                    <q-item-section>Delete</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
           </q-card-section>
           <img v-if="pw.coverBlob" :src="getImgUrl(pw.coverBlob)" />
         </q-card>
@@ -94,6 +114,9 @@ function getImgUrl(arrBuff: { type: string; data: number[] }) {
   const btoawindow = window.btoa(binary);
   const imgUrl = `data:${arrBuff.type};base64,${btoawindow}`;
   return imgUrl;
+}
+function openPaperwork(pw: Paperwork) {
+  console.log('openPaperwork', pw);
 }
 
 const leftDrawerOpen = ref(true);
