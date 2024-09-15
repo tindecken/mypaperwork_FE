@@ -11,7 +11,15 @@
       <left-drawer></left-drawer>
     </q-drawer>
     <q-page-container>
-      <router-view />
+      <div class="row q-pa-md q-gutter-md">
+        <q-card class="my-card" v-for="pw in papperworks" :key="pw.id">
+          <q-card-section>
+            <q-item-label>{{ pw.name }}</q-item-label>
+            <q-item-label>{{ pw.description }}</q-item-label>
+          </q-card-section>
+          <img v-if="pw.coverBlob" :src="getImgUrl(pw.coverBlob)" />
+        </q-card>
+      </div>
     </q-page-container>
     <q-footer reveal bordered class="bg-primary text-white row inline justify-between" style="height: 24px">
       <app-footer></app-footer>
@@ -20,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref, onMounted } from 'vue';
+import { onBeforeMount, ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useUserStore } from 'src/stores/userStore';
@@ -37,15 +45,14 @@ const $route = useRoute();
 const $router = useRouter();
 const userStore = useUserStore();
 const $q = useQuasar();
+const papperworks = computed(() => paperworkStore.paperworks);
 
 onBeforeMount(() => {
-  console.log('bbbbbbbbbbbbbbbb');
   if (!userStore.userInfo.selectedFileId) {
     $router.push('/selectfile');
   }
 });
 onMounted(async () => {
-  console.log('aaaaaaaaaaaaaa');
   categoryStore
     .getCategoriesByFileId()
     .then((response: GenericResponseData | undefined) => {
@@ -77,6 +84,22 @@ onMounted(async () => {
       });
     });
 });
+function getImgUrl(arrBuff: { type: string; data: number[] }) {
+  var binary = '';
+  var bytes = new Uint8Array(arrBuff.data);
+  var len = bytes.byteLength;
+  for (var i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  const btoawindow = window.btoa(binary);
+  const imgUrl = `data:${arrBuff.type};base64,${btoawindow}`;
+  return imgUrl;
+}
 
 const leftDrawerOpen = ref(true);
 </script>
+<style lang="sass" scoped>
+.my-card
+  width: 100%
+  max-width: 250px
+</style>

@@ -12,4 +12,7 @@ export interface Paperwork {
   categoryName: string;
   categoryDescription: string;
   categoryId: string;
+  coverBlob?: { type: string; data: number[] };
+  coverFileName?: string;
+  coverFileSize?: string;
 }
