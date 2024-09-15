@@ -20,24 +20,63 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import LeftDrawer from '../LeftDrawer/LeftDrawer.vue';
-import AppFooter from '../AppFooter/AppFooter.vue';
-import User from '../User/User.vue';
+import { useQuasar } from 'quasar';
 import { useUserStore } from 'src/stores/userStore';
+import { useCategoryStore } from 'src/stores/categoryStore';
+import { usePaperworkStore } from 'src/stores/paperworkStore';
+import { GenericResponseData } from 'src/Models/GenericResponseData';
+import User from 'src/components/User/User.vue';
+import AppFooter from 'src/components/AppFooter/AppFooter.vue';
+import LeftDrawer from 'src/components/LeftDrawer/LeftDrawer.vue';
+
+const categoryStore = useCategoryStore();
+const paperworkStore = usePaperworkStore();
 const $route = useRoute();
 const $router = useRouter();
 const userStore = useUserStore();
+const $q = useQuasar();
 
 onBeforeMount(() => {
+  console.log('bbbbbbbbbbbbbbbb');
   if (!userStore.userInfo.selectedFileId) {
-    const redirectUrl = `/${$route.query.redirect || 'home'}`;
-    void $router.replace({ path: redirectUrl, query: { fileId: userStore.userInfo.selectedFileId } });
+    $router.push('/selectfile');
   }
+});
+onMounted(async () => {
+  console.log('aaaaaaaaaaaaaa');
+  categoryStore
+    .getCategoriesByFileId()
+    .then((response: GenericResponseData | undefined) => {
+      $q.notify({
+        type: 'positive',
+        message: response?.message,
+      });
+    })
+    .catch((err: GenericResponseData | any) => {
+      console.log('err', err);
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title,
+      });
+    });
+  paperworkStore
+    .getPaperworksBySelectedFile()
+    .then((response: GenericResponseData | undefined) => {
+      $q.notify({
+        type: 'positive',
+        message: response?.message,
+      });
+    })
+    .catch((err: GenericResponseData | any) => {
+      console.log('err', err);
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title,
+      });
+    });
 });
 
 const leftDrawerOpen = ref(true);
-const fileId = ref(userStore.userInfo.selectedFileId);
-console.log('Selected file:', fileId.value);
 </script>

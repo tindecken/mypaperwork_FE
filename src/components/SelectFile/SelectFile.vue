@@ -51,9 +51,8 @@ const userStore = useUserStore();
 
 onBeforeMount(() => {
   if (userStore.userInfo.selectedFileId) {
-    console.log('Selected file:', userStore.userInfo.selectedFileId);
     const redirectUrl = `/${$route.query.redirect || 'home'}`;
-    void $router.replace({ path: redirectUrl, query: { fileId: userStore.userInfo.selectedFileId } });
+    void $router.replace(redirectUrl);
   }
 });
 </script>
