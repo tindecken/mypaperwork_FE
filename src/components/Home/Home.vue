@@ -58,6 +58,7 @@ import { GenericResponseData } from 'src/Models/GenericResponseData';
 import User from 'src/components/User/User.vue';
 import AppFooter from 'src/components/AppFooter/AppFooter.vue';
 import LeftDrawer from 'src/components/LeftDrawer/LeftDrawer.vue';
+import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
 
 const categoryStore = useCategoryStore();
 const paperworkStore = usePaperworkStore();
