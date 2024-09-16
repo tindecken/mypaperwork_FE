@@ -7,7 +7,7 @@
         <user></user>
       </q-toolbar>
     </q-header>
-    <q-drawer v-model="leftDrawerOpen" side="left" bordered :width="180">
+    <q-drawer v-model="leftDrawerOpen" side="left" bordered :width="250">
       <left-drawer></left-drawer>
     </q-drawer>
     <q-page-container>
