@@ -25,7 +25,7 @@
           </div>
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="row q-mt-sm">
-            <q-uploader :color="isDark ? 'grey-9' : 'grey-6'" ref="uploader" class="col-grow" label="Images (max 50 file, max size: 20mb per file)" multiple hide-upload-btn max-files="50" max-file-size="20000000" @rejected="onRejected($event)" />
+            <q-uploader hide-upload-btn :color="isDark ? 'grey-9' : 'grey-6'" ref="uploader" class="col-grow" label="Images (max 50 file, max size: 20mb per file)" multiple max-files="50" max-file-size="50000000" @rejected="onRejected($event)" />
           </div>
           <div class="row justify-end">
             <q-btn class="q-mt-sm" outline label="Create" type="submit" style="height: 50px; width: 100px" />
@@ -57,6 +57,7 @@ const description = ref('');
 const name = ref('');
 const uploader = ref();
 async function createPaperwork() {
+  console.log('uploader.value?.files', uploader.value?.files);
   const requestModel: CreatePaperworkRequestModel = {
     name: name.value,
     description: description.value,

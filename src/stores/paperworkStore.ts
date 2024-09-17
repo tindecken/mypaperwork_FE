@@ -46,7 +46,9 @@ export const usePaperworkStore = defineStore('paperwork', {
         formData.append('categoryId', model.categoryId || '');
         formData.append('name', model.name);
         formData.append('description', model.description || '');
-        // formData.append('files', model.files?.map((file) => new Blob([file], { type: file.type })));
+        model.files?.forEach((file: any) => {
+          formData.append('files', file, file.name);
+        });
 
         const axiosResponse = await api.post('/paperworks/create', formData, {
           headers: {
