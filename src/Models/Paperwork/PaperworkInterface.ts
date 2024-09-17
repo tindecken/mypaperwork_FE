@@ -15,4 +15,5 @@ export interface Paperwork {
   coverBlob?: { type: string; data: number[] };
   coverFileName?: string;
   coverFileSize?: string;
+  documentCount?: number;
 }

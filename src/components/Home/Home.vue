@@ -14,7 +14,7 @@
       <div class="row q-pa-md q-gutter-md">
         <q-card class="my-card" v-for="pw in papperworks" :key="pw.id" @click="openPaperwork(pw)">
           <q-card-section class="row justify-between">
-            <q-item-label class="self-center">{{ pw.name }}</q-item-label>
+            <q-item-label class="self-center">{{ pw.name }} ({{ pw.documentCount }})</q-item-label>
             <q-btn size="sm" flat round icon="more_vert" class="self-center">
               <q-menu>
                 <q-list style="min-width: 100px" dense>
