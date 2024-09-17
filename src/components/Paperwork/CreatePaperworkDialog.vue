@@ -13,12 +13,15 @@
         </div>
       </div>
       <div class="row q-pa-md">
-        <q-form @submit="post()" class="col-grow">
+        <q-form @submit="createPaperwork()" class="col-grow">
           <div class="row">
             <q-input class="col-grow" outlined dense v-model="name" label="Name"> </q-input>
           </div>
           <div class="row q-mt-md">
             <q-input type="textarea" class="col-grow" outlined dense v-model="description" label="Description"> </q-input>
+          </div>
+          <div class="row q-mt-md">
+            <q-select outlined v-model="selectedCategory" :options="categories" option-label="name" option-value="id" label="Category" @update:model-value="onSelectedCategory($event)" />
           </div>
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="row q-mt-sm">
@@ -34,20 +37,40 @@
 </template>
 
 <script setup lang="ts">
-import { QInput, useDialogPluginComponent, useQuasar, QEditor } from 'quasar';
-import { ref } from 'vue';
+import { QInput, useDialogPluginComponent } from 'quasar';
+import { Ref, ref } from 'vue';
+import { useCategoryStore } from 'src/stores/categoryStore';
+import { usePaperworkStore } from 'src/stores/paperworkStore';
+import { computed } from 'vue';
+import { Category } from 'src/Models/Category/CategoryInterface';
+import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
+
+const categoryStore = useCategoryStore();
+const paperworkStore = usePaperworkStore();
+const categories = computed(() => categoryStore.categories);
+const selectedCategory: Ref<Category | null> = ref(categoryStore.categories.filter((cat) => cat.name === 'Uncategorized')[0]);
 
 defineEmits([...useDialogPluginComponent.emits]);
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
+const { dialogRef, onDialogHide } = useDialogPluginComponent();
 const isDark = ref(false);
-const $q = useQuasar();
 const description = ref('');
 const name = ref('');
 const uploader = ref();
-async function createCategory() {
-  // TODO: Implement create category logic
+async function createPaperwork() {
+  const requestModel: CreatePaperworkRequestModel = {
+    name: name.value,
+    description: description.value,
+    categoryId: selectedCategory.value?.id,
+    files: uploader.value?.files,
+  };
+  console.log('Creating paperwork request model:', requestModel);
+  await paperworkStore.createPaperwork(requestModel);
 }
 async function onRejected(rejectedFiles: any) {
+  console.log('Rejected files:', rejectedFiles);
   // TODO: Implement on rejected logic
+}
+async function onSelectedCategory(cat: Category) {
+  console.log('Selected category:', cat.id);
 }
 </script>

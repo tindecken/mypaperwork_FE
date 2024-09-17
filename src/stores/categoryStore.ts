@@ -1,14 +1,9 @@
 import { defineStore } from 'pinia';
-import { AuthenticateRequestModel } from 'src/Models/Authentication/AuthenticateRequestModel';
 import { api } from '../boot/axios';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import handleError from 'src/utils/handleError';
-import { AuthenticateResponse } from 'src/Models/Authentication/AuthenticateResponse';
-import { ChangePasswordRequestModel } from 'src/Models/User/ChangePasswordRequestModel';
-import { useJwt } from '@vueuse/integrations/useJwt';
-import { UserInfoInterface } from 'src/Models/UserInfoInterface';
 import { useUserStore } from './userStore';
-import { Category } from 'src/Models/Category/AuthenticateResponse';
+import { Category } from 'src/Models/Category/CategoryInterface';
 
 const userStore = useUserStore();
 export const useCategoryStore = defineStore('category', {

@@ -7,6 +7,7 @@ import { useUserStore } from './userStore';
 import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
 import handlePaging from 'src/utils/handlePaging';
 import { Paging } from 'src/Models/PagingInterface';
+import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
 
 const userStore = useUserStore();
 export const usePaperworkStore = defineStore('paperwork', {
@@ -33,6 +34,28 @@ export const usePaperworkStore = defineStore('paperwork', {
         this.$patch({
           paperworks: responseData.data as Paperwork[],
         });
+        return responseData;
+      } catch (error: any) {
+        this.$reset();
+        handleError(error);
+      }
+    },
+    async createPaperwork(model: CreatePaperworkRequestModel): Promise<GenericResponseData | undefined> {
+      try {
+        const formData = new FormData();
+        formData.append('categoryId', model.categoryId || '');
+        formData.append('name', model.name);
+        formData.append('description', model.description || '');
+        // formData.append('files', model.files?.map((file) => new Blob([file], { type: file.type })));
+
+        const axiosResponse = await api.post('/paperworks/create', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-datan',
+            Authorization: `Bearer ${userStore.token}`,
+          },
+        });
+        const responseData = (await axiosResponse.data) as GenericResponseData;
+        console.log('responseData', responseData);
         return responseData;
       } catch (error: any) {
         this.$reset();
