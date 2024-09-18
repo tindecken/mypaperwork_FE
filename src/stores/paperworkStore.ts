@@ -8,8 +8,10 @@ import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
 import handlePaging from 'src/utils/handlePaging';
 import { Paging } from 'src/Models/PagingInterface';
 import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
+import { useCategoryStore } from './categoryStore';
 
 const userStore = useUserStore();
+const categoryStore = useCategoryStore();
 export const usePaperworkStore = defineStore('paperwork', {
   state: () => {
     return {
@@ -21,9 +23,7 @@ export const usePaperworkStore = defineStore('paperwork', {
     async getPaperworksBySelectedFile(paging?: Paging): Promise<GenericResponseData | undefined> {
       try {
         let query = '';
-        if (paging) {
-          query = handlePaging(paging);
-        }
+        query = handlePaging(paging);
         const axiosResponse = await api.get(`/paperworks/getPaperworks${query}`, {
           headers: {
             'Content-Type': 'application/json',
@@ -46,6 +46,9 @@ export const usePaperworkStore = defineStore('paperwork', {
         formData.append('categoryId', model.categoryId || '');
         formData.append('name', model.name);
         formData.append('description', model.description || '');
+        formData.append('issueAt', model.issueAt?.toString() || '');
+        formData.append('price', model.price?.toString() || '');
+        formData.append('priceCurrency', model.priceCurrency?.toString() || '');
         model.files?.forEach((file: any) => {
           formData.append('files', file, file.name);
         });
@@ -57,10 +60,11 @@ export const usePaperworkStore = defineStore('paperwork', {
           },
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('responseData', responseData);
+        // Reload categories after creating a new paperwork
+        await categoryStore.getCategoriesByFileId();
+        await this.getPaperworksBySelectedFile();
         return responseData;
       } catch (error: any) {
-        this.$reset();
         handleError(error);
       }
     },

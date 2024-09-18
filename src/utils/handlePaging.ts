@@ -2,21 +2,21 @@ import axios, { AxiosError } from 'axios';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { Paging } from 'src/Models/PagingInterface';
 
-export default function handlePaging(paging: Paging): string {
-  let query = '';
+export default function handlePaging(paging?: Paging): string {
+  let query = '?';
   // Pagesize
-  if (paging.pageNumber) {
+  if (paging && paging.pageNumber) {
     query += `pageNumber=${paging.pageNumber}&`;
     if (paging.pageSize) {
       query += `pageSize=${paging.pageSize}&`;
     } else {
-      query += `pageSize=${process.env.DEFAULT_PAGESIZE}&`;
+      query += 'pageSize=20&';
     }
   } else {
-    query += `pageNumber=1&pageSize=${process.env.DEFAULT_PAGESIZE}`;
+    query += 'pageNumber=1&pageSize=20';
   }
   // Sorting
-  if (paging.sortField) {
+  if (paging && paging.sortField) {
     query += `&sortField=${paging.sortField}`;
     if (paging.sortDirection) {
       query += `&sortDirection=${paging.sortDirection}`;
@@ -27,7 +27,7 @@ export default function handlePaging(paging: Paging): string {
     query += '&sortField=createdAt&sortDirection=desc';
   }
   // Filtering
-  if (paging.filterValue) {
+  if (paging && paging.filterValue) {
     query += `&filterValue=${paging.filterValue}`;
   }
   return query;

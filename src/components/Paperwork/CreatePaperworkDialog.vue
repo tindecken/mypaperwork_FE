@@ -20,8 +20,25 @@
           <div class="row q-mt-md">
             <q-input type="textarea" class="col-grow" outlined dense v-model="description" label="Description"> </q-input>
           </div>
-          <div class="row q-mt-md">
-            <q-select outlined v-model="selectedCategory" :options="categories" option-label="name" option-value="id" label="Category" @update:model-value="onSelectedCategory($event)" />
+          <div class="row q-mt-md q-col-gutter-sm">
+            <q-select class="col-6" outlined v-model="selectedCategory" :options="categories" option-label="name" option-value="id" label="Category" @update:model-value="onSelectedCategory($event)" />
+            <q-input class="col-6" outlined v-model="issueAt" label="Issue Date">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                    <q-date v-model="issueAt" today-btn mask="YYYY-MM-DD">
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup label="Close" color="primary" flat />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+          <div class="row q-mt-md q-col-gutter-sm">
+            <q-input class="col-grow" type="number" outlined dense v-model="price" label="Price"> </q-input>
+            <q-input type="text" class="col-grow" outlined dense v-model="priceCurrency" label="Price Currency (USD, VND, ...)"> </q-input>
           </div>
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="row q-mt-sm">
@@ -42,7 +59,7 @@ import { Ref, ref } from 'vue';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { computed } from 'vue';
-import { useQuasar } from 'quasar';
+import { useQuasar, date } from 'quasar';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
@@ -52,6 +69,7 @@ const paperworkStore = usePaperworkStore();
 const categories = computed(() => categoryStore.categories);
 const selectedCategory: Ref<Category> = ref(categoryStore.categories.filter((cat) => cat.name === 'Uncategorized')[0]);
 const $q = useQuasar();
+const issueAt: Ref<string | null> = ref(null);
 
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
@@ -59,12 +77,17 @@ const isDark = ref(false);
 const description = ref('');
 const name = ref('');
 const uploader = ref();
+const price: Ref<number | null> = ref(null);
+const priceCurrency = ref('');
 async function createPaperwork() {
   console.log('uploader.value?.files', uploader.value?.files);
   const requestModel: CreatePaperworkRequestModel = {
     name: name.value,
     description: description.value,
     categoryId: selectedCategory.value.id,
+    price: price.value,
+    priceCurrency: priceCurrency.value,
+    issueAt: issueAt.value,
     files: uploader.value?.files,
   };
   console.log('Creating paperwork request model:', requestModel);
