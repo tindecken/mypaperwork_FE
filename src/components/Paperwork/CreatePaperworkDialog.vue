@@ -42,16 +42,19 @@ import { Ref, ref } from 'vue';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { computed } from 'vue';
+import { useQuasar } from 'quasar';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
+import { GenericResponseData } from 'src/Models/GenericResponseData';
 
 const categoryStore = useCategoryStore();
 const paperworkStore = usePaperworkStore();
 const categories = computed(() => categoryStore.categories);
-const selectedCategory: Ref<Category | null> = ref(categoryStore.categories.filter((cat) => cat.name === 'Uncategorized')[0]);
+const selectedCategory: Ref<Category> = ref(categoryStore.categories.filter((cat) => cat.name === 'Uncategorized')[0]);
+const $q = useQuasar();
 
 defineEmits([...useDialogPluginComponent.emits]);
-const { dialogRef, onDialogHide } = useDialogPluginComponent();
+const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 const isDark = ref(false);
 const description = ref('');
 const name = ref('');
@@ -61,15 +64,46 @@ async function createPaperwork() {
   const requestModel: CreatePaperworkRequestModel = {
     name: name.value,
     description: description.value,
-    categoryId: selectedCategory.value?.id,
+    categoryId: selectedCategory.value.id,
     files: uploader.value?.files,
   };
   console.log('Creating paperwork request model:', requestModel);
-  await paperworkStore.createPaperwork(requestModel);
+  $q.loading.show({
+    message: 'Creating post...',
+  });
+  paperworkStore
+    .createPaperwork(requestModel)
+    .then((response: GenericResponseData | undefined) => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'positive',
+        message: response?.message,
+      });
+      onDialogOK();
+    })
+    .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title,
+      });
+      onDialogHide();
+    });
 }
-async function onRejected(rejectedFiles: any) {
-  console.log('Rejected files:', rejectedFiles);
-  // TODO: Implement on rejected logic
+async function onRejected(rejectedEntries: any) {
+  if (rejectedEntries.length > 0) {
+    if (rejectedEntries[0].failedPropValidation === 'duplicate') {
+      $q.notify({
+        type: 'warning',
+        message: "You've added the same file twice.",
+      });
+    } else if (rejectedEntries[0].failedPropValidation === 'max-file-size') {
+      $q.notify({
+        type: 'warning',
+        message: 'Exceeded the maximum file size.',
+      });
+    }
+  }
 }
 async function onSelectedCategory(cat: Category) {
   console.log('Selected category:', cat.id);

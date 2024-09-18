@@ -1,5 +1,5 @@
 export interface CreatePaperworkRequestModel {
-  categoryId?: string;
+  categoryId: string;
   name: string;
   description?: string;
   files?: string[];
