@@ -40,6 +40,7 @@
           <img v-if="pw.coverBlob" :src="getImgUrl(pw.coverBlob)" />
         </q-card>
       </div>
+      <q-pagination v-model="currentPagingNumber" max="5" direction-links push color="teal" active-design="push" active-color="orange" @update:model-value="navigateTo($event)" />
     </q-page-container>
     <q-footer reveal bordered class="bg-primary text-white row inline justify-between" style="height: 24px">
       <app-footer></app-footer>
@@ -67,7 +68,7 @@ const $router = useRouter();
 const userStore = useUserStore();
 const $q = useQuasar();
 const papperworks = computed(() => paperworkStore.paperworks);
-
+const currentPagingNumber = ref(1);
 onBeforeMount(() => {
   if (!userStore.userInfo.selectedFileId) {
     $router.push('/selectfile');
@@ -118,6 +119,10 @@ function getImgUrl(arrBuff: { type: string; data: number[] }) {
 }
 function openPaperwork(pw: Paperwork) {
   console.log('openPaperwork', pw);
+}
+function navigateTo(page: number) {
+  console.log('navigateTo', page);
+  console.log('currentPagingNumber', currentPagingNumber.value);
 }
 
 const leftDrawerOpen = ref(true);
