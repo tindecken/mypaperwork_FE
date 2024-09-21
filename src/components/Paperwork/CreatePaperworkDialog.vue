@@ -63,9 +63,11 @@ import { useQuasar, date } from 'quasar';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
+import { useGlobalStore } from 'src/stores/globalStore';
 
 const categoryStore = useCategoryStore();
 const paperworkStore = usePaperworkStore();
+const globalStore = useGlobalStore();
 const categories = computed(() => categoryStore.categories);
 const selectedCategory: Ref<Category> = ref(categoryStore.categories.filter((cat) => cat.name === 'Uncategorized')[0]);
 const $q = useQuasar();
@@ -73,7 +75,7 @@ const issueAt: Ref<string | null> = ref(null);
 
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
-const isDark = ref(false);
+const isDark = computed(() => globalStore.darkTheme);
 const description = ref('');
 const name = ref('');
 const uploader = ref();
