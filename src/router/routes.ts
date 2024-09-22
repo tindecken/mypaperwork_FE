@@ -19,6 +19,7 @@ const routes: RouteRecordRaw[] = [
           requiresAuth: true,
         },
       },
+
       {
         path: '/settings',
         component: () => import('src/components/Settings/Settings.vue'),
@@ -45,6 +46,13 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/test',
     component: () => import('src/components/Test/Test.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/paperwork-details/:id',
+    component: () => import('src/components/Paperwork/PaperworkDetails.vue'),
     meta: {
       requiresAuth: true,
     },

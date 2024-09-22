@@ -16,25 +16,24 @@
       </div>
       <template v-if="papperworks.length > 0">
         <div class="row q-pa-md q-gutter-md" :class="papperworks.length > 3 ? 'cards-justify' : ''">
-          <q-card class="my-card" v-for="pw in papperworks" :key="pw.id" @click="openPaperwork(pw)">
+          <q-card class="card-item" v-for="pw in papperworks" :key="pw.id" @click="openPaperwork(pw)">
             <q-card-section class="row justify-between card-item">
               <q-item-label class="self-center">{{ pw.name }} ({{ pw.documentCount }})</q-item-label>
-              <q-btn size="sm" flat round icon="more_vert" class="self-center">
+              <q-btn size="sm" flat round icon="more_vert" class="self-center" @click.stop>
                 <q-menu>
                   <q-list style="min-width: 100px" dense>
-                    <q-item clickable v-close-popup>
+                    <q-item clickable v-close-popup @click="editPaperwork(pw)">
                       <q-item-section>Edit</q-item-section>
                     </q-item>
-
                     <q-separator />
-                    <q-item clickable v-close-popup>
-                      <q-item-section>Move</q-item-section>
+                    <q-item clickable v-close-popup @click="addCategories(pw)">
+                      <q-item-section>Add categories</q-item-section>
                     </q-item>
-                    <q-item clickable v-close-popup>
-                      <q-item-section>Copy</q-item-section>
+                    <q-item clickable v-close-popup @click="removeCategories(pw)">
+                      <q-item-section>Remove categories</q-item-section>
                     </q-item>
                     <q-separator />
-                    <q-item clickable v-close-popup>
+                    <q-item clickable v-close-popup @click="deletePaperwork(pw)">
                       <q-item-section>Delete</q-item-section>
                     </q-item>
                   </q-list>
@@ -96,12 +95,7 @@ onBeforeMount(() => {
 onMounted(async () => {
   categoryStore
     .getCategoriesByFileId()
-    .then((response: GenericResponseData | undefined) => {
-      $q.notify({
-        type: 'positive',
-        message: response?.message,
-      });
-    })
+    .then((response: GenericResponseData | undefined) => {})
     .catch((err: GenericResponseData | any) => {
       console.log('err', err);
       $q.notify({
@@ -114,10 +108,6 @@ onMounted(async () => {
     .getPaperworksBySelectedFile()
     .then((response: GenericResponseData | undefined) => {
       totalRecords.value = response?.totalRecords ?? 0;
-      $q.notify({
-        type: 'positive',
-        message: response?.message,
-      });
     })
     .catch((err: GenericResponseData | any) => {
       console.log('err', err);
@@ -141,29 +131,6 @@ function getImgUrl(arrBuff: { type: string; data: number[] }) {
 function openPaperwork(pw: Paperwork) {
   console.log('openPaperwork', pw);
 }
-function navigateTo(selectedPageNumber: number) {
-  const paging: Paging = {
-    pageNumber: selectedPageNumber,
-    pageSize: pageSize.value,
-    filterValue: searchText.value,
-  };
-  paperworkStore
-    .getPaperworksBySelectedFile(paging)
-    .then((response: GenericResponseData | undefined) => {
-      totalRecords.value = response?.totalRecords ?? 0;
-      $q.notify({
-        type: 'positive',
-        message: response?.message,
-      });
-    })
-    .catch((err: GenericResponseData | any) => {
-      console.log('err', err);
-      $q.notify({
-        type: 'negative',
-        message: err.message || err.title,
-      });
-    });
-}
 function updatePaperworks() {
   const paging: Paging = {
     pageNumber: currentPagingNumber.value,
@@ -174,10 +141,6 @@ function updatePaperworks() {
     .getPaperworksBySelectedFile(paging)
     .then((response: GenericResponseData | undefined) => {
       totalRecords.value = response?.totalRecords ?? 0;
-      $q.notify({
-        type: 'positive',
-        message: response?.message,
-      });
     })
     .catch((err: GenericResponseData | any) => {
       console.log('err', err);
@@ -187,15 +150,27 @@ function updatePaperworks() {
       });
     });
 }
-
+function editPaperwork(pw: Paperwork) {
+  console.log('editPaperwork', pw);
+}
+function addCategories(pw: Paperwork) {
+  console.log('addCategories', pw);
+}
+function removeCategories(pw: Paperwork) {
+  console.log('removeCategories', pw);
+}
+function deletePaperwork(pw: Paperwork) {
+  console.log('deletePaperwork', pw);
+}
 const leftDrawerOpen = ref(true);
 </script>
 <style lang="sass" scoped>
 .cards-justify
   justify-content: space-between
-.my-card
+.card-item
   width: 100%
   max-width: 250px
+  cursor: pointer
 .searchText
   width: 200px
 </style>
