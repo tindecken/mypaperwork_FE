@@ -9,6 +9,7 @@ import handlePaging from 'src/utils/handlePaging';
 import { Paging } from 'src/Models/PagingInterface';
 import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
 import { useCategoryStore } from './categoryStore';
+import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
 
 const userStore = useUserStore();
 const categoryStore = useCategoryStore();
@@ -16,6 +17,7 @@ export const usePaperworkStore = defineStore('paperwork', {
   state: () => {
     return {
       paperworks: [] as Paperwork[],
+      paperworkDetails: null as PaperworkDetails | null,
     };
   },
   getters: {},
@@ -33,6 +35,24 @@ export const usePaperworkStore = defineStore('paperwork', {
         const responseData = (await axiosResponse.data) as GenericResponseData;
         this.$patch({
           paperworks: responseData.data as Paperwork[],
+        });
+        return responseData;
+      } catch (error: any) {
+        this.$reset();
+        handleError(error);
+      }
+    },
+    async getPaperworksById(paperworkId: string): Promise<GenericResponseData | undefined> {
+      try {
+        const axiosResponse = await api.get(`/paperworks/get/${paperworkId}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userStore.token}`,
+          },
+        });
+        const responseData = (await axiosResponse.data) as GenericResponseData;
+        this.$patch({
+          paperworkDetails: responseData.data as PaperworkDetails,
         });
         return responseData;
       } catch (error: any) {
