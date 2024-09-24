@@ -47,7 +47,7 @@
         <div class="row justify-between q-pa-md">
           <span class="text-center">Showing {{ papperworks.length }}/{{ totalRecords }} paperworks</span>
           <q-pagination v-model="currentPagingNumber" :max="pageSizeMax" direction-links push flat color="grey" active-color="primary" @update:model-value="updatePaperworks()" gutter="md" />
-          <q-select class="col-1" dense outlined v-model="pageSize" :options="pageSizeOption" label="Page Size" @update:model-value="updatePaperworks()" />
+          <q-select class="col-lg-1 col-md-2 col-sm-2 col-xs-3" dense outlined v-model="pageSize" :options="pageSizeOption" label="Page Size" @update:model-value="updatePaperworks()" />
         </div>
       </template>
       <template v-else>
@@ -129,7 +129,8 @@ function getImgUrl(arrBuff: { type: string; data: number[] }) {
   return imgUrl;
 }
 function openPaperwork(pw: Paperwork) {
-  console.log('openPaperwork', pw);
+  // routing to paperwork-details page
+  $router.push(`/paperwork-details/${pw.id}`);
 }
 function updatePaperworks() {
   const paging: Paging = {
