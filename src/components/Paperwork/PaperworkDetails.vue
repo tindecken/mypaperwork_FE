@@ -1,26 +1,39 @@
-<template>{{ $route.params.id }}</template>
+<template>
+  <q-layout class="q-pa-md">
+    <q-form>
+      <div class="row justify-end q-col-gutter-md">
+        <q-input readonly outlined class="col-6" v-model="name" label="Name *" />
+        <q-input readonly outlined class="col-grow" v-model="createdAt" label="Created At" />
+      </div>
+    </q-form>
+  </q-layout>
+</template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, onMounted } from 'vue';
+import { ref, onBeforeMount, Ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
-import AppFooter from '../AppFooter/AppFooter.vue';
-import User from '../User/User.vue';
 import { useUserStore } from 'src/stores/userStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
+import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
+
 const $route = useRoute();
 const $router = useRouter();
 const userStore = useUserStore();
 const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
+const paperwork: Ref<PaperworkDetails | null> = ref(null);
+const name = ref('');
+const createdAt = ref(paperwork.value?.createdAt.toString());
 
 onBeforeMount(() => {
-  // Fetch user data on route change
   paperworkStore
-    .getPaperworksById($route.params.id)
-    .then((response: GenericResponseData) => {
-      console.log('Fetched paperwork:', response.data);
+    .getPaperworksById($route.params.id as string)
+    .then((response: GenericResponseData | undefined) => {
+      console.log('Fetched paperwork:', response?.data);
+      paperwork.value = response?.data as PaperworkDetails;
+      name.value = paperwork.value?.name;
     })
     .catch((error) => {
       $q.notify({

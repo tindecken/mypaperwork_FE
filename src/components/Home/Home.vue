@@ -15,7 +15,7 @@
         <q-input dense flat debounce="400" v-model="searchText" icon="search" @update:model-value="updatePaperworks()" clearable clear-icon="close" placeholder="Search" class="searchText" />
       </div>
       <template v-if="papperworks.length > 0">
-        <div class="row q-pa-md q-gutter-md" :class="papperworks.length > 3 ? 'cards-justify' : ''">
+        <div class="row q-pa-md q-gutter-md justify-between">
           <q-card class="card-item" v-for="pw in papperworks" :key="pw.id" @click="openPaperwork(pw)">
             <q-card-section class="row justify-between card-item">
               <q-item-label class="self-center">{{ pw.name }} ({{ pw.documentCount }})</q-item-label>
@@ -166,8 +166,6 @@ function deletePaperwork(pw: Paperwork) {
 const leftDrawerOpen = ref(true);
 </script>
 <style lang="sass" scoped>
-.cards-justify
-  justify-content: space-between
 .card-item
   width: 100%
   max-width: 250px
