@@ -5,7 +5,7 @@
       <q-input readonly outlined class="col-grow" v-model="createdAt" label="Created At" />
     </div>
     <div class="row" v-if="paperwork">
-      <vue-json-pretty :deep="2" showLineNumber :data="(paperwork as unknown as JSONDataType)" />
+      <vue-json-pretty :deep="3" showLineNumber :data="(paperwork as unknown as JSONDataType)" />
     </div>
   </q-layout>
 </template>
