@@ -4,8 +4,8 @@
       <q-input readonly outlined class="col-6" v-model="name" label="Name *" />
       <q-input readonly outlined class="col-grow" v-model="createdAt" label="Created At" />
     </div>
-    <div class="row">
-      <pre>{{ paperwork }}</pre>
+    <div class="row" v-if="paperwork">
+      <vue-json-pretty :deep="2" showLineNumber :data="(paperwork as unknown as JSONDataType)" />
     </div>
   </q-layout>
 </template>
@@ -18,6 +18,9 @@ import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useUserStore } from 'src/stores/userStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
+import { JSONDataType } from 'vue-json-pretty/types/utils';
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
 const $route = useRoute();
 const $router = useRouter();

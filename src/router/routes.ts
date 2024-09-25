@@ -14,7 +14,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: '/home',
-        component: () => import('src/components/Home/Home.vue'),
+        component: () => import('src/components/Paperwork/PaperworkList.vue'),
         meta: {
           requiresAuth: true,
         },
