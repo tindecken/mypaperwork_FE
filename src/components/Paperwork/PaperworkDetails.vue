@@ -1,11 +1,12 @@
 <template>
   <q-layout class="q-pa-md">
-    <q-form>
-      <div class="row justify-end q-col-gutter-md">
-        <q-input readonly outlined class="col-6" v-model="name" label="Name *" />
-        <q-input readonly outlined class="col-grow" v-model="createdAt" label="Created At" />
-      </div>
-    </q-form>
+    <div class="row justify-end q-col-gutter-md">
+      <q-input readonly outlined class="col-6" v-model="name" label="Name *" />
+      <q-input readonly outlined class="col-grow" v-model="createdAt" label="Created At" />
+    </div>
+    <div class="row">
+      <pre>{{ paperwork }}</pre>
+    </div>
   </q-layout>
 </template>
 
@@ -34,6 +35,7 @@ onBeforeMount(() => {
       console.log('Fetched paperwork:', response?.data);
       paperwork.value = response?.data as PaperworkDetails;
       name.value = paperwork.value?.name;
+      createdAt.value = paperwork.value?.createdAt.toString();
     })
     .catch((error) => {
       $q.notify({

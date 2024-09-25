@@ -19,7 +19,20 @@ const routes: RouteRecordRaw[] = [
           requiresAuth: true,
         },
       },
-
+      {
+        path: '/paperworks',
+        component: () => import('src/components/Paperwork/PaperworkList.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: '/paperwork-details/:id',
+        component: () => import('src/components/Paperwork/PaperworkDetails.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
       {
         path: '/settings',
         component: () => import('src/components/Settings/Settings.vue'),
@@ -50,13 +63,7 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true,
     },
   },
-  {
-    path: '/paperwork-details/:id',
-    component: () => import('src/components/Paperwork/PaperworkDetails.vue'),
-    meta: {
-      requiresAuth: true,
-    },
-  },
+
   {
     path: '/:catchAll(.*)*',
     redirect: '/login',

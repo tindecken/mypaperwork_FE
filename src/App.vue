@@ -7,7 +7,6 @@ import { useUserStore } from 'src/stores/userStore';
 import { onBeforeMount, watch } from 'vue';
 import { Dark } from 'quasar';
 import { useGlobalStore } from 'src/stores/globalStore';
-import { AuthenticateResponse } from './Models/Authentication/AuthenticateResponse';
 
 const globalStore = useGlobalStore();
 const userStore = useUserStore();
