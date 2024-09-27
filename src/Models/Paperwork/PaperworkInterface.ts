@@ -4,6 +4,7 @@ export interface Paperwork {
   description: string;
   issuedAt: Date;
   price: number;
+  priceCurrency: string;
   createdAt: Date;
   createdBy: string;
   updatedAt: Date;
