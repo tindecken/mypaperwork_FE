@@ -16,10 +16,10 @@
     <div class="row q-mt-md">
       <span class="self-center">Attachments</span>
     </div>
-    <div class="row q-mt-md" v-for="attachment in attachments" :key="attachment.id">
+    <div class="row q-mt-md q-col-gutter-md" v-for="attachment in attachments" :key="attachment.id">
       <span class="self-center">{{ attachment.fileName }}</span>
       <span class="self-center">{{ attachment.fileSize }}</span>
-      <span class="self-center">Download</span>
+      <q-btn outline label="Download" @click="onDownloadAttachment(attachment.id)" />
     </div>
     <div class="row q-mt-lg" v-if="paperwork">
       <vue-json-pretty :deep="3" showLineNumber :data="(paperwork as unknown as JSONDataType)" />
@@ -33,6 +33,7 @@ import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useUserStore } from 'src/stores/userStore';
+import { useDocumentStore } from 'src/stores/documentStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
 import { JSONDataType } from 'vue-json-pretty/types/utils';
@@ -40,10 +41,12 @@ import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { AttachmentInterface } from 'src/Models/Document/AttachmentInterface';
+import { DownloadAttachmentRequestModel } from 'src/Models/Document/DownloadAttachmentRequestModel';
 
 const $route = useRoute();
 const $router = useRouter();
 const userStore = useUserStore();
+const documentStore = useDocumentStore();
 const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
 const paperwork: Ref<PaperworkDetails | null> = ref(null);
@@ -63,19 +66,41 @@ onBeforeMount(() => {
       paperwork.value = response?.data as PaperworkDetails;
       name.value = paperwork.value?.name;
       description.value = paperwork.value?.description;
-      createdAt.value = paperwork.value?.createdAt.toString();
-      price.value = paperwork.value?.price.toString();
+      createdAt.value = paperwork.value?.createdAt?.toString();
+      price.value = paperwork.value?.price?.toString();
       priceCurrency.value = paperwork.value?.priceCurrency;
       categories.value = paperwork.value?.categories;
       attachments.value = paperwork.value?.attachments || [];
     })
-    .catch((error) => {
+    .catch((err: GenericResponseData | any) => {
       $q.notify({
         type: 'negative',
-        message: 'Error fetching paperwork',
+        message: err.message || err.title,
       });
     });
 });
+async function onDownloadAttachment(attachmentId: string) {
+  const body: DownloadAttachmentRequestModel = {
+    paperworkId: $route.params.id as string,
+    documentId: attachmentId,
+  };
+  documentStore
+    .downloadAttachment(body)
+    .then((response: GenericResponseData | undefined) => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'positive',
+        message: response?.message,
+      });
+    })
+    .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title,
+      });
+    });
+}
 </script>
 
 <style lang="sass" scoped></style>
