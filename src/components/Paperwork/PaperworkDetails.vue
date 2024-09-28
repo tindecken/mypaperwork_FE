@@ -94,14 +94,15 @@ onMounted(() => {
       attachments.value = paperwork.value?.attachments || [];
       images.value = paperwork.value?.images || [];
       imagesUrls.value = images.value.map((image) => getImgUrl(image.fileBlob));
+      $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
       $q.notify({
         type: 'negative',
         message: err.message || err.title,
       });
     });
-  $q.loading.hide();
 });
 async function onDownloadAttachment(attachmentId: string, attachmentFileName: string) {
   const body: DownloadAttachmentRequestModel = {
