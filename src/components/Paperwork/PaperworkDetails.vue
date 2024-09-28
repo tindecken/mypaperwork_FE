@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, Ref } from 'vue';
+import { ref, onBeforeMount, Ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
@@ -78,7 +78,8 @@ const images: Ref<ImageInterface[]> = ref([]);
 const imagesUrls: Ref<string[]> = ref([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
 
-onBeforeMount(() => {
+onMounted(() => {
+  $q.loading.show();
   paperworkStore
     .getPaperworksById($route.params.id as string)
     .then((response: GenericResponseData | undefined) => {
@@ -100,6 +101,7 @@ onBeforeMount(() => {
         message: err.message || err.title,
       });
     });
+  $q.loading.hide();
 });
 async function onDownloadAttachment(attachmentId: string, attachmentFileName: string) {
   const body: DownloadAttachmentRequestModel = {
@@ -170,10 +172,10 @@ async function showImages(currentImageUrl: string, imageUrls: string[]) {
 
 <style lang="sass" scoped>
 .images
+  width: -webkit-fill-available
+  height: -webkit-fill-available
   cursor: pointer
   transition: transform 0.3s ease-in-out
   &:hover
     transform: scale(1.1)
-  width: -webkit-fill-available
-  height: -webkit-fill-available
 </style>
