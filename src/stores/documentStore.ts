@@ -32,7 +32,6 @@ export const useDocumentStore = defineStore('document', {
           }
         );
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log(responseData);
         return responseData;
       } catch (error: any) {
         this.$reset();

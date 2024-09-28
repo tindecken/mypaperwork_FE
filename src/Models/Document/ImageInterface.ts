@@ -1,4 +1,4 @@
-export interface AttachmentInterface {
+export interface ImageInterface {
   id: string;
   fileName: string;
   fileSize: number;
