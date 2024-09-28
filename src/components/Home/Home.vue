@@ -3,7 +3,9 @@
     <q-header bordered class="bg-primary text-white">
       <q-toolbar style="height: 24px">
         <q-btn dense flat round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" />
-        <q-toolbar-title> My Paperwork {{ $q.version }} </q-toolbar-title>
+        <q-toolbar-title @click="goHome()">
+          <span @click="goHome()" style="cursor: pointer"> My Paperwork {{ $q.version }} </span>
+        </q-toolbar-title>
         <user></user>
       </q-toolbar>
     </q-header>
@@ -52,7 +54,9 @@ onMounted(async () => {
       });
     });
 });
-
+function goHome() {
+  $router.push('/');
+}
 const leftDrawerOpen = ref(true);
 </script>
 <style lang="sass" scoped></style>

@@ -24,8 +24,17 @@
     <div class="row q-mt-md" v-if="imagesUrls.length > 0">
       <span class="self-center">Images ({{ imagesUrls.length }})</span>
     </div>
-    <div class="row q-mt-md q-col-gutter-md" v-for="imageUrl in imagesUrls" :key="imageUrl">
-      <img :src="imageUrl" @click="showImages(imageUrl, imagesUrls)" />
+    <div class="row q-mt-md q-col-gutter-md">
+      <div class="col" v-for="imageUrl in imagesUrls" :key="imageUrl" style="max-width: 300px; height: 150px">
+        <q-img :src="imageUrl" @click="showImages(imageUrl, imagesUrls)" class="images">
+          <template v-slot:loading>
+            <div class="text-yellow">
+              <q-spinner-ios />
+              <div class="q-mt-md">Loading...</div>
+            </div>
+          </template>
+        </q-img>
+      </div>
     </div>
     <div class="row q-mt-lg" v-if="paperwork">
       <vue-json-pretty :deep="3" showLineNumber :data="(paperwork as unknown as JSONDataType)" />
@@ -159,4 +168,12 @@ async function showImages(currentImageUrl: string, imageUrls: string[]) {
 }
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+.images
+  cursor: pointer
+  transition: transform 0.3s ease-in-out
+  &:hover
+    transform: scale(1.1)
+  width: -webkit-fill-available
+  height: -webkit-fill-available
+</style>
