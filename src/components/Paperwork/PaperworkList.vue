@@ -100,6 +100,8 @@ function openPaperwork(pw: Paperwork) {
   $router.push(`/paperwork-details/${pw.id}`);
 }
 function updatePaperworks() {
+  $q.loading.show();
+
   const paging: Paging = {
     pageNumber: currentPagingNumber.value,
     pageSize: pageSize.value,
@@ -109,6 +111,7 @@ function updatePaperworks() {
     .getPaperworksBySelectedFile(paging)
     .then((response: GenericResponseData | undefined) => {
       totalRecords.value = response?.totalRecords ?? 0;
+      $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
       console.log('err', err);
@@ -116,6 +119,7 @@ function updatePaperworks() {
         type: 'negative',
         message: err.message || err.title,
       });
+      $q.loading.hide();
     });
 }
 function editPaperwork(pw: Paperwork) {
