@@ -68,12 +68,15 @@ const searchText = ref('');
 const papperworks = computed(() => paperworkStore.paperworks);
 
 onMounted(() => {
+  $q.loading.show();
   paperworkStore
     .getPaperworksBySelectedFile()
     .then((response: GenericResponseData | undefined) => {
       totalRecords.value = response?.totalRecords ?? 0;
+      $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
       console.log('err', err);
       $q.notify({
         type: 'negative',
