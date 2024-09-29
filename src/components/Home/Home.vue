@@ -15,7 +15,7 @@
     <q-page-container>
       <router-view></router-view>
     </q-page-container>
-    <q-footer reveal bordered class="bg-primary text-white row inline justify-between" style="height: 24px">
+    <q-footer reveal bordered class="bg-primary text-white" style="height: 24px">
       <app-footer></app-footer>
     </q-footer>
   </q-layout>

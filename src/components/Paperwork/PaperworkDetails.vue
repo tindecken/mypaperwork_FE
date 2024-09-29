@@ -1,49 +1,59 @@
 <template>
   <q-layout class="q-pa-md">
-    <div class="row justify-end q-col-gutter-md">
+    <span class="title">Infos</span>
+    <div class="row justify-end q-col-gutter-md q-mt-xs">
       <q-input readonly outlined class="col-6" v-model="name" label="Name *" />
-      <q-input readonly outlined class="col-grow" v-model="createdAt" label="Created At" />
+      <q-input readonly outlined class="col-6" v-model="createdAt" label="Created At" />
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
       <q-input type="textarea" autogrow readonly outlined class="col-6" v-model="description" label="Description" />
-      <q-input readonly outlined class="col-grow" v-model="price" label="Price" />
-      <q-input readonly outlined class="col-grow" v-model="priceCurrency" label="Currency" />
+      <q-input readonly outlined class="col-3" v-model="price" label="Price" />
+      <q-input readonly outlined class="col-3" v-model="priceCurrency" label="Currency" />
     </div>
     <div class="row q-mt-md">
       <span class="self-center">Categories:</span>
       <q-chip outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event"> {{ cat.name }}</q-chip>
     </div>
-    <div class="row q-mt-md" v-if="attachments.length > 0">
-      <span class="self-center">Attachments ({{ attachments.length }})</span>
+    <span class="row q-mt-md title"
+      >Attachments
+      <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length" />
+    </span>
+    <q-table :rows="attachments" :columns="columns" row-key="id" no-data-label="No attachments" flat bordered class="q-mt-md" separator="cell" v-if="attachments.length > 0">
+      <template v-slot:body="props">
+        <q-tr :props="props">
+          <q-td key="fileName" :props="props">
+            {{ props.row.fileName }}
+          </q-td>
+          <q-td key="fileSize" :props="props">
+            {{ prettyBytes(props.row.fileSize) }}
+          </q-td>
+          <q-td key="download" :props="props">
+            <q-btn icon="sym_o_download" flat label="Download" @click="onDownloadAttachment(props.row.id, props.row.fileName)" />
+          </q-td>
+        </q-tr>
+      </template>
+    </q-table>
+    <div class="row q-mt-md">
+      <span class="self-center title">Images </span>
+      <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="images.length" />
     </div>
-    <div class="row q-mt-md q-col-gutter-md" v-for="attachment in attachments" :key="attachment.id">
-      <span class="self-center">{{ attachment.fileName }}</span>
-      <span class="self-center">{{ attachment.fileSize }}</span>
-      <q-btn outline label="Download" @click="onDownloadAttachment(attachment.id, attachment.fileName)" />
-    </div>
-    <div class="row q-mt-md" v-if="imagesUrls.length > 0">
-      <span class="self-center">Images ({{ imagesUrls.length }})</span>
-    </div>
-    <div class="row q-mt-md q-col-gutter-md">
-      <div class="col" v-for="imageUrl in imagesUrls" :key="imageUrl" style="max-width: 300px; height: 150px">
-        <q-img :src="imageUrl" @click="showImages(imageUrl, imagesUrls)" class="images">
-          <template v-slot:loading>
-            <div class="text-yellow">
-              <q-spinner-ios />
-              <div class="q-mt-md">Loading...</div>
-            </div>
-          </template>
+    <div class="row q-mt-md q-col-gutter-lg">
+      <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
+        <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(getImgUrl(image.fileBlob), images)" class="images">
+          <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 8px; left: 8px">
+            <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
+          </q-icon>
         </q-img>
       </div>
     </div>
-    <div class="row q-mt-lg" v-if="paperwork">
+    <div class="row q-mt-lg" v-if="isShowedJson">
       <vue-json-pretty :deep="3" showLineNumber :data="(paperwork as unknown as JSONDataType)" />
     </div>
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, Ref, onMounted } from 'vue';
+import { ref, onBeforeMount, Ref, onMounted, computed } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
@@ -60,6 +70,8 @@ import { DownloadAttachmentRequestModel } from 'src/Models/Document/DownloadAtta
 import { ImageInterface } from 'src/Models/Document/ImageInterface';
 import { api as viewerApi } from 'v-viewer';
 import 'viewerjs/dist/viewer.css';
+import prettyBytes from 'pretty-bytes';
+import { useGlobalStore } from 'src/stores/globalStore';
 
 const $route = useRoute();
 const $router = useRouter();
@@ -77,7 +89,20 @@ const attachments: Ref<AttachmentInterface[]> = ref([]);
 const images: Ref<ImageInterface[]> = ref([]);
 const imagesUrls: Ref<string[]> = ref([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
-
+const globalStore = useGlobalStore();
+const isShowedJson = computed(() => globalStore.isShowedJson);
+const columns = [
+  {
+    name: 'fileName',
+    required: true,
+    label: 'File Name',
+    align: 'left',
+    field: 'fileName',
+    sortable: true,
+  },
+  { name: 'fileSize', align: 'right', label: 'Size', field: 'fileSize', sortable: true, format: (val: number) => `${prettyBytes(val)}`, style: 'width: 50px' },
+  { name: 'download', label: 'Download', align: 'left' },
+];
 onMounted(() => {
   $q.loading.show();
   paperworkStore
@@ -145,9 +170,8 @@ function getImgUrl(arrBuff: { type: string; data: number[] }) {
   const imgUrl = `data:${arrBuff.type};base64,${btoawindow}`;
   return imgUrl;
 }
-async function showImages(currentImageUrl: string, imageUrls: string[]) {
-  console.log('Showing images:', currentImageUrl);
-  console.log('Showing images:', imageUrls);
+async function showImages(currentImageUrl: string, images: ImageInterface[]) {
+  const imageUrls = images.map((image) => getImgUrl(image.fileBlob));
   const index = imageUrls.indexOf(currentImageUrl);
   const $viewer = viewerApi({
     images: imageUrls,
@@ -155,7 +179,7 @@ async function showImages(currentImageUrl: string, imageUrls: string[]) {
       inline: true,
       button: true,
       navbar: false,
-      title: false,
+      title: () => `${images[index].fileName} - ${prettyBytes(images[index].fileSize)}`,
       toolbar: true,
       tooltip: false,
       movable: true,
@@ -176,7 +200,15 @@ async function showImages(currentImageUrl: string, imageUrls: string[]) {
   width: -webkit-fill-available
   height: -webkit-fill-available
   cursor: pointer
+  border: 1px solid
+  border-color: rgba(0, 0, 0, 0.4)
   transition: transform 0.3s ease-in-out
   &:hover
     transform: scale(1.1)
+.title
+  font-size: 20px
+  letter-spacing: 0.005em
+  font-weight: 400
+.badge
+  height: 16px
 </style>

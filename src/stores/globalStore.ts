@@ -17,6 +17,7 @@ export const useGlobalStore = defineStore('global', {
       { label: 'Pastels', value: 'pastels' },
       { label: 'Sunset', value: 'sunset' },
     ],
+    isShowedJson: false as boolean,
   }),
   actions: {
     switchDarkTheme() {
@@ -24,6 +25,9 @@ export const useGlobalStore = defineStore('global', {
     },
     changeTheme(theme: { label: string; value: string }) {
       this.selectedTheme = theme;
+    },
+    toggleIsShowedJson() {
+      this.isShowedJson = !this.isShowedJson;
     },
   },
 });
