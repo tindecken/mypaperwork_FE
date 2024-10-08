@@ -77,10 +77,9 @@ onMounted(() => {
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();
-      console.log('err', err);
       $q.notify({
         type: 'negative',
-        message: err.message || err.title,
+        message: err.message || err.title || err,
       });
     });
 });
@@ -114,10 +113,9 @@ function updatePaperworks() {
       $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
-      console.log('err', err);
       $q.notify({
         type: 'negative',
-        message: err.message || err.title,
+        message: err.message || err.title || err,
       });
       $q.loading.hide();
     });

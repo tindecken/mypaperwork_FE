@@ -1,6 +1,8 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
-import { useRoute, useRouter } from 'vue-router';
+import { useUserStore } from 'src/stores/userStore';
+import { useJwt } from '@vueuse/integrations/useJwt';
+import { UserInfoInterface } from '../Models/UserInfoInterface';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -14,11 +16,20 @@ declare module '@vue/runtime-core' {
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
+
 const api = axios.create({ baseURL: process.env.API_BASEURL });
 api.interceptors.request.use((request) => {
-  const $router = useRouter();
-  console.log('request', request);
-  window.location.href = '/login';
+  const userStore = useUserStore();
+  if (userStore.token) {
+    const decodedJwt = useJwt(userStore.token);
+    const token = decodedJwt.payload.value as UserInfoInterface;
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (token.exp && token.exp < currentTime) {
+      userStore.$reset();
+      window.location.href = '#/login';
+      return Promise.reject('Token has expired');
+    }
+  }
   return request;
 });
 

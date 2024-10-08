@@ -3,9 +3,9 @@
     <q-page-container class="row justify-center">
       <div class="col-auto">
         <q-form @submit="onClickLogin" @reset="onReset" style="min-width: 400px" class="q-mt-xl">
-          <q-input filled v-model="userName" label="User Name" lazy-rules :rules="[(val) => (val && val.length > 0) || 'Username is required']" />
+          <q-input filled v-model="userName" label="User Name" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Username is required']" />
 
-          <q-input filled type="password" v-model="password" label="Your password" lazy-rules :rules="[(val) => (val && val.length > 0) || 'Password is required']" />
+          <q-input filled type="password" v-model="password" label="Your password" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Password is required']" />
 
           <div>
             <q-btn label="Submit" type="submit" color="primary" />
@@ -50,7 +50,7 @@ const onClickLogin = async () => {
     .catch((err: GenericResponseData | any) => {
       $q.notify({
         type: 'negative',
-        message: err.message || err.title,
+        message: err.message || err.title || err,
       });
     });
 };

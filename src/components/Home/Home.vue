@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { onBeforeMount, ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useUserStore } from 'src/stores/userStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
@@ -31,7 +31,6 @@ import { GenericResponseData } from 'src/Models/GenericResponseData';
 import User from 'src/components/User/User.vue';
 import AppFooter from 'src/components/AppFooter/AppFooter.vue';
 import LeftDrawer from 'src/components/LeftDrawer/LeftDrawer.vue';
-import { watch } from 'fs';
 
 const categoryStore = useCategoryStore();
 const $router = useRouter();
@@ -48,10 +47,9 @@ onMounted(async () => {
     .getCategoriesByFileId()
     .then()
     .catch((err: GenericResponseData | any) => {
-      console.log('err', err);
       $q.notify({
         type: 'negative',
-        message: err.message || err.title,
+        message: err.message || err.title || err,
       });
     });
 });

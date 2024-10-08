@@ -125,7 +125,7 @@ onMounted(() => {
       $q.loading.hide();
       $q.notify({
         type: 'negative',
-        message: err.message || err.title,
+        message: err.message || err.title || err,
       });
     });
 });
@@ -155,7 +155,7 @@ async function onDownloadAttachment(attachmentId: string, attachmentFileName: st
       $q.loading.hide();
       $q.notify({
         type: 'negative',
-        message: err.message || err.title,
+        message: err.message || err.title || err,
       });
     });
 }

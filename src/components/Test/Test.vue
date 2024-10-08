@@ -12,19 +12,26 @@
 </template>
 
 <script setup lang="ts">
+import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { useFileStore } from 'src/stores/fileStore';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
+import { useQuasar } from 'quasar';
 
 const paperworkStore = usePaperworkStore();
 const fileStore = useFileStore();
+const $q = useQuasar();
+
 const onCallAPI = async () => {
   fileStore
     .getAssociatedFiles()
     .then((response) => {
       console.log(response);
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err: GenericResponseData | any) => {
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
     });
 };
 const onCallAPIGetPaperworkById = async () => {
@@ -33,8 +40,11 @@ const onCallAPIGetPaperworkById = async () => {
     .then((response) => {
       console.log(response);
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err: GenericResponseData | any) => {
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
     });
 };
 </script>

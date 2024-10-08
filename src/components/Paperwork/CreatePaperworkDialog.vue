@@ -110,7 +110,7 @@ async function createPaperwork() {
       $q.loading.hide();
       $q.notify({
         type: 'negative',
-        message: err.message || err.title,
+        message: err.message || err.title || err,
       });
       onDialogHide();
     });
