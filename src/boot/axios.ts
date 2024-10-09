@@ -27,7 +27,7 @@ api.interceptors.request.use((request) => {
     if (token.exp && token.exp < currentTime) {
       userStore.$reset();
       window.location.href = '#/login';
-      return Promise.reject('Token has expired');
+      return Promise.reject('Your session has been expired, please login again.');
     }
   }
   return request;

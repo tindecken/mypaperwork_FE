@@ -130,7 +130,25 @@ function removeCategories(pw: Paperwork) {
   console.log('removeCategories', pw);
 }
 function deletePaperwork(pw: Paperwork) {
-  console.log('deletePaperwork', pw);
+  $q.loading.show();
+
+  paperworkStore
+    .deletePaperwork(pw.id)
+    .then((response: GenericResponseData | undefined) => {
+      totalRecords.value -= 1;
+      $q.notify({
+        type: 'positive',
+        message: 'Delete paperwork successfully!',
+      });
+      $q.loading.hide();
+    })
+    .catch((err: GenericResponseData | any) => {
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
+      $q.loading.hide();
+    });
 }
 </script>
 

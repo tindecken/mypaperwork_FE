@@ -1,6 +1,12 @@
 <template>
   <q-layout class="q-pa-md">
-    <span class="title">Infos</span>
+    <div class="row justify-end">
+      <span class="col title">Infos</span>
+      <div class="col-auto">
+        <q-btn flat color="primary" label="Edit" @click="editPaperwork()" />
+        <q-btn class="q-ml-sm" flat color="primary" label="Back" @click="back()" />
+      </div>
+    </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
       <q-input readonly outlined class="col-6" v-model="name" label="Name *" />
       <q-input readonly outlined class="col-6" v-model="createdAt" label="Created At" />
@@ -18,7 +24,7 @@
       >Attachments
       <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length" />
     </span>
-    <q-table :rows="attachments" :columns="columns" row-key="id" no-data-label="No attachments" flat bordered class="q-mt-md" separator="cell" v-if="attachments.length > 0">
+    <q-table dense :rows="attachments" :columns="columns" row-key="id" no-data-label="No attachments" flat bordered class="q-mt-md" separator="cell" v-if="attachments.length > 0">
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td key="fileName" :props="props">
@@ -53,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, Ref, onMounted, computed } from 'vue';
+import { ref, Ref, onMounted, computed } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
@@ -192,6 +198,12 @@ async function showImages(currentImageUrl: string, images: ImageInterface[]) {
       initialViewIndex: index,
     },
   });
+}
+function editPaperwork() {
+  // TODO: Implement update paperwork logic
+}
+function back() {
+  $router.back();
 }
 </script>
 

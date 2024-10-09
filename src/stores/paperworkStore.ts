@@ -88,5 +88,22 @@ export const usePaperworkStore = defineStore('paperwork', {
         handleError(error);
       }
     },
+    async deletePaperwork(paperworkId: string): Promise<GenericResponseData | undefined> {
+      try {
+        const axiosResponse = await api.delete(`/paperworks/delete/${paperworkId}`, {
+          headers: {
+            'Content-Type': 'multipart/form-datan',
+            Authorization: `Bearer ${userStore.token}`,
+          },
+        });
+        const responseData = (await axiosResponse.data) as GenericResponseData;
+        // Reload categories after creating a new paperwork
+        await categoryStore.getCategoriesByFileId();
+        await this.getPaperworksBySelectedFile();
+        return responseData;
+      } catch (error: any) {
+        handleError(error);
+      }
+    },
   },
 });
