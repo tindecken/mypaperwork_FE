@@ -34,6 +34,13 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: '/paperwork-edit/:id',
+        component: () => import('src/components/Paperwork/EditPaperwork.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
         path: '/settings',
         component: () => import('src/components/Settings/Settings.vue'),
         meta: {

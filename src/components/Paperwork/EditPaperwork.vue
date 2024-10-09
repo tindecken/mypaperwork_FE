@@ -3,18 +3,18 @@
     <div class="row justify-end">
       <span class="col title">Infos</span>
       <div class="col-auto">
-        <q-btn flat color="primary" label="Edit" @click="editPaperwork()" />
-        <q-btn class="q-ml-sm" flat color="primary" label="Back" @click="back()" />
+        <q-btn flat color="primary" label="Save" @click="savePaperwork()" />
+        <q-btn class="q-ml-sm" flat color="primary" label="Cancel" @click="cancel()" />
       </div>
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
-      <q-input readonly outlined class="col-6" v-model="name" label="Name *" />
-      <q-input readonly outlined class="col-6" v-model="createdAt" label="Created At" />
+      <q-input outlined class="col-6" v-model="name" label="Name *" />
+      <q-input readonly class="col-6" v-model="createdAt" label="Created At" />
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
-      <q-input type="textarea" autogrow readonly outlined class="col-6" v-model="description" label="Description" />
-      <q-input readonly outlined class="col-3" v-model="price" label="Price" />
-      <q-input readonly outlined class="col-3" v-model="priceCurrency" label="Currency" />
+      <q-input type="textarea" autogrow outlined class="col-6" v-model="description" label="Description" />
+      <q-input outlined class="col-3" v-model="price" label="Price" />
+      <q-input outlined class="col-3" v-model="priceCurrency" label="Currency" />
     </div>
     <div class="row q-mt-md">
       <span class="self-center">Categories:</span>
@@ -199,12 +199,11 @@ async function showImages(currentImageUrl: string, images: ImageInterface[]) {
     },
   });
 }
-function editPaperwork() {
-  // TODO: Implement update paperwork logic\
-  $router.push(`/paperwork-edit/${$route.params.id}`);
+function savePaperwork() {
+  // TODO: Implement update paperwork logic
 }
-function back() {
-  $router.back();
+function cancel() {
+  // TODO: Implement cancel paperwork logic
 }
 </script>
 
