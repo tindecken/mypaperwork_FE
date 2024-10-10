@@ -1,55 +1,64 @@
 <template>
   <q-layout class="q-pa-md">
-    <div class="row justify-end">
-      <span class="col title">Infos</span>
-      <div class="col-auto">
-        <q-btn flat color="primary" label="Save" @click="savePaperwork()" />
-        <q-btn class="q-ml-sm" flat color="primary" label="Cancel" @click="cancel()" />
+    <div class="header q-pa-md">
+      <div class="row justify-end">
+        <span class="col title">Infos</span>
+        <div class="col-auto">
+          <q-btn flat color="primary" label="Save" @click="savePaperwork()" />
+          <q-btn class="q-ml-sm" flat color="primary" label="Cancel" @click="cancel()" />
+        </div>
+      </div>
+      <div class="row justify-end q-col-gutter-md q-mt-xs">
+        <q-input outlined class="col-6" v-model="name" label="Name *" />
+        <q-input readonly class="col-6" v-model="createdAt" label="Created At" />
+      </div>
+      <div class="row justify-end q-col-gutter-md q-mt-xs">
+        <q-input type="textarea" autogrow outlined class="col-6" v-model="description" label="Description" />
+        <q-input outlined class="col-3" v-model="price" label="Price" />
+        <q-input outlined class="col-3" v-model="priceCurrency" label="Currency" />
+      </div>
+      <div class="row q-mt-md">
+        <span class="self-center">Categories:</span>
+        <q-chip outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event"> {{ cat.name }}</q-chip>
       </div>
     </div>
-    <div class="row justify-end q-col-gutter-md q-mt-xs">
-      <q-input outlined class="col-6" v-model="name" label="Name *" />
-      <q-input readonly class="col-6" v-model="createdAt" label="Created At" />
+    <div class="header q-pa-md q-mt-md q-mb-md">
+      <span class="row title"
+        >Attachments
+        <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length" />
+      </span>
+      <q-table dense :rows="attachments" :columns="columns" row-key="id" no-data-label="No attachments" flat bordered class="q-mt-md" separator="cell" v-if="attachments.length > 0">
+        <template v-slot:body="props">
+          <q-tr :props="props">
+            <q-td key="fileName" :props="props">
+              {{ props.row.fileName }}
+            </q-td>
+            <q-td key="fileSize" :props="props">
+              {{ prettyBytes(props.row.fileSize) }}
+            </q-td>
+            <q-td key="download" :props="props">
+              <q-btn icon="sym_o_download" flat label="Download" @click="onDownloadAttachment(props.row.id, props.row.fileName)" />
+            </q-td>
+            <q-td key="remove" :props="props">
+              <q-btn icon="sym_o_remove" flat label="Remove" @click="onRemoveAttachment(props.row.id)" />
+            </q-td>
+          </q-tr>
+        </template>
+      </q-table>
     </div>
-    <div class="row justify-end q-col-gutter-md q-mt-xs">
-      <q-input type="textarea" autogrow outlined class="col-6" v-model="description" label="Description" />
-      <q-input outlined class="col-3" v-model="price" label="Price" />
-      <q-input outlined class="col-3" v-model="priceCurrency" label="Currency" />
-    </div>
-    <div class="row q-mt-md">
-      <span class="self-center">Categories:</span>
-      <q-chip outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event"> {{ cat.name }}</q-chip>
-    </div>
-    <span class="row q-mt-md title"
-      >Attachments
-      <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length" />
-    </span>
-    <q-table dense :rows="attachments" :columns="columns" row-key="id" no-data-label="No attachments" flat bordered class="q-mt-md" separator="cell" v-if="attachments.length > 0">
-      <template v-slot:body="props">
-        <q-tr :props="props">
-          <q-td key="fileName" :props="props">
-            {{ props.row.fileName }}
-          </q-td>
-          <q-td key="fileSize" :props="props">
-            {{ prettyBytes(props.row.fileSize) }}
-          </q-td>
-          <q-td key="download" :props="props">
-            <q-btn icon="sym_o_download" flat label="Download" @click="onDownloadAttachment(props.row.id, props.row.fileName)" />
-          </q-td>
-        </q-tr>
-      </template>
-    </q-table>
-    <div class="row q-mt-md">
-      <span class="self-center title">Images </span>
-      <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="images.length" />
-    </div>
-    <div class="row q-mt-md q-col-gutter-lg">
-      <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
-        <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(getImgUrl(image.fileBlob), images)" class="images">
-          <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 8px; left: 8px">
-            <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
-          </q-icon>
-        </q-img>
+    <div class="header q-pa-md">
+      <div class="row">
+        <span class="self-center title">Images </span>
+        <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="images.length" />
+      </div>
+      <div class="row q-mt-md q-col-gutter-lg">
+        <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
+          <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(getImgUrl(image.fileBlob), images)" class="images">
+            <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 8px; left: 8px">
+              <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
+            </q-icon>
+          </q-img>
+        </div>
       </div>
     </div>
     <div class="row q-mt-lg" v-if="isShowedJson">
@@ -108,6 +117,7 @@ const columns = [
   },
   { name: 'fileSize', align: 'right', label: 'Size', field: 'fileSize', sortable: true, format: (val: number) => `${prettyBytes(val)}`, style: 'width: 50px' },
   { name: 'download', label: 'Download', align: 'left' },
+  { name: 'remove', label: 'Remove', align: 'left' },
 ];
 onMounted(() => {
   $q.loading.show();
@@ -205,6 +215,9 @@ function savePaperwork() {
 function cancel() {
   // TODO: Implement cancel paperwork logic
 }
+function onRemoveAttachment(attachmentId: string) {
+  // TODO: Implement onRemoveAttachment
+}
 </script>
 
 <style lang="sass" scoped>
@@ -223,4 +236,7 @@ function cancel() {
   font-weight: 400
 .badge
   height: 16px
+.header
+  border: 1px solid rgba(0, 0, 0, 0.1)
+  box-shadow: $shadow-1
 </style>
