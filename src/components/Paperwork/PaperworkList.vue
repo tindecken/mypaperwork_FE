@@ -53,6 +53,7 @@ import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
 import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
 import { Paging } from 'src/Models/PagingInterface';
+import ConfirmDeletePaperworkDialog from './Dialogs/ConfirmDeletePaperworkDialog.vue';
 
 const $route = useRoute();
 const $router = useRouter();
@@ -121,7 +122,7 @@ function updatePaperworks() {
     });
 }
 function editPaperwork(pw: Paperwork) {
-  console.log('editPaperwork', pw);
+  $router.push(`/paperwork-edit/${pw.id}`);
 }
 function addCategories(pw: Paperwork) {
   console.log('addCategories', pw);
@@ -130,24 +131,32 @@ function removeCategories(pw: Paperwork) {
   console.log('removeCategories', pw);
 }
 function deletePaperwork(pw: Paperwork) {
-  $q.loading.show();
-
-  paperworkStore
-    .deletePaperwork(pw.id)
-    .then((response: GenericResponseData | undefined) => {
-      totalRecords.value -= 1;
-      $q.notify({
-        type: 'positive',
-        message: 'Delete paperwork successfully!',
-      });
-      $q.loading.hide();
+  $q.dialog({
+    component: ConfirmDeletePaperworkDialog,
+  })
+    .onOk(async () => {
+      $q.loading.show();
+      paperworkStore
+        .deletePaperwork(pw.id)
+        .then((response: GenericResponseData | undefined) => {
+          totalRecords.value -= 1;
+          $q.notify({
+            type: 'positive',
+            message: 'Delete paperwork successfully!',
+          });
+          $q.loading.hide();
+        })
+        .catch((err: GenericResponseData | any) => {
+          $q.notify({
+            type: 'negative',
+            message: err.message || err.title || err,
+          });
+          $q.loading.hide();
+        });
     })
-    .catch((err: GenericResponseData | any) => {
-      $q.notify({
-        type: 'negative',
-        message: err.message || err.title || err,
-      });
-      $q.loading.hide();
+    .onCancel(async () => {})
+    .onDismiss(() => {
+      // TODO
     });
 }
 </script>

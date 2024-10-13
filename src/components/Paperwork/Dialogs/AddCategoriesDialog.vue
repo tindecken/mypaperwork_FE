@@ -15,7 +15,7 @@
       <div class="row q-pa-md">
         <q-form @submit="addCategories()" class="col-grow">
           <div class="row q-mt-sm">
-            <q-uploader hide-upload-btn :color="isDark ? 'grey-9' : 'grey-6'" ref="uploader" class="col-grow" label="Images (max 50 file, max size: 20mb per file)" multiple max-files="50" max-file-size="50000000" @rejected="onRejected($event)" />
+            <q-option-group option-label="name" option-value="id" :options="categoriesOptions" type="checkbox" v-model="selectedCategories" />
           </div>
           <div class="row q-pa-md justify-end">
             <q-btn flat label="Cancel" @click="onDialogHide()"></q-btn>
@@ -29,38 +29,32 @@
 
 <script setup lang="ts">
 import { QInput, useDialogPluginComponent } from 'quasar';
-import { Ref, ref } from 'vue';
+import { PropType, Ref, ref } from 'vue';
 import { useCategoryStore } from 'src/stores/categoryStore';
-import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { computed } from 'vue';
 import { useQuasar, date } from 'quasar';
 import { Category } from 'src/Models/Category/CategoryInterface';
-import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
-import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { useGlobalStore } from 'src/stores/globalStore';
 
+const props = defineProps({
+  existingCategories: {
+    type: Array as PropType<Category[]>,
+    required: true,
+  },
+});
 const globalStore = useGlobalStore();
 const isDark = computed(() => globalStore.darkTheme);
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 const $q = useQuasar();
+const categoryStore = useCategoryStore();
 
-async function onRejected(rejectedEntries: any) {
-  if (rejectedEntries.length > 0) {
-    if (rejectedEntries[0].failedPropValidation === 'duplicate') {
-      $q.notify({
-        type: 'warning',
-        message: "You've added the same file twice.",
-      });
-    } else if (rejectedEntries[0].failedPropValidation === 'max-file-size') {
-      $q.notify({
-        type: 'warning',
-        message: 'Exceeded the maximum file size.',
-      });
-    }
-  }
-}
+const categoriesOptions = ref<Category[]>(categoryStore.categories);
+const mapExistingCategories = categoriesOptions.value.filter((c) => props.existingCategories.map((cc) => cc.id).indexOf(c.id) > -1);
+const selectedCategories = ref<string[]>(mapExistingCategories.map((m) => m.id));
+
 async function addCategories() {
-  // todo Add attachments
+  console.log('selectedCategories', selectedCategories.value);
+  onDialogOK(selectedCategories.value);
 }
 </script>

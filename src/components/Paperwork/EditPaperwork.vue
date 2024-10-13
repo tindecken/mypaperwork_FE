@@ -4,25 +4,31 @@
       <div class="row justify-end">
         <span class="col title">Infos</span>
       </div>
-      <div class="row justify-end q-col-gutter-md q-mt-xs">
-        <q-input outlined class="col-6" v-model="name" label="Name *" />
-        <q-input readonly class="col-6" v-model="createdAt" label="Created At" />
-      </div>
-      <div class="row justify-end q-col-gutter-md q-mt-xs">
-        <q-input type="textarea" autogrow outlined class="col-6" v-model="description" label="Description" />
-        <q-input outlined class="col-3" v-model="price" label="Price" />
-        <q-input outlined class="col-3" v-model="priceCurrency" label="Currency" />
-      </div>
-      <div class="row q-mt-md">
-        <span class="self-center">Categories:</span>
-        <q-chip removable outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }" @remove="removeCategory(cat)"> {{ cat.name }}</q-chip>
-      </div>
-      <div class="row justify-end">
-        <div class="col-auto">
-          <q-btn flat color="primary" label="Save" @click="savePaperwork()" />
-          <q-btn class="q-ml-sm" flat color="primary" label="Cancel" @click="cancel()" />
+      <q-form @submit="savePaperwork()">
+        <div class="row justify-end q-col-gutter-md q-mt-xs">
+          <q-input outlined class="col-6" v-model="name" label="Name *" />
+          <q-input readonly class="col-6" v-model="createdAt" label="Created At" />
         </div>
+        <div class="row justify-end q-col-gutter-md q-mt-xs">
+          <q-input type="textarea" autogrow outlined class="col-6" v-model="description" label="Description" />
+          <q-input outlined class="col-3" v-model="price" label="Price" />
+          <q-input outlined class="col-3" v-model="priceCurrency" label="Currency" />
+        </div>
+
+        <div class="row justify-end">
+          <div class="col-auto">
+            <q-btn flat color="primary" label="Save" type="submit" />
+            <q-btn class="q-ml-sm" flat color="primary" label="Cancel" @click="cancel()" />
+          </div>
+        </div>
+      </q-form>
+    </div>
+    <div class="header q-pa-md q-mt-md q-mb-md">
+      <div class="row">
+        <span class="row self-center title">Categories</span>
+        <q-btn class="q-ml-md" outline icon="sym_o_category" color="primary" label="Add" @click="addCategories()" />
       </div>
+      <q-chip class="row q-mt-md" removable outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }" @remove="removeCategory(cat)"> {{ cat.name }}</q-chip>
     </div>
     <div class="header q-pa-md q-mt-md q-mb-md">
       <div class="row">
@@ -99,6 +105,7 @@ import { useGlobalStore } from 'src/stores/globalStore';
 import ConfirmDeleteImageDialog from './Dialogs/ConfirmDeleteImageDialog.vue';
 import ConfirmDeleteAttachmentDialog from './Dialogs/ConfirmDeleteAttachmentDialog.vue';
 import AddAttachmentsDialog from './Dialogs/AddAttachmentsDialog.vue';
+import AddCategoriesDialog from './Dialogs/AddCategoriesDialog.vue';
 const truncate = ref(true);
 const $route = useRoute();
 const $router = useRouter();
@@ -262,11 +269,22 @@ function addAttachments() {
       // TODO
     });
 }
-function addImages() {
-  // TODO: Implement add attachments logic
-}
+function addImages() {}
 function removeCategory(cat: Category) {
   console.log('Removing category:', cat);
+}
+function addCategories() {
+  $q.dialog({
+    component: AddCategoriesDialog,
+    componentProps: { existingCategories: categories.value },
+  })
+    .onOk(async () => {
+      console.log('Adding categories');
+    })
+    .onCancel(async () => {})
+    .onDismiss(() => {
+      // TODO
+    });
 }
 </script>
 
