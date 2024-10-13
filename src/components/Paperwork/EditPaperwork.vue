@@ -3,10 +3,6 @@
     <div class="header q-pa-md">
       <div class="row justify-end">
         <span class="col title">Infos</span>
-        <div class="col-auto">
-          <q-btn flat color="primary" label="Save" @click="savePaperwork()" />
-          <q-btn class="q-ml-sm" flat color="primary" label="Cancel" @click="cancel()" />
-        </div>
       </div>
       <div class="row justify-end q-col-gutter-md q-mt-xs">
         <q-input outlined class="col-6" v-model="name" label="Name *" />
@@ -19,14 +15,23 @@
       </div>
       <div class="row q-mt-md">
         <span class="self-center">Categories:</span>
-        <q-chip outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event"> {{ cat.name }}</q-chip>
+        <q-chip removable outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }" @remove="removeCategory(cat)"> {{ cat.name }}</q-chip>
+      </div>
+      <div class="row justify-end">
+        <div class="col-auto">
+          <q-btn flat color="primary" label="Save" @click="savePaperwork()" />
+          <q-btn class="q-ml-sm" flat color="primary" label="Cancel" @click="cancel()" />
+        </div>
       </div>
     </div>
     <div class="header q-pa-md q-mt-md q-mb-md">
-      <span class="row title"
-        >Attachments
-        <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length" />
-      </span>
+      <div class="row">
+        <span class="row title"
+          >Attachments
+          <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length" />
+          <q-btn class="q-ml-md" outline icon="sym_o_attach_file_add" color="primary" label="Add" @click="addAttachments()" />
+        </span>
+      </div>
       <q-table dense :rows="attachments" :columns="columns" row-key="id" no-data-label="No attachments" flat bordered class="q-mt-md" separator="cell" v-if="attachments.length > 0">
         <template v-slot:body="props">
           <q-tr :props="props">
@@ -36,11 +41,13 @@
             <q-td key="fileSize" :props="props">
               {{ prettyBytes(props.row.fileSize) }}
             </q-td>
-            <q-td key="download" :props="props">
-              <q-btn icon="sym_o_download" flat label="Download" @click="onDownloadAttachment(props.row.id, props.row.fileName)" />
-            </q-td>
-            <q-td key="remove" :props="props">
-              <q-btn icon="sym_o_remove" flat label="Remove" @click="onRemoveAttachment(props.row.id)" />
+            <q-td key="actions" :props="props">
+              <q-btn icon="sym_o_download" flat @click="onDownloadAttachment(props.row.id, props.row.fileName)">
+                <q-tooltip style="font-size: small">Download</q-tooltip>
+              </q-btn>
+              <q-btn icon="sym_o_delete_forever" flat @click="onRemoveAttachment(props.row.id)">
+                <q-tooltip style="font-size: small">Delete</q-tooltip>
+              </q-btn>
             </q-td>
           </q-tr>
         </template>
@@ -48,15 +55,17 @@
     </div>
     <div class="header q-pa-md">
       <div class="row">
-        <span class="self-center title">Images </span>
+        <span class="self-center title">Images</span>
         <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="images.length" />
+        <q-btn class="q-ml-md" outline icon="sym_o_add_a_photo" color="primary" label="Add" @click="addImages()" />
       </div>
-      <div class="row q-mt-md q-col-gutter-lg">
+      <div class="row q-mt-sm q-col-gutter-lg">
         <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
-          <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(getImgUrl(image.fileBlob), images)" class="images">
-            <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 8px; left: 8px">
-              <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
-            </q-icon>
+          <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(getImgUrl(image.fileBlob), images)" class="row images self-center">
+            <q-tooltip style="font-size: small">{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
+            <q-btn round class="absolute all-pointer-events" size="xs" icon="sym_o_delete_forever" color="primary" style="top: 1px; right: 1px" @click.stop="onRemoveImage(image.id)">
+              <q-tooltip style="font-size: small">Remove</q-tooltip>
+            </q-btn>
           </q-img>
         </div>
       </div>
@@ -87,7 +96,10 @@ import { api as viewerApi } from 'v-viewer';
 import 'viewerjs/dist/viewer.css';
 import prettyBytes from 'pretty-bytes';
 import { useGlobalStore } from 'src/stores/globalStore';
-
+import ConfirmDeleteImageDialog from './Dialogs/ConfirmDeleteImageDialog.vue';
+import ConfirmDeleteAttachmentDialog from './Dialogs/ConfirmDeleteAttachmentDialog.vue';
+import AddAttachmentsDialog from './Dialogs/AddAttachmentsDialog.vue';
+const truncate = ref(true);
 const $route = useRoute();
 const $router = useRouter();
 const userStore = useUserStore();
@@ -116,8 +128,7 @@ const columns = [
     sortable: true,
   },
   { name: 'fileSize', align: 'right', label: 'Size', field: 'fileSize', sortable: true, format: (val: number) => `${prettyBytes(val)}`, style: 'width: 50px' },
-  { name: 'download', label: 'Download', align: 'left' },
-  { name: 'remove', label: 'Remove', align: 'left' },
+  { name: 'actions', label: 'Actions', align: 'left' },
 ];
 onMounted(() => {
   $q.loading.show();
@@ -216,7 +227,46 @@ function cancel() {
   // TODO: Implement cancel paperwork logic
 }
 function onRemoveAttachment(attachmentId: string) {
-  // TODO: Implement onRemoveAttachment
+  $q.dialog({
+    component: ConfirmDeleteAttachmentDialog,
+  })
+    .onOk(async () => {
+      console.log('Removing attachmentId:', attachmentId);
+    })
+    .onCancel(async () => {})
+    .onDismiss(() => {
+      // TODO
+    });
+}
+function onRemoveImage(imageId: string) {
+  $q.dialog({
+    component: ConfirmDeleteImageDialog,
+  })
+    .onOk(async () => {
+      console.log('Removing imageId:', imageId);
+    })
+    .onCancel(async () => {})
+    .onDismiss(() => {
+      // TODO
+    });
+}
+function addAttachments() {
+  $q.dialog({
+    component: AddAttachmentsDialog,
+  })
+    .onOk(async () => {
+      console.log('Adding attachments');
+    })
+    .onCancel(async () => {})
+    .onDismiss(() => {
+      // TODO
+    });
+}
+function addImages() {
+  // TODO: Implement add attachments logic
+}
+function removeCategory(cat: Category) {
+  console.log('Removing category:', cat);
 }
 </script>
 
@@ -239,4 +289,6 @@ function onRemoveAttachment(attachmentId: string) {
 .header
   border: 1px solid rgba(0, 0, 0, 0.1)
   box-shadow: $shadow-1
+.truncate-chip-labels > .q-chip
+  max-width: 140px
 </style>

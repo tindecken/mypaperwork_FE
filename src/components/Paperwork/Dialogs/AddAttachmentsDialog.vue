@@ -1,0 +1,66 @@
+<template>
+  <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
+    <q-layout style="max-width: 598px; min-height: 150px !important" :class="isDark ? 'bg-dark' : 'bg-white'" :style="isDark ? 'border: 1px solid white' : 'border: 1px solid black'">
+      <div class="row">
+        <div class="col-grow">
+          <q-bar :class="isDark ? 'bg-grey-9' : 'bg-grey-7'">
+            <span class="text-h6 text-white">Add Attachments</span>
+            <q-space />
+            <q-btn dense flat icon="close" v-close-popup>
+              <q-tooltip style="font-size: small">Close</q-tooltip>
+            </q-btn>
+          </q-bar>
+        </div>
+      </div>
+      <div class="row q-pa-md">
+        <q-form @submit="addAttachments()" class="col-grow">
+          <div class="row q-mt-sm">
+            <q-uploader hide-upload-btn :color="isDark ? 'grey-9' : 'grey-6'" ref="uploader" class="col-grow" label="Images (max 50 file, max size: 20mb per file)" multiple max-files="50" max-file-size="50000000" @rejected="onRejected($event)" />
+          </div>
+          <div class="row q-pa-md justify-end">
+            <q-btn flat label="Cancel" @click="onDialogHide()"></q-btn>
+            <q-btn color="red-7" class="q-ml-sm" flat label="Add" type="submit"></q-btn>
+          </div>
+        </q-form>
+      </div>
+    </q-layout>
+  </q-dialog>
+</template>
+
+<script setup lang="ts">
+import { QInput, useDialogPluginComponent } from 'quasar';
+import { Ref, ref } from 'vue';
+import { useCategoryStore } from 'src/stores/categoryStore';
+import { usePaperworkStore } from 'src/stores/paperworkStore';
+import { computed } from 'vue';
+import { useQuasar, date } from 'quasar';
+import { Category } from 'src/Models/Category/CategoryInterface';
+import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
+import { GenericResponseData } from 'src/Models/GenericResponseData';
+import { useGlobalStore } from 'src/stores/globalStore';
+
+const globalStore = useGlobalStore();
+const isDark = computed(() => globalStore.darkTheme);
+defineEmits([...useDialogPluginComponent.emits]);
+const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
+const $q = useQuasar();
+
+async function onRejected(rejectedEntries: any) {
+  if (rejectedEntries.length > 0) {
+    if (rejectedEntries[0].failedPropValidation === 'duplicate') {
+      $q.notify({
+        type: 'warning',
+        message: "You've added the same file twice.",
+      });
+    } else if (rejectedEntries[0].failedPropValidation === 'max-file-size') {
+      $q.notify({
+        type: 'warning',
+        message: 'Exceeded the maximum file size.',
+      });
+    }
+  }
+}
+async function addAttachments() {
+  // todo Add attachments
+}
+</script>

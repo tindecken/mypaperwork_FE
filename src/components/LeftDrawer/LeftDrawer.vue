@@ -48,7 +48,7 @@ import { useCategoryStore } from 'src/stores/categoryStore';
 import { computed } from 'vue';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { useQuasar } from 'quasar';
-import CreatePaperworkDialog from 'components/Paperwork/CreatePaperworkDialog.vue';
+import CreatePaperworkDialog from 'components/Paperwork/Dialogs/CreatePaperworkDialog.vue';
 
 const categoryStore = useCategoryStore();
 const $q = useQuasar();

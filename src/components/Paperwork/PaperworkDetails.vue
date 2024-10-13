@@ -18,7 +18,7 @@
     </div>
     <div class="row q-mt-md">
       <span class="self-center">Categories:</span>
-      <q-chip outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event"> {{ cat.name }}</q-chip>
+      <q-chip outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
     </div>
     <span class="row q-mt-md title"
       >Attachments
@@ -33,8 +33,10 @@
           <q-td key="fileSize" :props="props">
             {{ prettyBytes(props.row.fileSize) }}
           </q-td>
-          <q-td key="download" :props="props">
-            <q-btn icon="sym_o_download" flat label="Download" @click="onDownloadAttachment(props.row.id, props.row.fileName)" />
+          <q-td key="actions" :props="props">
+            <q-btn icon="sym_o_download" flat @click="onDownloadAttachment(props.row.id, props.row.fileName)">
+              <q-tooltip style="font-size: small">Download</q-tooltip>
+            </q-btn>
           </q-td>
         </q-tr>
       </template>
@@ -97,6 +99,7 @@ const imagesUrls: Ref<string[]> = ref([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
 const globalStore = useGlobalStore();
 const isShowedJson = computed(() => globalStore.isShowedJson);
+const truncate = ref(true);
 const columns = [
   {
     name: 'fileName',
@@ -107,7 +110,7 @@ const columns = [
     sortable: true,
   },
   { name: 'fileSize', align: 'right', label: 'Size', field: 'fileSize', sortable: true, format: (val: number) => `${prettyBytes(val)}`, style: 'width: 50px' },
-  { name: 'download', label: 'Download', align: 'left' },
+  { name: 'actions', label: 'Actions', align: 'left' },
 ];
 onMounted(() => {
   $q.loading.show();
@@ -224,4 +227,6 @@ function back() {
   font-weight: 400
 .badge
   height: 16px
+.truncate-chip-labels > .q-chip
+  max-width: 140px
 </style>
