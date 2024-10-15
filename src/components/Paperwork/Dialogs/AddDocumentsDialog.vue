@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-grow">
           <q-bar :class="isDark ? 'bg-grey-9' : 'bg-grey-7'">
-            <span class="text-h6 text-white">Add Categories</span>
+            <span class="text-h6 text-white">Add Documents</span>
             <q-space />
             <q-btn dense flat icon="close" v-close-popup>
               <q-tooltip style="font-size: small">Close</q-tooltip>
@@ -15,7 +15,7 @@
       <div class="row q-pa-md">
         <q-form @submit="addCategories()" class="col-grow">
           <div class="row q-mt-sm">
-            <q-uploader hide-upload-btn :color="isDark ? 'grey-9' : 'grey-6'" ref="uploader" class="col-grow" label="Images (max 50 file, max size: 20mb per file)" multiple max-files="50" max-file-size="50000000" @rejected="onRejected($event)" />
+            <q-uploader hide-upload-btn :color="isDark ? 'grey-9' : 'grey-6'" ref="uploader" class="col-grow" label="Images or Files (max 50 files, max size: 20mb per file)" multiple max-files="20" max-file-size="20000000" @rejected="onRejected($event)" />
           </div>
           <div class="row q-pa-md justify-end">
             <q-btn flat label="Cancel" @click="onDialogHide()"></q-btn>

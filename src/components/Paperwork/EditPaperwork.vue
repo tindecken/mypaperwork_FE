@@ -26,16 +26,16 @@
     <div class="header q-pa-md q-mt-md q-mb-md">
       <div class="row">
         <span class="row self-center title">Categories</span>
-        <q-btn class="q-ml-md" outline icon="sym_o_category" color="primary" label="Add" @click="addCategories()" />
+        <q-btn class="q-ml-md" outline icon="sym_o_category" color="primary" label="Update" @click="updateCategories()" />
       </div>
       <q-chip class="row q-mt-md" removable outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }" @remove="removeCategory(cat)"> {{ cat.name }}</q-chip>
     </div>
     <div class="header q-pa-md q-mt-md q-mb-md">
       <div class="row">
         <span class="row title"
-          >Attachments
+          >Documents
           <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length" />
-          <q-btn class="q-ml-md" outline icon="sym_o_attach_file_add" color="primary" label="Add" @click="addAttachments()" />
+          <q-btn class="q-ml-md" outline icon="sym_o_attach_file_add" color="primary" label="Add" @click="addDocuments()" />
         </span>
       </div>
       <q-table dense :rows="attachments" :columns="columns" row-key="id" no-data-label="No attachments" flat bordered class="q-mt-md" separator="cell" v-if="attachments.length > 0">
@@ -58,13 +58,6 @@
           </q-tr>
         </template>
       </q-table>
-    </div>
-    <div class="header q-pa-md">
-      <div class="row">
-        <span class="self-center title">Images</span>
-        <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="images.length" />
-        <q-btn class="q-ml-md" outline icon="sym_o_add_a_photo" color="primary" label="Add" @click="addImages()" />
-      </div>
       <div class="row q-mt-sm q-col-gutter-lg">
         <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
           <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(getImgUrl(image.fileBlob), images)" class="row images self-center">
@@ -104,7 +97,7 @@ import prettyBytes from 'pretty-bytes';
 import { useGlobalStore } from 'src/stores/globalStore';
 import ConfirmDeleteImageDialog from './Dialogs/ConfirmDeleteImageDialog.vue';
 import ConfirmDeleteAttachmentDialog from './Dialogs/ConfirmDeleteAttachmentDialog.vue';
-import AddAttachmentsDialog from './Dialogs/AddAttachmentsDialog.vue';
+import AddDocumentsDialog from './Dialogs/AddDocumentsDialog.vue';
 import AddCategoriesDialog from './Dialogs/AddCategoriesDialog.vue';
 const truncate = ref(true);
 const $route = useRoute();
@@ -257,23 +250,22 @@ function onRemoveImage(imageId: string) {
       // TODO
     });
 }
-function addAttachments() {
+function addDocuments() {
   $q.dialog({
-    component: AddAttachmentsDialog,
+    component: AddDocumentsDialog,
   })
     .onOk(async () => {
-      console.log('Adding attachments');
+      console.log('Adding documents');
     })
     .onCancel(async () => {})
     .onDismiss(() => {
       // TODO
     });
 }
-function addImages() {}
 function removeCategory(cat: Category) {
   console.log('Removing category:', cat);
 }
-function addCategories() {
+function updateCategories() {
   $q.dialog({
     component: AddCategoriesDialog,
     componentProps: { existingCategories: categories.value },

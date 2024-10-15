@@ -2,7 +2,7 @@
   <div class="row justify-between">
     <div class="col">{{ $q.screen.name }} - {{ $q.screen.sizes }}</div>
     <div class="col-auto">
-      <q-btn size="sm" flat @click="toogleIsShowJson()">Show/hide Json</q-btn>
+      <q-btn size="sm" flat @click="toggleIsShowJson()">Show/hide Json</q-btn>
     </div>
   </div>
 </template>
@@ -12,7 +12,7 @@ import { useGlobalStore } from 'src/stores/globalStore';
 
 const globalStore = useGlobalStore();
 const $q = useQuasar();
-function toogleIsShowJson() {
+function toggleIsShowJson() {
   $q.loading.show();
   globalStore.toggleIsShowedJson();
   $q.loading.hide();
