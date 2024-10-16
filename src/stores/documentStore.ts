@@ -10,6 +10,8 @@ import { UserInfoInterface } from 'src/Models/UserInfoInterface';
 import { useUserStore } from './userStore';
 import { DownloadAttachmentRequestModel } from 'src/Models/Document/DownloadAttachmentRequestModel';
 import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachmentRequestModel';
+import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
+import { UploadDocumentsRequestModel } from 'src/Models/Document/UploadDocumentsequestModel';
 
 const userStore = useUserStore();
 export const useDocumentStore = defineStore('document', {
@@ -61,6 +63,26 @@ export const useDocumentStore = defineStore('document', {
         return responseData;
       } catch (error: any) {
         this.$reset();
+        handleError(error);
+      }
+    },
+    async uploadDocuments(model: UploadDocumentsRequestModel): Promise<GenericResponseData | undefined> {
+      try {
+        const promises = model.files.map(async (file: string) => {
+          const formData = new FormData();
+          formData.append('paperworkId', model.paperworkId);
+          formData.append('file', file);
+          return await api.post('/documents/upload', formData, {
+            headers: {
+              'Content-Type':'multipart/form-data',
+              Authorization: `Bearer ${userStore.token}`,
+            },
+          })
+        })
+        const response = await Promise.all(promises);
+        const responseData = response.map((res: any) => res.data as GenericResponseData);
+        return responseData;
+      } catch (error: any) {
         handleError(error);
       }
     },

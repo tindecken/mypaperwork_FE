@@ -119,6 +119,7 @@ const imagesUrls: Ref<string[]> = ref([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
 const globalStore = useGlobalStore();
 const isShowedJson = computed(() => globalStore.isShowedJson);
+const paperworkId = $route.params.id as string;
 const columns = [
   {
     name: 'fileName',
@@ -158,10 +159,12 @@ onMounted(() => {
     });
 });
 async function onDownloadAttachment(attachmentId: string, attachmentFileName: string) {
+  console.log('paperworkId', $route.params.id);
   const body: DownloadAttachmentRequestModel = {
-    paperworkId: $route.params.id as string,
+    paperworkId: $route.params.id,
     documentId: attachmentId,
   };
+
   documentStore
     .downloadAttachment(body)
     .then((response: GenericResponseData | undefined) => {
@@ -287,9 +290,29 @@ function onRemoveImage(imageId: string) {
 function addDocuments() {
   $q.dialog({
     component: AddDocumentsDialog,
+    componentProps: {
+      paperworkId: $route.params.id as string
+    },
   })
     .onOk(async () => {
-      console.log('Adding documents');
+      console.log('Added documents');
+      // Reload paperwork data
+      paperworkStore
+        .getPaperworksById($route.params.id as string)
+        .then((response: GenericResponseData | undefined) => {
+          paperwork.value = response?.data as PaperworkDetails;
+          attachments.value = paperwork.value?.attachments || [];
+          images.value = paperwork.value?.images || [];
+          imagesUrls.value = images.value.map((image) => getImgUrl(image.fileBlob));
+          $q.loading.hide();
+        })
+        .catch((err: GenericResponseData | any) => {
+          $q.loading.hide();
+          $q.notify({
+            type: 'negative',
+            message: err.message || err.title || err,
+          });
+        });
     })
     .onCancel(async () => {})
     .onDismiss(() => {

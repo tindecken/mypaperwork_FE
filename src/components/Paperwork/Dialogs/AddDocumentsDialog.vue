@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="row q-pa-md">
-        <q-form @submit="addCategories()" class="col-grow">
+        <q-form @submit="addDocuments()" class="col-grow">
           <div class="row q-mt-sm">
             <q-uploader hide-upload-btn :color="isDark ? 'grey-9' : 'grey-6'" ref="uploader" class="col-grow" label="Images or Files (max 50 files, max size: 20mb per file)" multiple max-files="20" max-file-size="20000000" @rejected="onRejected($event)" />
           </div>
@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { QInput, useDialogPluginComponent } from 'quasar';
-import { Ref, ref } from 'vue';
+import { PropType, Ref, ref } from 'vue';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { computed } from 'vue';
@@ -38,12 +38,22 @@ import { Category } from 'src/Models/Category/CategoryInterface';
 import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { useGlobalStore } from 'src/stores/globalStore';
+import { useDocumentStore} from 'stores/documentStore';
+import { UploadDocumentsRequestModel } from 'src/Models/Document/UploadDocumentsequestModel';
 
 const globalStore = useGlobalStore();
 const isDark = computed(() => globalStore.darkTheme);
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 const $q = useQuasar();
+const documentStore = useDocumentStore();
+const uploader = ref();
+const props = defineProps({
+  paperworkId: {
+    type: String,
+    required: true,
+  },
+});
 
 async function onRejected(rejectedEntries: any) {
   if (rejectedEntries.length > 0) {
@@ -60,7 +70,27 @@ async function onRejected(rejectedEntries: any) {
     }
   }
 }
-async function addCategories() {
-  // todo Add attachments
+async function addDocuments() {
+  $q.loading.show();
+  const request: UploadDocumentsRequestModel = {
+    paperworkId: props.paperworkId,
+    files: uploader.value?.files,
+  }
+  documentStore.uploadDocuments(request).then(() => {
+    $q.loading.hide();
+    $q.notify({
+      type: 'positive',
+      message: 'Add document(s) successfully.',
+    });
+    onDialogOK();
+  })
+    .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
+      onDialogHide();
+    });
 }
 </script>
