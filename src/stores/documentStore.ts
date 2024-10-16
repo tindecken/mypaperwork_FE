@@ -9,6 +9,7 @@ import { useJwt } from '@vueuse/integrations/useJwt';
 import { UserInfoInterface } from 'src/Models/UserInfoInterface';
 import { useUserStore } from './userStore';
 import { DownloadAttachmentRequestModel } from 'src/Models/Document/DownloadAttachmentRequestModel';
+import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachmentRequestModel';
 
 const userStore = useUserStore();
 export const useDocumentStore = defineStore('document', {
@@ -30,6 +31,31 @@ export const useDocumentStore = defineStore('document', {
               Authorization: `Bearer ${userStore.token}`,
             },
           }
+        );
+        const responseData = (await axiosResponse.data) as GenericResponseData;
+        return responseData;
+      } catch (error: any) {
+        this.$reset();
+        handleError(error);
+      }
+    },
+    async removeAttachment(body: RemoveAttachmentRequestModel): Promise<GenericResponseData | undefined> {
+      console.log('body', body);
+      console.log('userStore.token', userStore.token);
+      try {
+        const axiosResponse = await api.delete(
+          '/documents/remove',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${userStore.token}`,
+            },
+            data: {
+              paperworkId: body.paperworkId,
+              documentId: body.documentId,
+            }
+          },
+
         );
         const responseData = (await axiosResponse.data) as GenericResponseData;
         return responseData;

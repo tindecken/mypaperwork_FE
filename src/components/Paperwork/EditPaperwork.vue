@@ -34,7 +34,7 @@
       <div class="row">
         <span class="row title"
           >Documents
-          <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length" />
+          <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length + images.length" />
           <q-btn class="q-ml-md" outline icon="sym_o_attach_file_add" color="primary" label="Add" @click="addDocuments()" />
         </span>
       </div>
@@ -99,6 +99,7 @@ import ConfirmDeleteImageDialog from './Dialogs/ConfirmDeleteImageDialog.vue';
 import ConfirmDeleteAttachmentDialog from './Dialogs/ConfirmDeleteAttachmentDialog.vue';
 import AddDocumentsDialog from './Dialogs/AddDocumentsDialog.vue';
 import AddCategoriesDialog from './Dialogs/AddCategoriesDialog.vue';
+import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachmentRequestModel';
 const truncate = ref(true);
 const $route = useRoute();
 const $router = useRouter();
@@ -232,6 +233,23 @@ function onRemoveAttachment(attachmentId: string) {
   })
     .onOk(async () => {
       console.log('Removing attachmentId:', attachmentId);
+      const request: RemoveAttachmentRequestModel = {
+        paperworkId: $route.params.id as string,
+        documentId: attachmentId,
+      }
+      documentStore.removeAttachment(request).then(() => {
+        attachments.value = attachments.value.filter((attachment) => attachment.id!== attachmentId);
+        $q.notify({
+          type: 'positive',
+          message: 'Attachment removed successfully.',
+        });
+      })
+      .catch((err: GenericResponseData | any) => {
+        $q.notify({
+          type: 'negative',
+          message: err.message || err.title || err,
+        });
+      })
     })
     .onCancel(async () => {})
     .onDismiss(() => {
@@ -243,7 +261,23 @@ function onRemoveImage(imageId: string) {
     component: ConfirmDeleteImageDialog,
   })
     .onOk(async () => {
-      console.log('Removing imageId:', imageId);
+      const request: RemoveAttachmentRequestModel = {
+        paperworkId: $route.params.id as string,
+        documentId: imageId,
+      }
+      documentStore.removeAttachment(request).then(() => {
+        images.value = images.value.filter((image) => image.id!== imageId);
+        $q.notify({
+          type: 'positive',
+          message: 'Image removed successfully.',
+        });
+      })
+        .catch((err: GenericResponseData | any) => {
+          $q.notify({
+            type: 'negative',
+            message: err.message || err.title || err,
+          });
+        })
     })
     .onCancel(async () => {})
     .onDismiss(() => {
