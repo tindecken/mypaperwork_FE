@@ -240,6 +240,9 @@ async function showImages(currentImageUrl: string, images: ImageInterface[]) {
   });
 }
 function savePaperwork() {
+  $q.loading.show({
+    message: 'Updating ...',
+  });
   const updateRequest: UpdatePaperworkRequestModel = {
     id: paperwork.value?.id as string,
     name: name.value,
@@ -249,6 +252,7 @@ function savePaperwork() {
     issueAt: issueAt.value ?? null,
   }
   paperworkStore.updatePaperwork(updateRequest).then(() => {
+    $q.loading.hide();
     $q.notify({
       type:'positive',
       message: 'Paperwork updated successfully.',
