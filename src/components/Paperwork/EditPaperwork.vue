@@ -102,7 +102,6 @@ import UpdateCategoriesDialog from './Dialogs/UpdateCategoriesDialog.vue';
 import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachmentRequestModel';
 const truncate = ref(true);
 const $route = useRoute();
-const $router = useRouter();
 const userStore = useUserStore();
 const documentStore = useDocumentStore();
 const $q = useQuasar();
@@ -133,7 +132,9 @@ const columns = [
   { name: 'actions', label: 'Actions', align: 'left' },
 ];
 onMounted(() => {
-  $q.loading.show();
+  $q.loading.show({
+    message: 'Getting paperwork ...',
+  });
   paperworkStore
     .getPaperworksById($route.params.id as string)
     .then((response: GenericResponseData | undefined) => {

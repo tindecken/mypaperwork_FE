@@ -1,5 +1,3 @@
-import axios, { AxiosError } from 'axios';
-import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { Paging } from 'src/Models/PagingInterface';
 
 export default function handlePaging(paging?: Paging): string {

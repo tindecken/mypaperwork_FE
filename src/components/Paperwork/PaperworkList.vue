@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, Ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
@@ -55,7 +55,6 @@ import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
 import { Paging } from 'src/Models/PagingInterface';
 import ConfirmDeletePaperworkDialog from './Dialogs/ConfirmDeletePaperworkDialog.vue';
 
-const $route = useRoute();
 const $router = useRouter();
 const userStore = useUserStore();
 const $q = useQuasar();
@@ -69,7 +68,9 @@ const searchText = ref('');
 const papperworks = computed(() => paperworkStore.paperworks);
 
 onMounted(() => {
-  $q.loading.show();
+  $q.loading.show({
+    message: 'Getting paperworks...',
+  });
   paperworkStore
     .getPaperworksBySelectedFile()
     .then((response: GenericResponseData | undefined) => {
@@ -138,7 +139,7 @@ function deletePaperwork(pw: Paperwork) {
       $q.loading.show();
       paperworkStore
         .deletePaperwork(pw.id)
-        .then((response: GenericResponseData | undefined) => {
+        .then(() => {
           totalRecords.value -= 1;
           $q.notify({
             type: 'positive',

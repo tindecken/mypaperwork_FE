@@ -113,7 +113,9 @@ const columns = [
   { name: 'actions', label: 'Actions', align: 'left' },
 ];
 onMounted(() => {
-  $q.loading.show();
+  $q.loading.show({
+    message: 'Getting paperwork details...',
+  });
   paperworkStore
     .getPaperworksById($route.params.id as string)
     .then((response: GenericResponseData | undefined) => {

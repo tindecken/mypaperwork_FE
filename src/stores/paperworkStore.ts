@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { AuthenticateRequestModel } from 'src/Models/Authentication/AuthenticateRequestModel';
 import { api } from '../boot/axios';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import handleError from 'src/utils/handleError';

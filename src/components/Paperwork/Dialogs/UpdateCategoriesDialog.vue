@@ -28,11 +28,11 @@
 </template>
 
 <script setup lang="ts">
-import { QInput, useDialogPluginComponent } from 'quasar';
-import { PropType, Ref, ref } from 'vue';
+import { useDialogPluginComponent } from 'quasar';
+import { PropType, ref } from 'vue';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { computed } from 'vue';
-import { useQuasar, date } from 'quasar';
+import { useQuasar } from 'quasar';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { useGlobalStore } from 'src/stores/globalStore';
 import { UpdateCategoriesRequestModel } from 'src/Models/Category/UpdateCategoriesRequestModel';
