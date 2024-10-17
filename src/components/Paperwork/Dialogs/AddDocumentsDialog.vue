@@ -71,7 +71,9 @@ async function onRejected(rejectedEntries: any) {
   }
 }
 async function addDocuments() {
-  $q.loading.show();
+  $q.loading.show({
+    message: 'Uploading ...'
+  });
   const request: UploadDocumentsRequestModel = {
     paperworkId: props.paperworkId,
     files: uploader.value?.files,

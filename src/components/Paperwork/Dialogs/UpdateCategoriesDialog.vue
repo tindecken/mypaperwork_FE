@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="row q-pa-md">
-        <q-form @submit="addCategories()" class="col-grow">
+        <q-form @submit="updateCategories()" class="col-grow">
           <div class="row q-mt-sm">
             <q-option-group option-label="name" option-value="id" :options="categoriesOptions" type="checkbox" v-model="selectedCategories" />
           </div>
@@ -59,25 +59,30 @@ const categoriesOptions = ref<Category[]>(categoryStore.categories);
 const mapExistingCategories = categoriesOptions.value.filter((c) => props.existingCategories.map((cc) => cc.id).indexOf(c.id) > -1);
 const selectedCategories = ref<string[]>(mapExistingCategories.map((m) => m.id));
 
-async function addCategories() {
+async function updateCategories() {
   const model: UpdateCategoriesRequestModel = {
     paperworkId: props.paperworkId,
     categoryIds: selectedCategories.value,
   }
-  console.log('model', model)
+  $q.loading.show({
+    message: 'Updating ...'
+  });
   categoryStore.updateCategoriesByFileId(model)
     .then((response: GenericResponseData | undefined) => {
-    $q.notify({
-      type:'positive',
-      message: `${response?.message}`
+      $q.notify({
+        type:'positive',
+        message: `${response?.message}`
     })
+    $q.loading.hide();
+    onDialogOK();
+
   })
     .catch((err: GenericResponseData | any) => {
       $q.notify({
         type: 'negative',
         message: err.message || err.title || err,
       });
+      $q.loading.hide();
     });
-  onDialogOK();
 }
 </script>

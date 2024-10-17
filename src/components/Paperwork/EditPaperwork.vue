@@ -319,18 +319,19 @@ function addDocuments() {
       // TODO
     });
 }
-function updateCategories() {
+async function updateCategories() {
   $q.dialog({
     component: UpdateCategoriesDialog,
     componentProps: { existingCategories: categories.value, paperworkId: $route.params.id as string },
   })
     .onOk(async () => {
-      $q.loading.show();
+      $q.loading.show({
+        message: 'Getting paperwork ...',
+      });
       paperworkStore
         .getPaperworksById($route.params.id as string)
         .then((response: GenericResponseData | undefined) => {
-          paperwork.value = response?.data as PaperworkDetails;
-          categories.value = paperwork.value?.categories;
+          categories.value = response?.data?.categories;
           $q.loading.hide();
         })
         .catch((err: GenericResponseData | any) => {
