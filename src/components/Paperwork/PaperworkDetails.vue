@@ -9,7 +9,7 @@
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
       <q-input readonly outlined class="col-6" v-model="name" label="Name *" />
-      <q-input readonly outlined class="col-6" v-model="createdAt" label="Created At" />
+      <q-input readonly outlined class="col-6" v-model="issueAt" label="Issue At" />
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
       <q-input type="textarea" autogrow readonly outlined class="col-6" v-model="description" label="Description" />
@@ -97,6 +97,7 @@ const attachments: Ref<AttachmentInterface[]> = ref([]);
 const images: Ref<ImageInterface[]> = ref([]);
 const imagesUrls: Ref<string[]> = ref([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
+const issueAt = ref(paperwork.value?.issuedAt.toString());
 const globalStore = useGlobalStore();
 const isShowedJson = computed(() => globalStore.isShowedJson);
 const truncate = ref(true);
@@ -124,6 +125,7 @@ onMounted(() => {
       name.value = paperwork.value?.name;
       description.value = paperwork.value?.description;
       createdAt.value = paperwork.value?.createdAt?.toString();
+      issueAt.value = paperwork.value?.issuedAt?.toString();
       price.value = paperwork.value?.price?.toString();
       priceCurrency.value = paperwork.value?.priceCurrency;
       categories.value = paperwork.value?.categories;

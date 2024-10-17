@@ -7,11 +7,23 @@
       <q-form @submit="savePaperwork()">
         <div class="row justify-end q-col-gutter-md q-mt-xs">
           <q-input outlined class="col-6" v-model="name" label="Name *" />
-          <q-input readonly class="col-6" v-model="createdAt" label="Created At" />
+          <q-input class="col-6" outlined v-model="issueAt" label="Issue Date">
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                  <q-date v-model="issueAt" today-btn mask="YYYY-MM-DD">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
         </div>
         <div class="row justify-end q-col-gutter-md q-mt-xs">
           <q-input type="textarea" autogrow outlined class="col-6" v-model="description" label="Description" />
-          <q-input outlined class="col-3" v-model="price" label="Price" />
+          <q-input type="number" outlined class="col-3" v-model.number="price" label="Price" />
           <q-input outlined class="col-3" v-model="priceCurrency" label="Currency" />
         </div>
 
@@ -77,7 +89,7 @@
 
 <script setup lang="ts">
 import { ref, Ref, onMounted, computed } from 'vue';
-import { useQuasar } from 'quasar';
+import { QInput, useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useUserStore } from 'src/stores/userStore';
@@ -100,6 +112,7 @@ import ConfirmDeleteAttachmentDialog from './Dialogs/ConfirmDeleteAttachmentDial
 import AddDocumentsDialog from './Dialogs/AddDocumentsDialog.vue';
 import UpdateCategoriesDialog from './Dialogs/UpdateCategoriesDialog.vue';
 import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachmentRequestModel';
+import { UpdatePaperworkRequestModel } from 'src/Models/Paperwork/UpdatePaperworkRequestModel';
 const truncate = ref(true);
 const $route = useRoute();
 const userStore = useUserStore();
@@ -109,13 +122,14 @@ const paperworkStore = usePaperworkStore();
 const paperwork: Ref<PaperworkDetails | null> = ref(null);
 const name = ref('');
 const description = ref('');
-const price = ref('');
+const price = ref(0);
 const priceCurrency = ref('');
 const categories: Ref<Category[]> = ref([]);
 const attachments: Ref<AttachmentInterface[]> = ref([]);
 const images: Ref<ImageInterface[]> = ref([]);
 const imagesUrls: Ref<string[]> = ref([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
+const issueAt = ref(paperwork.value?.issuedAt.toString());
 const globalStore = useGlobalStore();
 const isShowedJson = computed(() => globalStore.isShowedJson);
 const paperworkId = $route.params.id as string;
@@ -142,8 +156,9 @@ onMounted(() => {
       paperwork.value = response?.data as PaperworkDetails;
       name.value = paperwork.value?.name;
       description.value = paperwork.value?.description;
+      issueAt.value = paperwork.value?.issuedAt?.toString();
       createdAt.value = paperwork.value?.createdAt?.toString();
-      price.value = paperwork.value?.price?.toString();
+      price.value = paperwork.value?.price;
       priceCurrency.value = paperwork.value?.priceCurrency;
       categories.value = paperwork.value?.categories;
       attachments.value = paperwork.value?.attachments || [];
@@ -162,10 +177,9 @@ onMounted(() => {
 async function onDownloadAttachment(attachmentId: string, attachmentFileName: string) {
   console.log('paperworkId', $route.params.id);
   const body: DownloadAttachmentRequestModel = {
-    paperworkId: $route.params.id,
+    paperworkId: $route.params.id as string,
     documentId: attachmentId,
   };
-
   documentStore
     .downloadAttachment(body)
     .then((response: GenericResponseData | undefined) => {
@@ -205,7 +219,7 @@ function getImgUrl(arrBuff: { type: string; data: number[] }) {
 async function showImages(currentImageUrl: string, images: ImageInterface[]) {
   const imageUrls = images.map((image) => getImgUrl(image.fileBlob));
   const index = imageUrls.indexOf(currentImageUrl);
-  const $viewer = viewerApi({
+  viewerApi({
     images: imageUrls,
     options: {
       inline: true,
@@ -226,7 +240,26 @@ async function showImages(currentImageUrl: string, images: ImageInterface[]) {
   });
 }
 function savePaperwork() {
-  // TODO: Implement update paperwork logic
+  const updateRequest: UpdatePaperworkRequestModel = {
+    id: paperwork.value?.id as string,
+    name: name.value,
+    description: description.value,
+    price: price.value,
+    priceCurrency: priceCurrency.value,
+    issueAt: issueAt.value ?? null,
+  }
+  paperworkStore.updatePaperwork(updateRequest).then(() => {
+    $q.notify({
+      type:'positive',
+      message: 'Paperwork updated successfully.',
+    });
+  }).catch((err: GenericResponseData | any) => {
+    $q.loading.hide();
+    $q.notify({
+      type: 'negative',
+      message: err.message || err.title || err,
+    });
+  });
 }
 function cancel() {
   // TODO: Implement cancel paperwork logic

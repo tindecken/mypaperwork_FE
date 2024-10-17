@@ -9,6 +9,7 @@ import { Paging } from 'src/Models/PagingInterface';
 import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
 import { useCategoryStore } from './categoryStore';
 import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
+import { UpdatePaperworkRequestModel } from 'src/Models/Paperwork/UpdatePaperworkRequestModel';
 
 const userStore = useUserStore();
 const categoryStore = useCategoryStore();
@@ -91,7 +92,7 @@ export const usePaperworkStore = defineStore('paperwork', {
       try {
         const axiosResponse = await api.delete(`/paperworks/delete/${paperworkId}`, {
           headers: {
-            'Content-Type': 'multipart/form-datan',
+            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${userStore.token}`,
           },
         });
@@ -99,6 +100,20 @@ export const usePaperworkStore = defineStore('paperwork', {
         // Reload categories after creating a new paperwork
         await categoryStore.getCategoriesByFileId();
         await this.getPaperworksBySelectedFile();
+        return responseData;
+      } catch (error: any) {
+        handleError(error);
+      }
+    },
+    async updatePaperwork(model: UpdatePaperworkRequestModel): Promise<GenericResponseData | undefined> {
+      try {
+        const axiosResponse = await api.put(`/paperworks/update/${model.id}`, model,{
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userStore.token}`,
+          },
+        });
+        const responseData = (await axiosResponse.data) as GenericResponseData;
         return responseData;
       } catch (error: any) {
         handleError(error);
