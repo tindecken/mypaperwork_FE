@@ -28,7 +28,7 @@
         <span class="row self-center title">Categories</span>
         <q-btn class="q-ml-md" outline icon="sym_o_category" color="primary" label="Update" @click="updateCategories()" />
       </div>
-      <q-chip class="row q-mt-md" removable outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }" @remove="removeCategory(cat)"> {{ cat.name }}</q-chip>
+      <q-chip class="row q-mt-md" outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
     </div>
     <div class="header q-pa-md q-mt-md q-mb-md">
       <div class="row">
@@ -98,7 +98,7 @@ import { useGlobalStore } from 'src/stores/globalStore';
 import ConfirmDeleteImageDialog from './Dialogs/ConfirmDeleteImageDialog.vue';
 import ConfirmDeleteAttachmentDialog from './Dialogs/ConfirmDeleteAttachmentDialog.vue';
 import AddDocumentsDialog from './Dialogs/AddDocumentsDialog.vue';
-import AddCategoriesDialog from './Dialogs/AddCategoriesDialog.vue';
+import UpdateCategoriesDialog from './Dialogs/UpdateCategoriesDialog.vue';
 import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachmentRequestModel';
 const truncate = ref(true);
 const $route = useRoute();
@@ -319,16 +319,27 @@ function addDocuments() {
       // TODO
     });
 }
-function removeCategory(cat: Category) {
-  console.log('Removing category:', cat);
-}
 function updateCategories() {
   $q.dialog({
-    component: AddCategoriesDialog,
-    componentProps: { existingCategories: categories.value },
+    component: UpdateCategoriesDialog,
+    componentProps: { existingCategories: categories.value, paperworkId: $route.params.id as string },
   })
     .onOk(async () => {
-      console.log('Adding categories');
+      $q.loading.show();
+      paperworkStore
+        .getPaperworksById($route.params.id as string)
+        .then((response: GenericResponseData | undefined) => {
+          paperwork.value = response?.data as PaperworkDetails;
+          categories.value = paperwork.value?.categories;
+          $q.loading.hide();
+        })
+        .catch((err: GenericResponseData | any) => {
+          $q.loading.hide();
+          $q.notify({
+            type: 'negative',
+            message: err.message || err.title || err,
+          });
+        });
     })
     .onCancel(async () => {})
     .onDismiss(() => {

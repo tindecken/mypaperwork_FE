@@ -66,7 +66,7 @@ export const useDocumentStore = defineStore('document', {
         handleError(error);
       }
     },
-    async uploadDocuments(model: UploadDocumentsRequestModel): Promise<GenericResponseData | undefined> {
+    async uploadDocuments(model: UploadDocumentsRequestModel) {
       try {
         const promises = model.files.map(async (file: string) => {
           const formData = new FormData();
@@ -79,9 +79,7 @@ export const useDocumentStore = defineStore('document', {
             },
           })
         })
-        const response = await Promise.all(promises);
-        const responseData = response.map((res: any) => res.data as GenericResponseData);
-        return responseData;
+        await Promise.all(promises);
       } catch (error: any) {
         handleError(error);
       }

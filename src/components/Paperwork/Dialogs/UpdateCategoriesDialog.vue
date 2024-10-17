@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-grow">
           <q-bar :class="isDark ? 'bg-grey-9' : 'bg-grey-7'">
-            <span class="text-h6 text-white">Add Categories</span>
+            <span class="text-h6 text-white">Update Categories</span>
             <q-space />
             <q-btn dense flat icon="close" v-close-popup>
               <q-tooltip style="font-size: small">Close</q-tooltip>
@@ -19,7 +19,7 @@
           </div>
           <div class="row q-pa-md justify-end">
             <q-btn flat label="Cancel" @click="onDialogHide()"></q-btn>
-            <q-btn color="red-7" class="q-ml-sm" flat label="Add" type="submit"></q-btn>
+            <q-btn color="red-7" class="q-ml-sm" flat label="Update" type="submit"></q-btn>
           </div>
         </q-form>
       </div>
@@ -35,10 +35,16 @@ import { computed } from 'vue';
 import { useQuasar, date } from 'quasar';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { useGlobalStore } from 'src/stores/globalStore';
+import { UpdateCategoriesRequestModel } from 'src/Models/Category/UpdateCategoriesRequestModel';
+import { GenericResponseData } from 'src/Models/GenericResponseData';
 
 const props = defineProps({
   existingCategories: {
     type: Array as PropType<Category[]>,
+    required: true,
+  },
+  paperworkId: {
+    type: String,
     required: true,
   },
 });
@@ -54,7 +60,24 @@ const mapExistingCategories = categoriesOptions.value.filter((c) => props.existi
 const selectedCategories = ref<string[]>(mapExistingCategories.map((m) => m.id));
 
 async function addCategories() {
-  console.log('selectedCategories', selectedCategories.value);
-  onDialogOK(selectedCategories.value);
+  const model: UpdateCategoriesRequestModel = {
+    paperworkId: props.paperworkId,
+    categoryIds: selectedCategories.value,
+  }
+  console.log('model', model)
+  categoryStore.updateCategoriesByFileId(model)
+    .then((response: GenericResponseData | undefined) => {
+    $q.notify({
+      type:'positive',
+      message: `${response?.message}`
+    })
+  })
+    .catch((err: GenericResponseData | any) => {
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
+    });
+  onDialogOK();
 }
 </script>
