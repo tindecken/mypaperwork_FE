@@ -37,7 +37,7 @@
             </q-input>
           </div>
           <div class="row q-mt-md q-col-gutter-sm">
-            <q-input class="col-grow" type="number" outlined dense v-model="price" label="Price"> </q-input>
+            <q-input class="col-grow" type="number" outlined dense v-model.number="price" label="Price"> </q-input>
             <q-input type="text" class="col-grow" outlined dense v-model="priceCurrency" label="Price Currency (USD, VND, ...)"> </q-input>
           </div>
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
