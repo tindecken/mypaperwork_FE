@@ -17,7 +17,7 @@
           <div class="row q-mt-sm">
             <q-uploader hide-upload-btn :color="isDark ? 'grey-9' : 'grey-6'" ref="uploader" class="col-grow" label="Images or Files (max 50 files, max size: 20mb per file)" multiple max-files="20" max-file-size="20000000" @rejected="onRejected($event)" />
           </div>
-          <div class="row q-pa-md justify-end">
+          <div class="row justify-end q-mt-sm">
             <q-btn flat label="Cancel" @click="onDialogHide()"></q-btn>
             <q-btn color="red-7" class="q-ml-sm" flat label="Add" type="submit"></q-btn>
           </div>

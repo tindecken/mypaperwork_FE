@@ -14,10 +14,11 @@
       </div>
       <div class="row q-pa-md">
         <q-form @submit="updateCategories()" class="col-grow">
+          <div class="row">Select categories to update:</div>
           <div class="row q-mt-sm">
             <q-option-group option-label="name" option-value="id" :options="categoriesOptions" type="checkbox" v-model="selectedCategories" />
           </div>
-          <div class="row q-pa-md justify-end">
+          <div class="row justify-end">
             <q-btn flat label="Cancel" @click="onDialogHide()"></q-btn>
             <q-btn color="red-7" class="q-ml-sm" flat label="Update" type="submit"></q-btn>
           </div>

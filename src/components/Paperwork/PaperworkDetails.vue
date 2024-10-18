@@ -207,7 +207,6 @@ async function showImages(currentImageUrl: string, images: ImageInterface[]) {
   });
 }
 function editPaperwork() {
-  // TODO: Implement update paperwork logic\
   $router.push(`/paperwork-edit/${$route.params.id}`);
 }
 function back() {

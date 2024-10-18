@@ -29,7 +29,7 @@
 
         <div class="row justify-end q-mt-sm">
           <div class="col-auto">
-            <q-btn outline color="primary" label="Save" type="submit" />
+            <q-btn outline  color="primary" label="Save" type="submit" />
             <q-btn outline class="q-ml-sm" color="primary" label="Cancel" @click="cancel()" />
           </div>
         </div>
@@ -115,6 +115,7 @@ import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachme
 import { UpdatePaperworkRequestModel } from 'src/Models/Paperwork/UpdatePaperworkRequestModel';
 const truncate = ref(true);
 const $route = useRoute();
+const $router = useRouter();
 const userStore = useUserStore();
 const documentStore = useDocumentStore();
 const $q = useQuasar();
@@ -132,7 +133,6 @@ const createdAt = ref(paperwork.value?.createdAt.toString());
 const issueAt = ref(paperwork.value?.issuedAt.toString());
 const globalStore = useGlobalStore();
 const isShowedJson = computed(() => globalStore.isShowedJson);
-const paperworkId = $route.params.id as string;
 const columns = [
   {
     name: 'fileName',
@@ -266,7 +266,7 @@ function savePaperwork() {
   });
 }
 function cancel() {
-  // TODO: Implement cancel paperwork logic
+  $router.push('/paperwork-details');
 }
 function onRemoveAttachment(attachmentId: string) {
   $q.dialog({
