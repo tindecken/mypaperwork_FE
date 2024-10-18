@@ -27,10 +27,10 @@
           <q-input outlined class="col-3" v-model="priceCurrency" label="Currency" />
         </div>
 
-        <div class="row justify-end">
+        <div class="row justify-end q-mt-sm">
           <div class="col-auto">
-            <q-btn flat color="primary" label="Save" type="submit" />
-            <q-btn class="q-ml-sm" flat color="primary" label="Cancel" @click="cancel()" />
+            <q-btn outline color="primary" label="Save" type="submit" />
+            <q-btn outline class="q-ml-sm" color="primary" label="Cancel" @click="cancel()" />
           </div>
         </div>
       </q-form>
