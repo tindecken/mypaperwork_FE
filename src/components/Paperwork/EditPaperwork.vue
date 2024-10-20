@@ -74,15 +74,28 @@
         <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
           <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(getImgUrl(image.fileBlob), images)" class="row images self-center">
             <q-tooltip style="font-size: small">{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
-            <q-btn round class="absolute all-pointer-events" size="xs" icon="sym_o_delete_forever" color="primary" style="top: 1px; right: 1px" @click.stop="onRemoveImage(image.id)">
-              <q-tooltip style="font-size: small">Remove</q-tooltip>
+            <q-btn v-if="image.isCover" size="sm" flat round icon="star" color="primary" style="top: 1px; left: 1px">
+              <q-tooltip style="font-size: small">Cover</q-tooltip>
+            </q-btn>
+            <q-btn size="sm" flat round icon="more_vert" color="primary" class="absolute all-pointer-events" style="top: 1px; right: 1px" @click.stop>
+              <q-menu>
+                <q-list style="min-width: 100px" dense>
+                  <q-item clickable v-close-popup @click="setCover(image.id)">
+                    <q-item-section>Set Cover</q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item clickable v-close-popup @click="onRemoveImage(image.id)">
+                    <q-item-section>Remove</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
             </q-btn>
           </q-img>
         </div>
       </div>
     </div>
     <div class="row q-mt-lg" v-if="isShowedJson">
-      <vue-json-pretty :deep="3" showLineNumber :data="(paperwork as unknown as JSONDataType)" />
+      <vue-json-pretty :deep="3" showLineNumber :data="images" />
     </div>
   </q-layout>
 </template>
@@ -96,7 +109,6 @@ import { useUserStore } from 'src/stores/userStore';
 import { useDocumentStore } from 'src/stores/documentStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
-import { JSONDataType } from 'vue-json-pretty/types/utils';
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 import { Category } from 'src/Models/Category/CategoryInterface';
@@ -113,6 +125,7 @@ import AddDocumentsDialog from './Dialogs/AddDocumentsDialog.vue';
 import UpdateCategoriesDialog from './Dialogs/UpdateCategoriesDialog.vue';
 import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachmentRequestModel';
 import { UpdatePaperworkRequestModel } from 'src/Models/Paperwork/UpdatePaperworkRequestModel';
+import { SetCoverRequestModel } from 'src/Models/Document/SetCoverRequestModel';
 const truncate = ref(true);
 const $route = useRoute();
 const $router = useRouter();
@@ -325,6 +338,32 @@ function onRemoveImage(imageId: string) {
       // TODO
     });
 }
+async function setCover(imageId: string) {
+  $q.loading.show({
+    message: 'Setting cover...',
+  });
+  const request: SetCoverRequestModel = {
+    paperworkId: $route.params.id as string,
+    documentId: imageId,
+  }
+  documentStore.setCover(request).then(() => {
+    $q.loading.hide();
+    images.value = images.value.map((image) =>
+      image.id === imageId? {...image, isCover: true } : {...image, isCover: false }
+    );
+    $q.notify({
+      type: 'positive',
+      message: 'Set cover successfully.',
+    });
+  })
+    .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
+    })
+}
 function addDocuments() {
   $q.dialog({
     component: AddDocumentsDialog,
@@ -340,7 +379,7 @@ function addDocuments() {
         .then((response: GenericResponseData | undefined) => {
           paperwork.value = response?.data as PaperworkDetails;
           attachments.value = paperwork.value?.attachments || [];
-          images.value = paperwork.value?.images || [];
+          images.value = (paperwork.value?.images || []) as ImageInterface[];
           imagesUrls.value = images.value.map((image) => getImgUrl(image.fileBlob));
           $q.loading.hide();
         })
@@ -369,7 +408,9 @@ async function updateCategories() {
       paperworkStore
         .getPaperworksById($route.params.id as string)
         .then((response: GenericResponseData | undefined) => {
-          categories.value = response?.data?.categories;
+          if (response?.data && 'categories' in response.data) {
+            categories.value = (response.data as PaperworkDetails).categories;
+          }
           $q.loading.hide();
         })
         .catch((err: GenericResponseData | any) => {

@@ -3,4 +3,5 @@ export interface ImageInterface {
   fileName: string;
   fileSize: number;
   fileBlob: { type: string; data: number[] };
+  isCover: boolean;
 }

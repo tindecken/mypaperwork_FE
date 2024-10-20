@@ -48,9 +48,12 @@
     <div class="row q-mt-md q-col-gutter-lg">
       <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
         <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(getImgUrl(image.fileBlob), images)" class="images">
-          <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 8px; left: 8px">
+          <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 2px; right: 2px">
             <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
           </q-icon>
+          <q-btn v-if="image.isCover"  class="absolute all-pointer-events" size="sm" flat round icon="star" color="primary" style="top: 2px; left: 2px">
+            <q-tooltip style="font-size: small">Cover</q-tooltip>
+          </q-btn>
         </q-img>
       </div>
     </div>

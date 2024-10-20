@@ -12,6 +12,7 @@ import { DownloadAttachmentRequestModel } from 'src/Models/Document/DownloadAtta
 import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachmentRequestModel';
 import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
 import { UploadDocumentsRequestModel } from 'src/Models/Document/UploadDocumentsequestModel';
+import { SetCoverRequestModel } from 'src/Models/Document/SetCoverRequestModel';
 
 const userStore = useUserStore();
 export const useDocumentStore = defineStore('document', {
@@ -42,8 +43,6 @@ export const useDocumentStore = defineStore('document', {
       }
     },
     async removeAttachment(body: RemoveAttachmentRequestModel): Promise<GenericResponseData | undefined> {
-      console.log('body', body);
-      console.log('userStore.token', userStore.token);
       try {
         const axiosResponse = await api.delete(
           '/documents/remove',
@@ -80,6 +79,28 @@ export const useDocumentStore = defineStore('document', {
           })
         })
         await Promise.all(promises);
+      } catch (error: any) {
+        handleError(error);
+      }
+    },
+    async setCover(model: SetCoverRequestModel) {
+      try {
+        const axiosResponse = await api.post(
+          '/documents/setCover',
+          {
+            paperworkId: model.paperworkId,
+            documentId: model.documentId,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${userStore.token}`,
+            },
+          }
+
+        );
+        const responseData = (await axiosResponse.data) as GenericResponseData;
+        return responseData;
       } catch (error: any) {
         handleError(error);
       }
