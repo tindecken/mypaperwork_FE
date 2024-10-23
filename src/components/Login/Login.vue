@@ -31,6 +31,9 @@ const userName = ref('');
 const password = ref('');
 const userStore = useUserStore();
 const onClickLogin = async () => {
+  $q.loading.show({
+    message: 'Authenticating...',
+  });
   const payload: AuthenticateRequestModel = {
     userName: userName.value,
     password: password.value,
@@ -38,6 +41,7 @@ const onClickLogin = async () => {
   userStore
     .login(payload)
     .then((response: GenericResponseData | undefined) => {
+      $q.loading.hide();
       const redirectUrl = `/${$route.query.redirect || 'selectfile'}`;
       void $router.replace(redirectUrl);
       $q.notify({
@@ -46,6 +50,7 @@ const onClickLogin = async () => {
       });
     })
     .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
       $q.notify({
         type: 'negative',
         message: err.message || err.title || err,

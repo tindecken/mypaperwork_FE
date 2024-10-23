@@ -22,7 +22,7 @@
     "jwt-decode": "^4",
     "pinia": "^2.0.11",
     "pretty-bytes": "^6.1.1",
-    "quasar": "^2.17.0",
+    "quasar": "^2.17.1",
     "v-viewer": "^3.0.20",
     "viewerjs": "^1.11.6",
     "vue": "^3.4.18",
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.3.1",
-    "@quasar/app-vite": "^1.10.0",
+    "@quasar/app-vite": "^1.10.2",
     "@types/node": "^12.20.21",
     "@typescript-eslint/eslint-plugin": "^7.16.0",
     "@typescript-eslint/parser": "^7.16.0",
