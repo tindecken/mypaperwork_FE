@@ -42,7 +42,18 @@
           </div>
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="row q-mt-sm">
-            <q-uploader hide-upload-btn :color="isDark ? 'grey-9' : 'grey-6'" ref="uploader" class="col-grow" label="Images or Files (max 50 files, max size: 20mb per file)" multiple max-files="20" max-file-size="20000000" @rejected="onRejected($event)" />
+            <q-uploader
+              hide-upload-btn
+              :color="isDark ? 'grey-9' : 'grey-6'"
+              ref="uploader"
+              class="col-grow"
+              label="Images or Files (max 50 files, max size: 20mb per file)"
+              multiple
+              max-files="20"
+              max-file-size="20000000"
+              @rejected="onRejected($event)"
+              @added="onAdded($event)"
+            />
           </div>
           <div class="row justify-end">
             <q-btn class="q-mt-sm" outline label="Create" type="submit" style="height: 50px; width: 100px" />
@@ -64,6 +75,7 @@ import { Category } from 'src/Models/Category/CategoryInterface';
 import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { useGlobalStore } from 'src/stores/globalStore';
+import heic2any from 'heic2any';
 
 const categoryStore = useCategoryStore();
 const paperworkStore = usePaperworkStore();
@@ -132,5 +144,25 @@ async function onRejected(rejectedEntries: any) {
 }
 async function onSelectedCategory(cat: Category) {
   console.log('Selected category:', cat.id);
+}
+async function onAdded(files: any) {
+  console.log('Files added:', files);
+  const convertedFiles = await Promise.all(
+    files.map(async (file: File) => {
+      if (file.name.toLowerCase().endsWith('.heic')) {
+        uploader.value?.removeQueuedFiles(file);
+        console.log('Converting HEIC to PNG:', file.name);
+        const image = await heic2any({ blob: file, toType: 'image/jpeg' });
+        if (image instanceof Blob) {
+          return new File([image], file.name.replace(/\.heic$/i, '.jpeg'), {
+            type: 'image/jpeg',
+            lastModified: file.lastModified,
+          });
+        }
+      }
+      return file;
+    })
+  );
+  uploader.value?.addFiles(convertedFiles.filter(Boolean));
 }
 </script>

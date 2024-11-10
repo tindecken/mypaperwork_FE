@@ -51,7 +51,7 @@
           <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 2px; right: 2px">
             <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
           </q-icon>
-          <q-btn v-if="image.isCover"  class="absolute all-pointer-events" size="sm" flat round icon="star" color="primary" style="top: 2px; left: 2px">
+          <q-btn v-if="image.isCover" class="absolute all-pointer-events" size="sm" flat round icon="star" color="primary" style="top: 2px; left: 2px">
             <q-tooltip style="font-size: small">Cover</q-tooltip>
           </q-btn>
         </q-img>
@@ -133,7 +133,10 @@ onMounted(() => {
       priceCurrency.value = paperwork.value?.priceCurrency;
       categories.value = paperwork.value?.categories;
       attachments.value = paperwork.value?.attachments || [];
-      images.value = paperwork.value?.images || [];
+      images.value = (paperwork.value?.images || []).map((image) => ({
+        ...image,
+        isCover: false, // Assuming 'isCover' is missing and needs to be added
+      }));
       imagesUrls.value = images.value.map((image) => getImgUrl(image.fileBlob));
       $q.loading.hide();
     })
