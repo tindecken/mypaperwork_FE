@@ -29,7 +29,7 @@
 
         <div class="row justify-end q-mt-sm">
           <div class="col-auto">
-            <q-btn outline  color="primary" label="Save" type="submit" />
+            <q-btn outline color="primary" label="Save" type="submit" />
             <q-btn outline class="q-ml-sm" color="primary" label="Cancel" @click="cancel()" />
           </div>
         </div>
@@ -72,7 +72,7 @@
       </q-table>
       <div class="row q-mt-sm q-col-gutter-lg">
         <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
-          <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(getImgUrl(image.fileBlob), images)" class="row images self-center">
+          <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(image, images)" class="row images self-center">
             <q-tooltip style="font-size: small">{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
             <q-btn v-if="image.isCover" size="sm" flat round icon="star" color="primary" style="top: 1px; left: 1px">
               <q-tooltip style="font-size: small">Cover</q-tooltip>
@@ -219,19 +219,16 @@ async function onDownloadAttachment(attachmentId: string, attachmentFileName: st
     });
 }
 function getImgUrl(arrBuff: { type: string; data: number[] }) {
-  var binary = '';
   var bytes = new Uint8Array(arrBuff.data);
-  var len = bytes.byteLength;
-  for (var i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  const btoawindow = window.btoa(binary);
-  const imgUrl = `data:${arrBuff.type};base64,${btoawindow}`;
-  return imgUrl;
+  var blob = new Blob([bytes.buffer], { type: 'image/jpeg' });
+  var urlCreator = window.URL || window.webkitURL;
+  var imageUrl = urlCreator.createObjectURL(blob);
+  return imageUrl;
 }
-async function showImages(currentImageUrl: string, images: ImageInterface[]) {
+async function showImages(currentImage: ImageInterface, images: ImageInterface[]) {
   const imageUrls = images.map((image) => getImgUrl(image.fileBlob));
-  const index = imageUrls.indexOf(currentImageUrl);
+  const index = images.findIndex((img: any) => img.fileName == currentImage.fileName);
+  console.log('index:', index);
   viewerApi({
     images: imageUrls,
     options: {
@@ -263,20 +260,23 @@ function savePaperwork() {
     price: price.value,
     priceCurrency: priceCurrency.value,
     issueAt: issueAt.value ?? null,
-  }
-  paperworkStore.updatePaperwork(updateRequest).then(() => {
-    $q.loading.hide();
-    $q.notify({
-      type:'positive',
-      message: 'Paperwork updated successfully.',
+  };
+  paperworkStore
+    .updatePaperwork(updateRequest)
+    .then(() => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'positive',
+        message: 'Paperwork updated successfully.',
+      });
+    })
+    .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
     });
-  }).catch((err: GenericResponseData | any) => {
-    $q.loading.hide();
-    $q.notify({
-      type: 'negative',
-      message: err.message || err.title || err,
-    });
-  });
 }
 function cancel() {
   $router.push('/paperwork-details');
@@ -290,20 +290,22 @@ function onRemoveAttachment(attachmentId: string) {
       const request: RemoveAttachmentRequestModel = {
         paperworkId: $route.params.id as string,
         documentId: attachmentId,
-      }
-      documentStore.removeAttachment(request).then(() => {
-        attachments.value = attachments.value.filter((attachment) => attachment.id!== attachmentId);
-        $q.notify({
-          type: 'positive',
-          message: 'Attachment removed successfully.',
+      };
+      documentStore
+        .removeAttachment(request)
+        .then(() => {
+          attachments.value = attachments.value.filter((attachment) => attachment.id !== attachmentId);
+          $q.notify({
+            type: 'positive',
+            message: 'Attachment removed successfully.',
+          });
+        })
+        .catch((err: GenericResponseData | any) => {
+          $q.notify({
+            type: 'negative',
+            message: err.message || err.title || err,
+          });
         });
-      })
-      .catch((err: GenericResponseData | any) => {
-        $q.notify({
-          type: 'negative',
-          message: err.message || err.title || err,
-        });
-      })
     })
     .onCancel(async () => {})
     .onDismiss(() => {
@@ -318,20 +320,22 @@ function onRemoveImage(imageId: string) {
       const request: RemoveAttachmentRequestModel = {
         paperworkId: $route.params.id as string,
         documentId: imageId,
-      }
-      documentStore.removeAttachment(request).then(() => {
-        images.value = images.value.filter((image) => image.id!== imageId);
-        $q.notify({
-          type: 'positive',
-          message: 'Image removed successfully.',
-        });
-      })
+      };
+      documentStore
+        .removeAttachment(request)
+        .then(() => {
+          images.value = images.value.filter((image) => image.id !== imageId);
+          $q.notify({
+            type: 'positive',
+            message: 'Image removed successfully.',
+          });
+        })
         .catch((err: GenericResponseData | any) => {
           $q.notify({
             type: 'negative',
             message: err.message || err.title || err,
           });
-        })
+        });
     })
     .onCancel(async () => {})
     .onDismiss(() => {
@@ -345,30 +349,30 @@ async function setCover(imageId: string) {
   const request: SetCoverRequestModel = {
     paperworkId: $route.params.id as string,
     documentId: imageId,
-  }
-  documentStore.setCover(request).then(() => {
-    $q.loading.hide();
-    images.value = images.value.map((image) =>
-      image.id === imageId? {...image, isCover: true } : {...image, isCover: false }
-    );
-    $q.notify({
-      type: 'positive',
-      message: 'Set cover successfully.',
-    });
-  })
+  };
+  documentStore
+    .setCover(request)
+    .then(() => {
+      $q.loading.hide();
+      images.value = images.value.map((image) => (image.id === imageId ? { ...image, isCover: true } : { ...image, isCover: false }));
+      $q.notify({
+        type: 'positive',
+        message: 'Set cover successfully.',
+      });
+    })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();
       $q.notify({
         type: 'negative',
         message: err.message || err.title || err,
       });
-    })
+    });
 }
 function addDocuments() {
   $q.dialog({
     component: AddDocumentsDialog,
     componentProps: {
-      paperworkId: $route.params.id as string
+      paperworkId: $route.params.id as string,
     },
   })
     .onOk(async () => {

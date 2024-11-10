@@ -47,7 +47,7 @@
     </div>
     <div class="row q-mt-md q-col-gutter-lg">
       <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
-        <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(getImgUrl(image.fileBlob), images)" class="images">
+        <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(image, images)" class="images" loading="lazy">
           <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 2px; right: 2px">
             <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
           </q-icon>
@@ -179,19 +179,16 @@ async function onDownloadAttachment(attachmentId: string, attachmentFileName: st
     });
 }
 function getImgUrl(arrBuff: { type: string; data: number[] }) {
-  var binary = '';
   var bytes = new Uint8Array(arrBuff.data);
-  var len = bytes.byteLength;
-  for (var i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  const btoawindow = window.btoa(binary);
-  const imgUrl = `data:${arrBuff.type};base64,${btoawindow}`;
-  return imgUrl;
+  var blob = new Blob([bytes.buffer], { type: 'image/jpeg' });
+  var urlCreator = window.URL || window.webkitURL;
+  var imageUrl = urlCreator.createObjectURL(blob);
+  return imageUrl;
 }
-async function showImages(currentImageUrl: string, images: ImageInterface[]) {
+async function showImages(currentImage: ImageInterface, images: ImageInterface[]) {
   const imageUrls = images.map((image) => getImgUrl(image.fileBlob));
-  const index = imageUrls.indexOf(currentImageUrl);
+  const index = images.findIndex((img: any) => img.fileName == currentImage.fileName);
+  console.log('index:', index);
   const $viewer = viewerApi({
     images: imageUrls,
     options: {

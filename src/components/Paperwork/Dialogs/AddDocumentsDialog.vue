@@ -15,7 +15,18 @@
       <div class="row q-pa-md">
         <q-form @submit="addDocuments()" class="col-grow">
           <div class="row q-mt-sm">
-            <q-uploader hide-upload-btn :color="isDark ? 'grey-9' : 'grey-6'" ref="uploader" class="col-grow" label="Images or Files (max 50 files, max size: 20mb per file)" multiple max-files="20" max-file-size="20000000" @rejected="onRejected($event)" />
+            <q-uploader
+              hide-upload-btn
+              :color="isDark ? 'grey-9' : 'grey-6'"
+              ref="uploader"
+              class="col-grow"
+              label="Images or Files (max 50 files, max size: 20mb per file)"
+              multiple
+              max-files="20"
+              max-file-size="20000000"
+              @rejected="onRejected($event)"
+              @added="onAdded($event)"
+            />
           </div>
           <div class="row justify-end q-mt-sm">
             <q-btn flat label="Cancel" @click="onDialogHide()"></q-btn>
@@ -34,8 +45,9 @@ import { computed } from 'vue';
 import { useQuasar } from 'quasar';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { useGlobalStore } from 'src/stores/globalStore';
-import { useDocumentStore} from 'stores/documentStore';
+import { useDocumentStore } from 'stores/documentStore';
 import { UploadDocumentsRequestModel } from 'src/Models/Document/UploadDocumentsequestModel';
+import heic2any from 'heic2any';
 
 const globalStore = useGlobalStore();
 const isDark = computed(() => globalStore.darkTheme);
@@ -68,20 +80,22 @@ async function onRejected(rejectedEntries: any) {
 }
 async function addDocuments() {
   $q.loading.show({
-    message: 'Uploading ...'
+    message: 'Uploading ...',
   });
   const request: UploadDocumentsRequestModel = {
     paperworkId: props.paperworkId,
     files: uploader.value?.files,
-  }
-  documentStore.uploadDocuments(request).then(() => {
-    $q.loading.hide();
-    $q.notify({
-      type: 'positive',
-      message: 'Add document(s) successfully.',
-    });
-    onDialogOK();
-  })
+  };
+  documentStore
+    .uploadDocuments(request)
+    .then(() => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'positive',
+        message: 'Add document(s) successfully.',
+      });
+      onDialogOK();
+    })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();
       $q.notify({
@@ -90,5 +104,25 @@ async function addDocuments() {
       });
       onDialogHide();
     });
+}
+async function onAdded(files: any) {
+  console.log('Files added:', files);
+  const convertedFiles = await Promise.all(
+    files.map(async (file: File) => {
+      if (file.name.toLowerCase().endsWith('.heic')) {
+        uploader.value?.removeQueuedFiles(file);
+        console.log('Converting HEIC to PNG:', file.name);
+        const image = await heic2any({ blob: file, toType: 'image/jpeg' });
+        if (image instanceof Blob) {
+          return new File([image], file.name.replace(/\.heic$/i, '.jpeg'), {
+            type: 'image/jpeg',
+            lastModified: file.lastModified,
+          });
+        }
+      }
+      return file;
+    })
+  );
+  uploader.value?.addFiles(convertedFiles.filter(Boolean));
 }
 </script>

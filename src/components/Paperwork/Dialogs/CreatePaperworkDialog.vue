@@ -15,7 +15,7 @@
       <div class="row q-pa-md">
         <q-form @submit="createPaperwork()" class="col-grow">
           <div class="row">
-            <q-input class="col-grow" outlined dense v-model="name" label="Name"> </q-input>
+            <q-input class="col-grow" outlined dense v-model="name" label="Name *" :rules="[(val) => !!val || 'Name is required']"> </q-input>
           </div>
           <div class="row q-mt-md">
             <q-input type="textarea" class="col-grow" outlined dense v-model="description" label="Description"> </q-input>
