@@ -46,17 +46,14 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useQuasar } from 'quasar';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
-import { useUserStore } from 'src/stores/userStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
-import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
 import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
 import { Paging } from 'src/Models/PagingInterface';
 import ConfirmDeletePaperworkDialog from './Dialogs/ConfirmDeletePaperworkDialog.vue';
 
 const $router = useRouter();
-const userStore = useUserStore();
 const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
 const currentPagingNumber = ref(1);

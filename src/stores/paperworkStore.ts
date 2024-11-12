@@ -33,6 +33,7 @@ export const usePaperworkStore = defineStore('paperwork', {
           },
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
+        console.log('responseData.data', responseData.data);
         this.$patch({
           paperworks: responseData.data as Paperwork[],
         });
@@ -107,7 +108,7 @@ export const usePaperworkStore = defineStore('paperwork', {
     },
     async updatePaperwork(model: UpdatePaperworkRequestModel): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.put(`/paperworks/update/${model.id}`, model,{
+        const axiosResponse = await api.put(`/paperworks/update/${model.id}`, model, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${userStore.token}`,

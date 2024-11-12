@@ -106,7 +106,7 @@ async function createPaperwork() {
   };
   console.log('Creating paperwork request model:', requestModel);
   $q.loading.show({
-    message: 'Creating post...',
+    message: 'Creating paperwork...',
   });
   paperworkStore
     .createPaperwork(requestModel)
@@ -127,13 +127,21 @@ async function createPaperwork() {
       onDialogHide();
     });
 }
+function checkIfDuplicateExists(arr: any[]): boolean {
+  return new Set(arr).size !== arr.length;
+}
 async function onRejected(rejectedEntries: any) {
   if (rejectedEntries.length > 0) {
+    console.error('Rejected files:', rejectedEntries);
     if (rejectedEntries[0].failedPropValidation === 'duplicate') {
-      $q.notify({
-        type: 'warning',
-        message: "You've added the same file twice.",
-      });
+      console.log('uploader.value', uploader.value?.files);
+      // check if there is a duplicate file name in the uploader.value.files array, if so, notify the user
+      if (checkIfDuplicateExists(uploader.value?.files)) {
+        $q.notify({
+          type: 'warning',
+          message: "You've added the same file twice.",
+        });
+      }
     } else if (rejectedEntries[0].failedPropValidation === 'max-file-size') {
       $q.notify({
         type: 'warning',
@@ -149,8 +157,9 @@ async function onAdded(files: any) {
   console.log('Files added:', files);
   const convertedFiles = await Promise.all(
     files.map(async (file: File) => {
+      console.log('uploader files', uploader.value?.files);
+      console.log('file:', file);
       if (file.name.toLowerCase().endsWith('.heic')) {
-        uploader.value?.removeQueuedFiles(file);
         console.log('Converting HEIC to PNG:', file.name);
         const image = await heic2any({ blob: file, toType: 'image/jpeg' });
         if (image instanceof Blob) {
