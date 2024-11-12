@@ -10,9 +10,7 @@ export interface Paperwork {
   updatedAt: Date;
   updatedBy: string;
   isDeleted: boolean;
-  categoryName: string;
-  categoryDescription: string;
-  categoryId: string;
+  categories: string[];
   coverBlob?: { type: string; data: number[] };
   coverFileName?: string;
   documentCount?: number;
