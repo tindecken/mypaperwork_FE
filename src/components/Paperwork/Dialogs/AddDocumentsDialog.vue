@@ -63,13 +63,21 @@ const props = defineProps({
   },
 });
 
+function checkIfDuplicateExists(arr: any[]): boolean {
+  return new Set(arr).size !== arr.length;
+}
 async function onRejected(rejectedEntries: any) {
   if (rejectedEntries.length > 0) {
+    console.error('Rejected files:', rejectedEntries);
     if (rejectedEntries[0].failedPropValidation === 'duplicate') {
-      $q.notify({
-        type: 'warning',
-        message: "You've added the same file twice.",
-      });
+      console.log('uploader.value', uploader.value?.files);
+      // check if there is a duplicate file name in the uploader.value.files array, if so, notify the user
+      if (checkIfDuplicateExists(uploader.value?.files)) {
+        $q.notify({
+          type: 'warning',
+          message: "You've added the same file twice.",
+        });
+      }
     } else if (rejectedEntries[0].failedPropValidation === 'max-file-size') {
       $q.notify({
         type: 'warning',
@@ -110,9 +118,8 @@ async function onAdded(files: any) {
   const convertedFiles = await Promise.all(
     files.map(async (file: File) => {
       if (file.name.toLowerCase().endsWith('.heic')) {
-        uploader.value?.removeQueuedFiles(file);
-        console.log('Converting HEIC to PNG:', file.name);
         const image = await heic2any({ blob: file, toType: 'image/jpeg' });
+        uploader.value?.removeFile(file);
         if (image instanceof Blob) {
           return new File([image], file.name.replace(/\.heic$/i, '.jpeg'), {
             type: 'image/jpeg',

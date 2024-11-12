@@ -157,11 +157,9 @@ async function onAdded(files: any) {
   console.log('Files added:', files);
   const convertedFiles = await Promise.all(
     files.map(async (file: File) => {
-      console.log('uploader files', uploader.value?.files);
-      console.log('file:', file);
       if (file.name.toLowerCase().endsWith('.heic')) {
-        console.log('Converting HEIC to PNG:', file.name);
         const image = await heic2any({ blob: file, toType: 'image/jpeg' });
+        uploader.value?.removeFile(file);
         if (image instanceof Blob) {
           return new File([image], file.name.replace(/\.heic$/i, '.jpeg'), {
             type: 'image/jpeg',
