@@ -47,7 +47,7 @@
     </div>
     <div class="row q-mt-md q-col-gutter-lg">
       <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
-        <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(image, images)" class="images" loading="lazy">
+        <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(image, images)" class="images">
           <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 2px; right: 2px">
             <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
           </q-icon>
@@ -186,19 +186,26 @@ function getImgUrl(arrBuff: { type: string; data: number[] }) {
   return imageUrl;
 }
 async function showImages(currentImage: ImageInterface, images: ImageInterface[]) {
-  const imageUrls = images.map((image) => getImgUrl(image.fileBlob));
-  const index = images.findIndex((img: any) => img.fileName == currentImage.fileName);
+  const imageUrls = images.map((image) => ({
+    source: getImgUrl(image.fileBlob),
+    fileName: image.fileName,
+    fileSize: prettyBytes(image.fileSize),
+    alt: image.fileName,
+  }));
+  const index = images.findIndex((image) => image.id === currentImage.id);
+  console.log('imageUrls', imageUrls);
   console.log('index:', index);
   const $viewer = viewerApi({
     images: imageUrls,
     options: {
+      url: 'source',
       inline: true,
       button: true,
-      navbar: false,
-      title: () => `${images[index].fileName} - ${prettyBytes(images[index].fileSize)}`,
+      navbar: true,
+      title: true,
       toolbar: true,
-      tooltip: false,
-      movable: true,
+      tooltip: true,
+      movable: false,
       zoomable: true,
       rotatable: true,
       scalable: false,

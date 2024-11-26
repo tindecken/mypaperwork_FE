@@ -226,19 +226,26 @@ function getImgUrl(arrBuff: { type: string; data: number[] }) {
   return imageUrl;
 }
 async function showImages(currentImage: ImageInterface, images: ImageInterface[]) {
-  const imageUrls = images.map((image) => getImgUrl(image.fileBlob));
-  const index = images.findIndex((img: any) => img.fileName == currentImage.fileName);
+  const imageUrls = images.map((image) => ({
+    source: getImgUrl(image.fileBlob),
+    fileName: image.fileName,
+    fileSize: prettyBytes(image.fileSize),
+    alt: image.fileName,
+  }));
+  const index = images.findIndex((image) => image.id === currentImage.id);
+  console.log('imageUrls', imageUrls);
   console.log('index:', index);
-  viewerApi({
+  const $viewer = viewerApi({
     images: imageUrls,
     options: {
+      url: 'source',
       inline: true,
       button: true,
-      navbar: false,
-      title: () => `${images[index].fileName} - ${prettyBytes(images[index].fileSize)}`,
+      navbar: true,
+      title: true,
       toolbar: true,
-      tooltip: false,
-      movable: true,
+      tooltip: true,
+      movable: false,
       zoomable: true,
       rotatable: true,
       scalable: false,
