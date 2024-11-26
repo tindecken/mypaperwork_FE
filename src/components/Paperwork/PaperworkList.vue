@@ -14,13 +14,6 @@
                   <q-item-section>Edit</q-item-section>
                 </q-item>
                 <q-separator />
-                <q-item clickable v-close-popup @click="addCategories(pw)">
-                  <q-item-section>Add categories</q-item-section>
-                </q-item>
-                <q-item clickable v-close-popup @click="removeCategories(pw)">
-                  <q-item-section>Remove categories</q-item-section>
-                </q-item>
-                <q-separator />
                 <q-item clickable v-close-popup @click="deletePaperwork(pw)">
                   <q-item-section>Delete</q-item-section>
                 </q-item>
@@ -121,12 +114,6 @@ function updatePaperworks() {
 }
 function editPaperwork(pw: Paperwork) {
   $router.push(`/paperwork-edit/${pw.id}`);
-}
-function addCategories(pw: Paperwork) {
-  console.log('addCategories', pw);
-}
-function removeCategories(pw: Paperwork) {
-  console.log('removeCategories', pw);
 }
 function deletePaperwork(pw: Paperwork) {
   $q.dialog({
