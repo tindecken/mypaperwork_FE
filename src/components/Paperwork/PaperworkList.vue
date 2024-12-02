@@ -4,22 +4,26 @@
   </div>
   <template v-if="papperworks.length > 0">
     <div class="row q-pa-md q-gutter-md justify-start">
-      <q-card class="card-item" v-for="pw in papperworks" :key="pw.id" @click="openPaperwork(pw)">
-        <q-card-section class="row justify-between card-item">
-          <q-item-label class="self-center">{{ pw.name }} ({{ pw.documentCount }})</q-item-label>
-          <q-btn size="sm" flat round icon="more_vert" class="self-center" @click.stop>
-            <q-menu>
-              <q-list style="min-width: 100px" dense>
-                <q-item clickable v-close-popup @click="editPaperwork(pw)">
-                  <q-item-section>Edit</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable v-close-popup @click="deletePaperwork(pw)">
-                  <q-item-section>Delete</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
+      <q-card class="card-item q-pa-xs" v-for="pw in papperworks" :key="pw.id" @click="openPaperwork(pw)">
+        <q-card-section class="row justify-between card-item q-pa-sm">
+          <div class="col-11" style="word-break: break-all">
+            <q-item-label class="self-center q-pa-none">{{ pw.name }} ({{ pw.documentCount }})</q-item-label>
+          </div>
+          <div class="col-1">
+            <q-btn size="sm" flat round icon="more_vert" class="self-center" @click.stop>
+              <q-menu>
+                <q-list style="min-width: 100px" dense>
+                  <q-item clickable v-close-popup @click="editPaperwork(pw)">
+                    <q-item-section>Edit</q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item clickable v-close-popup @click="deletePaperwork(pw)">
+                    <q-item-section>Delete</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </div>
         </q-card-section>
         <img v-if="pw.coverBlob" :src="getImgUrl(pw.coverBlob)" />
       </q-card>
