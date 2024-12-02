@@ -43,6 +43,27 @@ export const usePaperworkStore = defineStore('paperwork', {
         handleError(error);
       }
     },
+    async getPaperworksByCategoryId(categoryId: string, paging?: Paging): Promise<GenericResponseData | undefined> {
+      try {
+        let query = '';
+        query = handlePaging(paging);
+        const axiosResponse = await api.get(`/paperworks/getPaperworks/${categoryId}/${query}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userStore.token}`,
+          },
+        });
+        const responseData = (await axiosResponse.data) as GenericResponseData;
+        console.log('responseData.data', responseData.data);
+        this.$patch({
+          paperworks: responseData.data as Paperwork[],
+        });
+        return responseData;
+      } catch (error: any) {
+        this.$reset();
+        handleError(error);
+      }
+    },
     async getPaperworksById(paperworkId: string): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.get(`/paperworks/get/${paperworkId}`, {

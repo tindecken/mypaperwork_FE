@@ -20,6 +20,13 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: '/category-details/:id',
+        component: () => import('src/components/Category/CategoryDetails.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
         path: '/paperworks',
         component: () => import('src/components/Paperwork/PaperworkList.vue'),
         meta: {

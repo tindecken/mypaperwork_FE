@@ -43,16 +43,19 @@
 </template>
 <script setup lang="ts">
 import { Dark } from 'quasar';
+import { useRouter } from 'vue-router';
 import { useGlobalStore } from 'src/stores/globalStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { computed } from 'vue';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { useQuasar } from 'quasar';
 import CreatePaperworkDialog from 'components/Paperwork/Dialogs/CreatePaperworkDialog.vue';
+import { usePaperworkStore } from 'src/stores/paperworkStore';
 
 const categoryStore = useCategoryStore();
 const $q = useQuasar();
 const categories = computed(() => categoryStore.categories);
+const $router = useRouter();
 
 const globalStore = useGlobalStore();
 function switchTheme() {
@@ -60,7 +63,7 @@ function switchTheme() {
   Dark.set(globalStore.darkTheme);
 }
 function onSelectCategory(category: Category) {
-  console.log('Selected category:', category);
+  $router.push(`/category-details/${category.id}`);
 }
 function onCreatePaperwork() {
   $q.dialog({
