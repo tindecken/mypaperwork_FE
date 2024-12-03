@@ -1,5 +1,5 @@
 <template>
-  <h4>Category: {{ categoryId }}</h4>
+  <paperwork-list v-bind:category-id="categoryId"></paperwork-list>
 </template>
 
 <script setup lang="ts">
@@ -11,10 +11,11 @@ import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
 import { Paging } from 'src/Models/PagingInterface';
 import ConfirmDeletePaperworkDialog from './Dialogs/ConfirmDeletePaperworkDialog.vue';
+import PaperworkList from '../Paperwork/PaperworkList.vue';
 
 const $route = useRoute();
 const $q = useQuasar();
-const categoryId = computed(() => $route.params.id);
+const categoryId = computed(() => $route.params.id as string);
 const paperworkStore = usePaperworkStore();
 // watch works directly on a ref
 watch(categoryId, async (newCategoryId, oldCategoryId) => {

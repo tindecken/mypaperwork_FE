@@ -54,30 +54,46 @@ const $router = useRouter();
 const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
 const currentPagingNumber = ref(1);
-const pageSize = ref(10);
+const pageSize = ref(20);
 const pageSizeOption = ref([10, 20, 30, 40, 50]);
-const totalRecords = ref(0);
+const totalRecords = computed(() => paperworkStore.totalRecords);
 const pageSizeMax = computed(() => Math.ceil(totalRecords.value / pageSize.value));
+console.log('pageSizeMax', pageSizeMax.value);
 const searchText = ref('');
 const papperworks = computed(() => paperworkStore.paperworks);
+const props = defineProps(['categoryId']);
 
 onMounted(() => {
   $q.loading.show({
     message: 'Getting paperworks...',
   });
-  paperworkStore
-    .getPaperworksBySelectedFile()
-    .then((response: GenericResponseData | undefined) => {
-      totalRecords.value = response?.totalRecords ?? 0;
-      $q.loading.hide();
-    })
-    .catch((err: GenericResponseData | any) => {
-      $q.loading.hide();
-      $q.notify({
-        type: 'negative',
-        message: err.message || err.title || err,
+  if (props.categoryId == undefined) {
+    paperworkStore
+      .getPaperworksBySelectedFile()
+      .then((response: GenericResponseData | undefined) => {
+        $q.loading.hide();
+      })
+      .catch((err: GenericResponseData | any) => {
+        $q.loading.hide();
+        $q.notify({
+          type: 'negative',
+          message: err.message || err.title || err,
+        });
       });
-    });
+  } else {
+    paperworkStore
+      .getPaperworksByCategoryId(props.categoryId)
+      .then((response: GenericResponseData | undefined) => {
+        $q.loading.hide();
+      })
+      .catch((err: GenericResponseData | any) => {
+        $q.loading.hide();
+        $q.notify({
+          type: 'negative',
+          message: err.message || err.title || err,
+        });
+      });
+  }
 });
 function getImgUrl(arrBuff: { type: string; data: number[] }) {
   var binary = '';
