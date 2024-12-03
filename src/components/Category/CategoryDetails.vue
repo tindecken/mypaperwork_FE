@@ -1,5 +1,6 @@
 <template>
   <h4>Category: {{ categoryId }}</h4>
+  <paperwork-list></paperwork-list>
 </template>
 
 <script setup lang="ts">
@@ -8,9 +9,7 @@ import { ref, onMounted, computed, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
-import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
-import { Paging } from 'src/Models/PagingInterface';
-import ConfirmDeletePaperworkDialog from './Dialogs/ConfirmDeletePaperworkDialog.vue';
+import PaperworkList from 'src/components/Paperwork/PaperworkList.vue';
 
 const $route = useRoute();
 const $q = useQuasar();

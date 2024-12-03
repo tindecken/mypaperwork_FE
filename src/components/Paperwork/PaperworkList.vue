@@ -56,29 +56,29 @@ const paperworkStore = usePaperworkStore();
 const currentPagingNumber = ref(1);
 const pageSize = ref(10);
 const pageSizeOption = ref([10, 20, 30, 40, 50]);
-const totalRecords = ref(0);
+const totalRecords = ref(paperworkStore.paperworks.length);
 const pageSizeMax = computed(() => Math.ceil(totalRecords.value / pageSize.value));
 const searchText = ref('');
 const papperworks = computed(() => paperworkStore.paperworks);
 
-onMounted(() => {
-  $q.loading.show({
-    message: 'Getting paperworks...',
-  });
-  paperworkStore
-    .getPaperworksBySelectedFile()
-    .then((response: GenericResponseData | undefined) => {
-      totalRecords.value = response?.totalRecords ?? 0;
-      $q.loading.hide();
-    })
-    .catch((err: GenericResponseData | any) => {
-      $q.loading.hide();
-      $q.notify({
-        type: 'negative',
-        message: err.message || err.title || err,
-      });
-    });
-});
+// onMounted(() => {
+//   $q.loading.show({
+//     message: 'Getting paperworks...',
+//   });
+//   paperworkStore
+//     .getPaperworksBySelectedFile()
+//     .then((response: GenericResponseData | undefined) => {
+//       totalRecords.value = response?.totalRecords ?? 0;
+//       $q.loading.hide();
+//     })
+//     .catch((err: GenericResponseData | any) => {
+//       $q.loading.hide();
+//       $q.notify({
+//         type: 'negative',
+//         message: err.message || err.title || err,
+//       });
+//     });
+// });
 function getImgUrl(arrBuff: { type: string; data: number[] }) {
   var binary = '';
   var bytes = new Uint8Array(arrBuff.data);
