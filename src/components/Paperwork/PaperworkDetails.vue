@@ -149,6 +149,10 @@ onMounted(() => {
     });
 });
 async function onDownloadAttachment(attachmentId: string, attachmentFileName: string) {
+  // add loading
+  $q.loading.show({
+    message: 'Downloading attachment...',
+  });
   const body: DownloadAttachmentRequestModel = {
     paperworkId: $route.params.id as string,
     documentId: attachmentId,
