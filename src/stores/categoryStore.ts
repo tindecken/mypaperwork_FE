@@ -35,16 +35,15 @@ export const useCategoryStore = defineStore('category', {
     },
     async updateCategoriesByFileId(body: UpdateCategoriesRequestModel): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.put('/categories/updateCategories',
-          body,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${userStore.token}`,
+        const axiosResponse = await api.put('/categories/updateCategories', body, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userStore.token}`,
           },
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         console.log('responseData', responseData);
+        await this.getCategoriesByFileId();
         return responseData;
       } catch (error: any) {
         this.$reset();

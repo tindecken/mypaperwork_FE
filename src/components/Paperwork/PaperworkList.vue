@@ -121,7 +121,6 @@ function updatePaperworks() {
   paperworkStore
     .getPaperworksBySelectedFile(paging)
     .then((response: GenericResponseData | undefined) => {
-      totalRecords.value = response?.totalRecords ?? 0;
       $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
@@ -144,7 +143,6 @@ function deletePaperwork(pw: Paperwork) {
       paperworkStore
         .deletePaperwork(pw.id)
         .then(() => {
-          totalRecords.value -= 1;
           $q.notify({
             type: 'positive',
             message: 'Delete paperwork successfully!',
