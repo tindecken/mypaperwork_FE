@@ -13,7 +13,7 @@
                 <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                   <q-date v-model="issueAt" today-btn mask="YYYY-MM-DD">
                     <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
+                      <q-btn flat v-close-popup label="Close" color="primary" flat />
                     </div>
                   </q-date>
                 </q-popup-proxy>
@@ -29,8 +29,8 @@
 
         <div class="row justify-end q-mt-sm">
           <div class="col-auto">
-            <q-btn outline color="primary" label="Save" type="submit" />
-            <q-btn outline class="q-ml-sm" color="primary" label="Cancel" @click="cancel()" />
+            <q-btn flat outline color="primary" label="Save" type="submit" />
+            <q-btn flat outline class="q-ml-sm" color="primary" label="Cancel" @click="cancel()" />
           </div>
         </div>
       </q-form>
@@ -38,7 +38,7 @@
     <div class="header q-pa-md q-mt-md q-mb-md">
       <div class="row">
         <span class="row self-center title">Categories</span>
-        <q-btn class="q-ml-md" outline icon="sym_o_category" color="primary" label="Update" @click="updateCategories()" />
+        <q-btn flat class="q-ml-md" outline icon="sym_o_category" color="primary" label="Update" @click="updateCategories()" />
       </div>
       <q-chip class="row q-mt-md" outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
     </div>
@@ -47,7 +47,7 @@
         <span class="row title"
           >Documents
           <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length + images.length" />
-          <q-btn class="q-ml-md" outline icon="sym_o_attach_file_add" color="primary" label="Add" @click="addDocuments()" />
+          <q-btn flat class="q-ml-md" outline icon="sym_o_attach_file_add" color="primary" label="Add" @click="addDocuments()" />
         </span>
       </div>
       <q-table dense :rows="attachments" :columns="columns" row-key="id" no-data-label="No attachments" flat bordered class="q-mt-md" separator="cell" v-if="attachments.length > 0">
