@@ -13,7 +13,7 @@
                 <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                   <q-date v-model="issueAt" today-btn mask="YYYY-MM-DD">
                     <div class="row items-center justify-end">
-                      <q-btn flat v-close-popup label="Close" color="primary" flat />
+                      <q-btn flat v-close-popup label="Close" color="primary" />
                     </div>
                   </q-date>
                 </q-popup-proxy>

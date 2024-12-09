@@ -4,7 +4,7 @@
       <span class="col title">Infos</span>
       <div class="col-auto">
         <q-btn flat color="primary" label="Edit" @click="editPaperwork()" />
-        <q-btn class="q-ml-sm" flat color="primary" label="Back" @click="back()" />
+        <q-btn flat class="q-ml-sm" color="primary" label="Back" @click="back()" />
       </div>
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
@@ -51,7 +51,7 @@
           <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 2px; right: 2px">
             <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
           </q-icon>
-          <q-btn v-if="image.isCover" class="absolute all-pointer-events" size="sm" flat round icon="star" color="primary" style="top: 2px; left: 2px">
+          <q-btn flat round icon="star" v-if="image.isCover" class="absolute all-pointer-events" size="sm" color="primary" style="top: 2px; left: 2px">
             <q-tooltip style="font-size: small">Cover</q-tooltip>
           </q-btn>
         </q-img>
