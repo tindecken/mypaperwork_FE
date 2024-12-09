@@ -245,7 +245,7 @@ async function showImages(currentImage: ImageInterface, images: ImageInterface[]
       title: true,
       toolbar: true,
       tooltip: true,
-      movable: false,
+      movable: true,
       zoomable: true,
       rotatable: true,
       scalable: false,

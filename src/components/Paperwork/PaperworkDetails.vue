@@ -149,6 +149,10 @@ onMounted(() => {
     });
 });
 async function onDownloadAttachment(attachmentId: string, attachmentFileName: string) {
+  // add loading
+  $q.loading.show({
+    message: 'Downloading attachment...',
+  });
   const body: DownloadAttachmentRequestModel = {
     paperworkId: $route.params.id as string,
     documentId: attachmentId,
@@ -205,7 +209,7 @@ async function showImages(currentImage: ImageInterface, images: ImageInterface[]
       title: true,
       toolbar: true,
       tooltip: true,
-      movable: false,
+      movable: true,
       zoomable: true,
       rotatable: true,
       scalable: false,

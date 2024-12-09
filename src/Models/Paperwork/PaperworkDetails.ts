@@ -2,7 +2,7 @@ import { Category } from '../Category/CategoryInterface';
 import { AttachmentInterface } from '../Document/AttachmentInterface';
 import { Paperwork } from './PaperworkInterface';
 
-export interface PaperworkDetails extends Paperwork, Category {
+export interface PaperworkDetails extends Paperwork {
   categories: Category[];
   attachments?: AttachmentInterface[];
   images?: {
@@ -10,5 +10,6 @@ export interface PaperworkDetails extends Paperwork, Category {
     fileName: string;
     fileSize: number;
     fileBlob: { type: string; data: number[] };
+    isCover: boolean;
   }[];
 }
