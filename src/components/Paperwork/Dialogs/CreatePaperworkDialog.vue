@@ -76,6 +76,7 @@ import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperwor
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { useGlobalStore } from 'src/stores/globalStore';
 import heic2any from 'heic2any';
+import { IMAGE_FILE_TYPE } from 'src/constants.ts/imageType';
 
 const categoryStore = useCategoryStore();
 const paperworkStore = usePaperworkStore();
@@ -155,21 +156,49 @@ async function onSelectedCategory(cat: Category) {
 }
 async function onAdded(files: any) {
   console.log('Files added:', files);
-  const convertedFiles = await Promise.all(
-    files.map(async (file: File) => {
-      if (file.name.toLowerCase().endsWith('.heic')) {
-        const image = await heic2any({ blob: file, toType: 'image/jpeg' });
-        uploader.value?.removeFile(file);
-        if (image instanceof Blob) {
-          return new File([image], file.name.replace(/\.heic$/i, '.jpeg'), {
-            type: 'image/jpeg',
-            lastModified: file.lastModified,
-          });
-        }
-      }
-      return file;
+  // loop for all files and check if the file type is not image type, check the size, if the size is > 2MB, notify the user and remove the file
+  if (
+    files.some((file: File) => {
+      // get file type by file.name
+      const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1);
+      console.log('File extension:', fileExtension);
+      return IMAGE_FILE_TYPE.includes(fileExtension.toLowerCase());
     })
-  );
-  uploader.value?.addFiles(convertedFiles.filter(Boolean));
+  ) {
+    const convertedHEICFiles = await Promise.all(
+      files.map(async (file: File) => {
+        console.log('Converting HEIC to JPEG:', file.name);
+        if (file.name.toLowerCase().endsWith('.heic')) {
+          $q.loading.show({
+            message: 'Converting HEIC to JPEG...',
+          });
+          const image = await heic2any({ blob: file, toType: 'image/jpeg' });
+          $q.loading.hide();
+          uploader.value?.removeFile(file);
+          if (image instanceof Blob) {
+            return new File([image], file.name.replace(/\.heic$/i, '.jpeg'), {
+              type: 'image/jpeg',
+              lastModified: file.lastModified,
+            });
+          }
+        }
+        return file;
+      })
+    );
+    uploader.value?.addFiles(convertedHEICFiles);
+  } else {
+    // check if the file size is > 2MB, if so, notify the user and remove the file
+    if (
+      files.some((file: File) => file.size > 2000000) // 2MB = 2000000 bytes
+    ) {
+      $q.notify({
+        type: 'warning',
+        message: 'Exceeded the maximum file size (2MB).',
+      });
+      uploader.value?.removeQueuedFiles();
+    } else {
+      uploader.value?.addFiles(files);
+    }
+  }
 }
 </script>
