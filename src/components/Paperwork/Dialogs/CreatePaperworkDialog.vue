@@ -47,10 +47,10 @@
               :color="isDark ? 'grey-9' : 'grey-6'"
               ref="uploader"
               class="col-grow"
-              label="Images or Files (max 50 files, max size: 20mb per file)"
+              label="Images or Files (max 20 files, max size: 2mb per file)"
               multiple
               max-files="20"
-              max-file-size="20000000"
+              max-file-size="10000000"
               @rejected="onRejected($event)"
               @added="onAdded($event)"
             />
@@ -76,7 +76,7 @@ import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperwor
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { useGlobalStore } from 'src/stores/globalStore';
 import heic2any from 'heic2any';
-import { IMAGE_FILE_TYPE } from 'src/constants.ts/imageType';
+import { IMAGE_FILE_TYPE } from 'src/constants/imageType';
 
 const categoryStore = useCategoryStore();
 const paperworkStore = usePaperworkStore();
