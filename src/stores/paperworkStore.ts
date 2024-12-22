@@ -18,6 +18,7 @@ export const usePaperworkStore = defineStore('paperwork', {
     return {
       paperworks: [] as Paperwork[],
       paperworkDetails: null as PaperworkDetails | null,
+      totalRecords: 0 as number,
     };
   },
   getters: {},
@@ -36,6 +37,7 @@ export const usePaperworkStore = defineStore('paperwork', {
         console.log('responseData.data', responseData.data);
         this.$patch({
           paperworks: responseData.data as Paperwork[],
+          totalRecords: responseData.totalRecords,
         });
         return responseData;
       } catch (error: any) {
@@ -57,6 +59,7 @@ export const usePaperworkStore = defineStore('paperwork', {
         console.log('responseData.data', responseData.data);
         this.$patch({
           paperworks: responseData.data as Paperwork[],
+          totalRecords: responseData.totalRecords,
         });
         return responseData;
       } catch (error: any) {

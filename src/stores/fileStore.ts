@@ -8,11 +8,15 @@ import { ChangePasswordRequestModel } from 'src/Models/User/ChangePasswordReques
 import { useJwt } from '@vueuse/integrations/useJwt';
 import { UserInfoInterface } from 'src/Models/UserInfoInterface';
 import { useUserStore } from './userStore';
+import { FilesTable } from 'src/Models/File/FilesTable';
 
 const userStore = useUserStore();
 export const useFileStore = defineStore('file', {
   state: () => {
-    return {};
+    return {
+      selectedFile: null as FilesTable | null,
+      files: [] as FilesTable[],
+    };
   },
   getters: {},
   actions: {
@@ -26,6 +30,9 @@ export const useFileStore = defineStore('file', {
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         console.log('Associated Files:', responseData);
+        this.$patch({
+          files: responseData.data as FilesTable[],
+        });
         return responseData;
       } catch (error: any) {
         this.$reset();

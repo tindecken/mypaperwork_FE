@@ -56,7 +56,7 @@ const paperworkStore = usePaperworkStore();
 const currentPagingNumber = ref(1);
 const pageSize = ref(10);
 const pageSizeOption = ref([10, 20, 30, 40, 50]);
-const totalRecords = ref(paperworkStore.paperworks.length);
+const totalRecords = computed(() => paperworkStore.totalRecords);
 const pageSizeMax = computed(() => Math.ceil(totalRecords.value / pageSize.value));
 const searchText = ref('');
 const papperworks = computed(() => paperworkStore.paperworks);

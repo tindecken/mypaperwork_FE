@@ -22,8 +22,9 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref, onMounted } from 'vue';
+import { onBeforeMount, ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useQuasar } from 'quasar';
 import { useUserStore } from 'src/stores/userStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
@@ -36,13 +37,29 @@ const categoryStore = useCategoryStore();
 const $router = useRouter();
 const userStore = useUserStore();
 const $q = useQuasar();
-
+const paperworkStore = usePaperworkStore();
+const totalRecords = computed(() => paperworkStore.totalRecords);
 onBeforeMount(() => {
   if (!userStore.userInfo.selectedFileId) {
     $router.push('/selectfile');
   }
 });
 onMounted(async () => {
+  $q.loading.show({
+    message: 'Getting paperworks...',
+  });
+  paperworkStore
+    .getPaperworksBySelectedFile()
+    .then((response: GenericResponseData | undefined) => {
+      $q.loading.hide();
+    })
+    .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
+    });
   categoryStore
     .getCategoriesByFileId()
     .then()
