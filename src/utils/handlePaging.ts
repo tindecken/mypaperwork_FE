@@ -9,10 +9,10 @@ export default function handlePaging(paging?: Paging): string {
     if (paging.pageSize) {
       query += `pageSize=${paging.pageSize}&`;
     } else {
-      query += 'pageSize=20&';
+      query += `pageSize=${process.env.DEFAULT_PAGESIZE}&`;
     }
   } else {
-    query += 'pageNumber=1&pageSize=20';
+    query += `pageNumber=1&pageSize=${process.env.DEFAULT_PAGESIZE}`;
   }
   // Sorting
   if (paging && paging.sortField) {

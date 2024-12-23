@@ -67,6 +67,7 @@ module.exports = configure(function (/* ctx */) {
       // analyze: true,
       env: {
         API_BASEURL: process.env.API_BASEURL,
+        DEFAULT_PAGESIZE: process.env.DEFAULT_PAGESIZE,
       },
       // rawDefine: {}
       // ignorePublicFolder: true,

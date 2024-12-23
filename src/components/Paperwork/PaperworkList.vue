@@ -41,9 +41,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useQuasar } from 'quasar';
-import { useRouter } from 'vue-router';
+import { useRouter, onBeforeRouteUpdate } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
@@ -54,31 +54,14 @@ const $router = useRouter();
 const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
 const currentPagingNumber = ref(1);
-const pageSize = ref(10);
+const pageSize = ref(process.env.DEFAULT_PAGESIZE);
 const pageSizeOption = ref([10, 20, 30, 40, 50]);
 const totalRecords = computed(() => paperworkStore.totalRecords);
 const pageSizeMax = computed(() => Math.ceil(totalRecords.value / pageSize.value));
 const searchText = ref('');
 const papperworks = computed(() => paperworkStore.paperworks);
 
-// onMounted(() => {
-//   $q.loading.show({
-//     message: 'Getting paperworks...',
-//   });
-//   paperworkStore
-//     .getPaperworksBySelectedFile()
-//     .then((response: GenericResponseData | undefined) => {
-//       totalRecords.value = response?.totalRecords ?? 0;
-//       $q.loading.hide();
-//     })
-//     .catch((err: GenericResponseData | any) => {
-//       $q.loading.hide();
-//       $q.notify({
-//         type: 'negative',
-//         message: err.message || err.title || err,
-//       });
-//     });
-// });
+const props = defineProps<{ categoryId: string }>();
 function getImgUrl(arrBuff: { type: string; data: number[] }) {
   var binary = '';
   var bytes = new Uint8Array(arrBuff.data);
@@ -102,18 +85,33 @@ function updatePaperworks() {
     pageSize: pageSize.value,
     filterValue: searchText.value,
   };
-  paperworkStore
-    .getPaperworksBySelectedFile(paging)
-    .then((response: GenericResponseData | undefined) => {
-      $q.loading.hide();
-    })
-    .catch((err: GenericResponseData | any) => {
-      $q.notify({
-        type: 'negative',
-        message: err.message || err.title || err,
+  if (props.categoryId) {
+    paperworkStore
+      .getPaperworksByCategoryId(props.categoryId, paging)
+      .then((response: GenericResponseData | undefined) => {
+        $q.loading.hide();
+      })
+      .catch((err: GenericResponseData | any) => {
+        $q.notify({
+          type: 'negative',
+          message: err.message || err.title || err,
+        });
+        $q.loading.hide();
       });
-      $q.loading.hide();
-    });
+  } else {
+    paperworkStore
+      .getPaperworksBySelectedFile(paging)
+      .then((response: GenericResponseData | undefined) => {
+        $q.loading.hide();
+      })
+      .catch((err: GenericResponseData | any) => {
+        $q.notify({
+          type: 'negative',
+          message: err.message || err.title || err,
+        });
+        $q.loading.hide();
+      });
+  }
 }
 function editPaperwork(pw: Paperwork) {
   $router.push(`/paperwork-edit/${pw.id}`);
@@ -146,6 +144,12 @@ function deletePaperwork(pw: Paperwork) {
       // TODO
     });
 }
+
+// reset searchText when navigating to another page
+onBeforeRouteUpdate((to, from, next) => {
+  searchText.value = '';
+  next();
+});
 </script>
 
 <style lang="sass" scoped>
