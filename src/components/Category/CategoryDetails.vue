@@ -1,16 +1,13 @@
 <template>
-  <paperwork-list v-bind:category-id="categoryId"></paperwork-list>
+  <paperwork-list :categoryId="categoryId"></paperwork-list>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { ref, onMounted, computed, watch } from 'vue';
+import { onMounted, computed, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
-import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
-import { Paging } from 'src/Models/PagingInterface';
-import ConfirmDeletePaperworkDialog from './Dialogs/ConfirmDeletePaperworkDialog.vue';
 import PaperworkList from '../Paperwork/PaperworkList.vue';
 
 const $route = useRoute();
