@@ -4,12 +4,24 @@
       <q-list style="min-width: 100px">
         <q-item clickable v-close-popup @click="changePassword()">
           <q-item-section>
-            <span><q-icon name="password" class="q-mr-sm" />Change Password</span>
+            <span><q-icon name="sym_o_password" class="q-mr-sm" />Change Password</span>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple class="cursor-pointer" router-link to="/settings">
+          <q-item-section
+            ><span><q-icon name="sym_o_settings" class="q-mr-sm" />Settings</span></q-item-section
+          >
+        </q-item>
+        <q-item clickable v-ripple @click="switchTheme()" class="cursor-pointer">
+          <q-item-section
+            ><span v-if="globalStore.darkTheme"><q-icon name="sym_o_light_mode" class="q-mr-sm" />Light Mode</span>
+            <span v-else><q-icon name="sym_o_dark_mode" class="q-mr-sm" />Dark Mode</span>
           </q-item-section>
         </q-item>
         <q-item clickable v-close-popup @click="logout">
           <q-item-section>
-            <span><q-icon name="exit_to_app" class="q-mr-sm" />Logout</span>
+            <span><q-icon name="sym_o_exit_to_app" class="q-mr-sm" />Logout</span>
           </q-item-section>
         </q-item>
       </q-list>
@@ -18,13 +30,17 @@
 </template>
 
 <script setup lang="ts">
-import { useQuasar } from 'quasar';
+import { useQuasar, Dark } from 'quasar';
 import { useUserStore } from 'stores/userStore';
 import { useRoute, useRouter } from 'vue-router';
 import ChangePasswordDialog from './Dialogs/ChangePasswordDialog.vue';
+import { useGlobalStore } from 'src/stores/globalStore';
+
 const $route = useRoute();
 const $router = useRouter();
 const userStore = useUserStore();
+const globalStore = useGlobalStore();
+
 const $q = useQuasar();
 const logout = () => {
   userStore.$reset();
@@ -46,4 +62,8 @@ const changePassword = () => {
       // TODO
     });
 };
+function switchTheme() {
+  globalStore.switchDarkTheme();
+  Dark.set(globalStore.darkTheme);
+}
 </script>

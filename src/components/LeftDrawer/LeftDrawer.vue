@@ -23,23 +23,6 @@
           <q-item-section class="q-pa-none">{{ cat.name }} ({{ cat.paperworkCount }})</q-item-section>
         </q-item>
       </q-expansion-item>
-
-      <q-separator />
-      <q-item clickable v-ripple class="cursor-pointer" router-link to="/settings">
-        <q-item-section avatar>
-          <q-avatar rounded color="primary" text-color="white" icon="settings" />
-        </q-item-section>
-        <q-item-section>Settings</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple @click="switchTheme()" class="cursor-pointer">
-        <q-item-section avatar>
-          <q-avatar rounded color="primary" text-color="white" :icon="globalStore.darkTheme ? 'light_mode' : 'dark_mode'" />
-        </q-item-section>
-        <q-item-section
-          ><span v-if="globalStore.darkTheme">Light Mode</span>
-          <span v-else>Dark Mode</span>
-        </q-item-section>
-      </q-item>
     </q-list>
   </div>
 </template>
@@ -63,10 +46,7 @@ const $router = useRouter();
 const expandedCategories = ref(true);
 
 const globalStore = useGlobalStore();
-function switchTheme() {
-  globalStore.switchDarkTheme();
-  Dark.set(globalStore.darkTheme);
-}
+
 function onSelectCategory(category: Category) {
   $router.push(`/category-details/${category.id}`);
 }
