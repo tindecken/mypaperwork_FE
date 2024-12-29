@@ -65,7 +65,7 @@ export const useUserStore = defineStore('user', {
     },
     async changePassword(changePasswordRequestModel: ChangePasswordRequestModel): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.post('/User/changepassword', changePasswordRequestModel, {
+        const axiosResponse = await api.post('/auth/changepassword', changePasswordRequestModel, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${this.token}`,

@@ -7,7 +7,7 @@
       <q-form @submit="savePaperwork()">
         <div class="row justify-end q-col-gutter-md q-mt-xs">
           <q-input outlined class="col-6" v-model="name" label="Name *" />
-          <q-input class="col-6" outlined v-model="issueAt" label="Issue Date">
+          <q-input class="col-6" outlined v-model="issueAt" label="Issue Date" mask="date">
             <template v-slot:append>
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -38,7 +38,7 @@
     <div class="header q-pa-md q-mt-md q-mb-md">
       <div class="row">
         <span class="row self-center title">Categories</span>
-        <q-btn flat class="q-ml-md" outline icon="sym_o_category" color="primary" label="Update" @click="updateCategories()" />
+        <q-btn flat class="q-ml-md" color="primary" label="Update" @click="updateCategories()" />
       </div>
       <q-chip class="row q-mt-md" outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
     </div>
@@ -285,8 +285,9 @@ function savePaperwork() {
       });
     });
 }
-function cancel() {
-  $router.push('/paperwork-details');
+async function cancel() {
+  await paperworkStore.getPaperworksBySelectedFile();
+  $router.push('/home');
 }
 function onRemoveAttachment(attachmentId: string) {
   $q.dialog({

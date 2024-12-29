@@ -17,7 +17,7 @@
             </q-input>
           </div>
           <div class="row q-mt-sm">
-            <q-input label="New Password" outlined dense v-model="newPassword" :rules="[(val) => !!val || '* Required']" :type="isPwd ? 'password' : 'text'" class="col">
+            <q-input label="New Password" outlined dense v-model="newPassword" :rules="[(val) => !!val || '* Required', (val) => val.length >= 3 || 'Password length has atleast 3 characters.']" :type="isPwd ? 'password' : 'text'" class="col">
               <template v-slot:append>
                 <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
               </template>
@@ -76,7 +76,9 @@ const $route = useRoute();
 const $router = useRouter();
 
 function changePassword() {
+  console.log('changePassword');
   const changePasswordRequestData = {
+    userId: userStore.userInfo.userId,
     currentPassword: currentPassword.value,
     newPassword: newPassword.value,
     confirmNewPassword: confirmPassword.value,

@@ -13,12 +13,16 @@
             <q-btn size="sm" flat round icon="more_vert" class="self-center" @click.stop>
               <q-menu>
                 <q-list style="min-width: 100px" dense>
-                  <q-item clickable v-close-popup @click="editPaperwork(pw)">
-                    <q-item-section>Edit</q-item-section>
+                  <q-item clickable v-close-popup @click="editPaperwork(pw)" style="padding-left: 8px">
+                    <q-item-section class="row inline no-wrap"
+                      ><div><q-icon size="xs" name="sym_o_edit" class="q-mr-xs" />Edit</div></q-item-section
+                    >
                   </q-item>
                   <q-separator />
-                  <q-item clickable v-close-popup @click="deletePaperwork(pw)">
-                    <q-item-section>Delete</q-item-section>
+                  <q-item clickable v-close-popup @click="deletePaperwork(pw)" style="padding-left: 8px">
+                    <q-item-section class="row inline no-wrap"
+                      ><div><q-icon size="xs" name="sym_o_delete" class="q-mr-xs" />Delete</div></q-item-section
+                    >
                   </q-item>
                 </q-list>
               </q-menu>
@@ -61,7 +65,7 @@ const pageSizeMax = computed(() => Math.ceil(totalRecords.value / pageSize.value
 const searchText = ref('');
 const papperworks = computed(() => paperworkStore.paperworks);
 
-const props = defineProps<{ categoryId: string }>();
+const props = defineProps<{ categoryId?: string }>();
 function getImgUrl(arrBuff: { type: string; data: number[] }) {
   var binary = '';
   var bytes = new Uint8Array(arrBuff.data);
