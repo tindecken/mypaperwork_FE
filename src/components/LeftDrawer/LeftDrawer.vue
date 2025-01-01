@@ -1,5 +1,5 @@
 <template>
-  <div id="leftdrawer" class="q-pa-md">
+  <div id="leftdrawer" class="q-pa-md" style="overflow: hidden; white-space: nowrap">
     <q-btn class="q-pl-md q-pr-lg" size="lg" icon="sym_o_add" rounded color="primary" label="New" id="btnNew" @click="onCreatePaperwork()"> </q-btn>
     <q-list class="q-mt-md">
       <q-item clickable v-ripple class="cursor-pointer" @click.stop="onSelectAllItems()">
@@ -20,7 +20,9 @@
 
         <q-item v-for="cat in categories" :key="cat.id" clickable v-ripple class="cursor-pointer" @click="onSelectCategory(cat)" dense>
           <q-avatar icon="sym_o_folder" />
-          <q-item-section class="q-pa-none">{{ cat.name }} ({{ cat.paperworkCount }})</q-item-section>
+          <q-item-section @mouseover="isShowEditMode = true" @mouseleave="isShowEditMode = false" class="q-pa-none" style="text-overflow: ellipsis">
+            <span>{{ cat.name }} ({{ cat.paperworkCount }})</span><template v-if="isShowEditMode"> sdfsdf </template></q-item-section
+          >
         </q-item>
       </q-expansion-item>
     </q-list>
@@ -37,6 +39,7 @@ import { useQuasar } from 'quasar';
 import CreatePaperworkDialog from 'components/Paperwork/Dialogs/CreatePaperworkDialog.vue';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
+import CreateCategoryDialog from '../Category/CreateCategoryDialog.vue';
 
 const categoryStore = useCategoryStore();
 const $q = useQuasar();
@@ -44,7 +47,7 @@ const paperworkStore = usePaperworkStore();
 const categories = computed(() => categoryStore.categories);
 const $router = useRouter();
 const expandedCategories = ref(true);
-
+const isShowEditMode = ref(false);
 const globalStore = useGlobalStore();
 
 function onSelectCategory(category: Category) {
@@ -65,7 +68,18 @@ function onCreatePaperwork() {
     });
 }
 function onCreateCategory() {
-  console.log('Creating category...');
+  $q.dialog({
+    component: CreateCategoryDialog,
+  })
+    .onOk(async () => {
+      // TODO
+    })
+    .onCancel(async () => {
+      // TODO
+    })
+    .onDismiss(() => {
+      // TODO
+    });
 }
 function onSelectAllItems() {
   $q.loading.show({

@@ -5,6 +5,7 @@ import handleError from 'src/utils/handleError';
 import { useUserStore } from './userStore';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { UpdateCategoriesRequestModel } from 'src/Models/Category/UpdateCategoriesRequestModel';
+import { CreateCategoryRequestModel } from 'src/Models/Category/CreateCategoryRequestModel';
 
 const userStore = useUserStore();
 export const useCategoryStore = defineStore('category', {
@@ -47,6 +48,21 @@ export const useCategoryStore = defineStore('category', {
         return responseData;
       } catch (error: any) {
         this.$reset();
+        handleError(error);
+      }
+    },
+    async createCategory(body: CreateCategoryRequestModel): Promise<GenericResponseData | undefined> {
+      try {
+        const axiosResponse = await api.post('/categories/create', body, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userStore.token}`,
+          },
+        });
+        const responseData = (await axiosResponse.data) as GenericResponseData;
+        console.log('responseData create category', responseData);
+        return responseData;
+      } catch (error: any) {
         handleError(error);
       }
     },
