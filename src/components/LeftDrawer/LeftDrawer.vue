@@ -20,9 +20,12 @@
 
         <q-item v-for="cat in categories" :key="cat.id" clickable v-ripple class="cursor-pointer" @click="onSelectCategory(cat)" dense>
           <q-avatar icon="sym_o_folder" />
-          <q-item-section @mouseover="isShowEditMode = true" @mouseleave="isShowEditMode = false" class="q-pa-none" style="text-overflow: ellipsis">
-            <span>{{ cat.name }} ({{ cat.paperworkCount }})</span><template v-if="isShowEditMode"> sdfsdf </template></q-item-section
-          >
+          <q-item-section @mouseover="hoveredCategoryId = cat.id" @mouseleave="hoveredCategoryId = null" class="q-pa-none" style="text-overflow: ellipsis">
+            <span>{{ cat.name }} ({{ cat.paperworkCount }})</span>
+            <q-btn size="sm" flat round icon="sym_o_edit" class="self-center" @click.stop="onEditCategory(cat.id)" v-if="hoveredCategoryId === cat.id">
+              <q-tooltip> Edit Category </q-tooltip>
+            </q-btn>
+          </q-item-section>
         </q-item>
       </q-expansion-item>
     </q-list>
@@ -33,13 +36,15 @@ import { Dark } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useGlobalStore } from 'src/stores/globalStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
-import { computed, ref } from 'vue';
+import { computed, ref, Ref } from 'vue';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { useQuasar } from 'quasar';
 import CreatePaperworkDialog from 'components/Paperwork/Dialogs/CreatePaperworkDialog.vue';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import CreateCategoryDialog from '../Category/CreateCategoryDialog.vue';
+import EditCategoryDialog from '../Category/EditCategoryDialog.vue';
+const hoveredCategoryId: Ref<string | null> = ref(null);
 
 const categoryStore = useCategoryStore();
 const $q = useQuasar();
@@ -47,9 +52,25 @@ const paperworkStore = usePaperworkStore();
 const categories = computed(() => categoryStore.categories);
 const $router = useRouter();
 const expandedCategories = ref(true);
-const isShowEditMode = ref(false);
 const globalStore = useGlobalStore();
 
+function onEditCategory(categoryId: string) {
+  $q.dialog({
+    component: EditCategoryDialog,
+    componentProps: {
+      categoryId: categoryId,
+    },
+  })
+    .onOk(async () => {
+      // TODO
+    })
+    .onCancel(async () => {
+      // TODO
+    })
+    .onDismiss(() => {
+      // TODO
+    });
+}
 function onSelectCategory(category: Category) {
   $router.push(`/category-details/${category.id}`);
 }
