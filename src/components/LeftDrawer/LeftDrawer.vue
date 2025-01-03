@@ -18,13 +18,15 @@
           </q-item-section>
         </template>
 
-        <q-item v-for="cat in categories" :key="cat.id" clickable v-ripple class="cursor-pointer" @click="onSelectCategory(cat)" dense>
+        <q-item v-for="cat in categories" :key="cat.id" clickable class="cursor-pointer q-pr-xs" @click="onSelectCategory(cat)">
           <q-avatar icon="sym_o_folder" />
-          <q-item-section @mouseover="hoveredCategoryId = cat.id" @mouseleave="hoveredCategoryId = null" class="q-pa-none" style="text-overflow: ellipsis">
-            <span>{{ cat.name }} ({{ cat.paperworkCount }})</span>
-            <q-btn size="sm" flat round icon="sym_o_edit" class="self-center" @click.stop="onEditCategory(cat.id)" v-if="hoveredCategoryId === cat.id">
-              <q-tooltip> Edit Category </q-tooltip>
-            </q-btn>
+          <q-item-section @mouseover="hoveredCategoryId = cat.id" @mouseleave="hoveredCategoryId = null">
+            <div class="row inline justify-between no-wrap" style="width: -webkit-fill-available">
+              <span class="col-11" style="text-overflow: ellipsis; overflow: hidden">{{ cat.name }} ({{ cat.paperworkCount }})</span>
+              <q-btn flat size="sm" icon="sym_o_edit" class="col-auto q-pa-none" @click.stop="onEditCategory(cat.id)" v-if="hoveredCategoryId === cat.id">
+                <q-tooltip> Edit Category </q-tooltip>
+              </q-btn>
+            </div>
           </q-item-section>
         </q-item>
       </q-expansion-item>
