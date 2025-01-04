@@ -73,6 +73,6 @@ onMounted(async () => {
 function goHome() {
   $router.push('/');
 }
-const leftDrawerOpen = ref(true);
+const leftDrawerOpen = ref($q.platform.is.mobile ? false : true);
 </script>
 <style lang="sass" scoped></style>

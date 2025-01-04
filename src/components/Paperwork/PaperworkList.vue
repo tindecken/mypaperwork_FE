@@ -161,6 +161,8 @@ onBeforeRouteUpdate((to, from, next) => {
   width: 100%
   max-width: 250px
   cursor: pointer
+  @media (max-width: $breakpoint-xs-max)
+    max-width: 100%
 .searchText
   width: 200px
 </style>
