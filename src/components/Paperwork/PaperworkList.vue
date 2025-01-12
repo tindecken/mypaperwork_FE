@@ -29,7 +29,7 @@
             </q-btn>
           </div>
         </q-card-section>
-        <img v-if="pw.coverBlob" :src="getImgUrl(pw.coverBlob)" />
+        <img v-if="pw.coverArrayBuffer" :src="getImgUrl(pw.coverArrayBuffer)" />
       </q-card>
     </div>
     <q-separator class="row q-mt-xs q-mb-xs" inset />
@@ -66,16 +66,13 @@ const searchText = ref('');
 const papperworks = computed(() => paperworkStore.paperworks);
 
 const props = defineProps<{ categoryId?: string }>();
-function getImgUrl(arrBuff: { type: string; data: number[] }) {
-  var binary = '';
-  var bytes = new Uint8Array(arrBuff.data);
-  var len = bytes.byteLength;
-  for (var i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  const btoawindow = window.btoa(binary);
-  const imgUrl = `data:${arrBuff.type};base64,${btoawindow}`;
-  return imgUrl;
+function getImgUrl(coverArrayBuffer: Uint8Array) {
+  const coverUnit8Array = new Uint8Array(Object.values(coverArrayBuffer));
+  const blob = new Blob([coverUnit8Array], { type: 'image/jpeg' });
+  console.log('blob', blob);
+  var urlCreator = window.URL || window.webkitURL;
+  var imageUrl = urlCreator.createObjectURL(blob);
+  return imageUrl;
 }
 function openPaperwork(pw: Paperwork) {
   // routing to paperwork-details page

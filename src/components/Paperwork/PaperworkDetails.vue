@@ -47,7 +47,7 @@
     </div>
     <div class="row q-mt-md q-col-gutter-lg">
       <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
-        <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(image, images)" class="images">
+        <q-img :src="getImgUrl(image.imageArrayBuffer!)" @click="showImages(image, images)" class="images">
           <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 2px; right: 2px">
             <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
           </q-icon>
@@ -133,11 +133,8 @@ onMounted(() => {
       priceCurrency.value = paperwork.value?.priceCurrency;
       categories.value = paperwork.value?.categories;
       attachments.value = paperwork.value?.attachments || [];
-      images.value = (paperwork.value?.images || []).map((image) => ({
-        ...image,
-        isCover: false, // Assuming 'isCover' is missing and needs to be added
-      }));
-      imagesUrls.value = images.value.map((image) => getImgUrl(image.fileBlob));
+      images.value = paperwork.value?.images || [];
+      imagesUrls.value = images.value.map((image) => getImgUrl(image.imageArrayBuffer!));
       $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
@@ -160,14 +157,7 @@ async function onDownloadAttachment(attachmentId: string, attachmentFileName: st
   documentStore
     .downloadAttachment(body)
     .then((response: GenericResponseData | undefined) => {
-      const responseData = response?.data as AttachmentInterface;
-      var bytes = new Uint8Array(responseData.fileBlob.data);
-      var len = bytes.byteLength;
-      let blob = new Blob([new Uint8Array(bytes, 0, len)], { type: 'application/octet-binary;charset=utf-8' });
-      var link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = attachmentFileName;
-      link.click();
+      console.log('Downloaded attachment:', response?.data);
       $q.loading.hide();
       $q.notify({
         type: 'positive',
@@ -182,16 +172,16 @@ async function onDownloadAttachment(attachmentId: string, attachmentFileName: st
       });
     });
 }
-function getImgUrl(arrBuff: { type: string; data: number[] }) {
-  var bytes = new Uint8Array(arrBuff.data);
-  var blob = new Blob([bytes.buffer], { type: 'image/jpeg' });
+function getImgUrl(arrayBuffer: Uint8Array) {
+  const coverUnit8Array = new Uint8Array(Object.values(arrayBuffer));
+  const blob = new Blob([coverUnit8Array], { type: 'image/jpeg' });
   var urlCreator = window.URL || window.webkitURL;
   var imageUrl = urlCreator.createObjectURL(blob);
   return imageUrl;
 }
 async function showImages(currentImage: ImageInterface, images: ImageInterface[]) {
   const imageUrls = images.map((image) => ({
-    source: getImgUrl(image.fileBlob),
+    source: getImgUrl(image.imageArrayBuffer!),
     fileName: image.fileName,
     fileSize: prettyBytes(image.fileSize),
     alt: image.fileName,
