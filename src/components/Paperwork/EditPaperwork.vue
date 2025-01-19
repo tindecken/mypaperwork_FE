@@ -72,7 +72,7 @@
       </q-table>
       <div class="row q-mt-sm q-col-gutter-lg">
         <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
-          <q-img :src="getImgUrl(image.fileBlob)" @click="showImages(image, images)" class="row images self-center">
+          <q-img :src="getImgUrl(image.imageArrayBuffer!)" @click="showImages(image, images)" class="row images self-center">
             <q-tooltip style="font-size: small">{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
             <q-btn v-if="image.isCover" size="sm" flat round icon="star" color="primary" style="top: 1px; left: 1px">
               <q-tooltip style="font-size: small">Cover</q-tooltip>
@@ -176,7 +176,7 @@ onMounted(() => {
       categories.value = paperwork.value?.categories;
       attachments.value = paperwork.value?.attachments || [];
       images.value = paperwork.value?.images || [];
-      imagesUrls.value = images.value.map((image) => getImgUrl(image.fileBlob));
+      imagesUrls.value = images.value.map((image) => getImgUrl(image.imageArrayBuffer!));
       $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
@@ -196,19 +196,31 @@ async function onDownloadAttachment(attachmentId: string, attachmentFileName: st
   documentStore
     .downloadAttachment(body)
     .then((response: GenericResponseData | undefined) => {
-      const responseData = response?.data as AttachmentInterface;
-      var bytes = new Uint8Array(responseData.fileBlob.data);
-      var len = bytes.byteLength;
-      let blob = new Blob([new Uint8Array(bytes, 0, len)], { type: 'application/octet-binary;charset=utf-8' });
-      var link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = attachmentFileName;
-      link.click();
-      $q.loading.hide();
-      $q.notify({
-        type: 'positive',
-        message: response?.message,
-      });
+      if (response?.data) {
+        const uint8Array = new Uint8Array(Object.values(response.data!));
+        // Create a Blob from the Uint8Array
+        const blob = new Blob([uint8Array], { type: 'application/octet-stream' }); // Change the MIME type as needed
+
+        // Create a link element
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = attachmentFileName; // Specify the file name and extension
+
+        // Append to the body (required for Firefox)
+        document.body.appendChild(link);
+
+        // Trigger the download
+        link.click();
+
+        // Clean up and remove the link
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(link.href);
+        $q.loading.hide();
+        $q.notify({
+          type: 'positive',
+          message: response?.message,
+        });
+      }
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();
@@ -218,16 +230,16 @@ async function onDownloadAttachment(attachmentId: string, attachmentFileName: st
       });
     });
 }
-function getImgUrl(arrBuff: { type: string; data: number[] }) {
-  var bytes = new Uint8Array(arrBuff.data);
-  var blob = new Blob([bytes.buffer], { type: 'image/jpeg' });
+function getImgUrl(arrayBuffer: Uint8Array) {
+  const coverUnit8Array = new Uint8Array(Object.values(arrayBuffer));
+  const blob = new Blob([coverUnit8Array], { type: 'image/jpeg' });
   var urlCreator = window.URL || window.webkitURL;
   var imageUrl = urlCreator.createObjectURL(blob);
   return imageUrl;
 }
 async function showImages(currentImage: ImageInterface, images: ImageInterface[]) {
   const imageUrls = images.map((image) => ({
-    source: getImgUrl(image.fileBlob),
+    source: getImgUrl(image.imageArrayBuffer!),
     fileName: image.fileName,
     fileSize: prettyBytes(image.fileSize),
     alt: image.fileName,
@@ -384,15 +396,13 @@ function addDocuments() {
     },
   })
     .onOk(async () => {
-      console.log('Added documents');
-      // Reload paperwork data
       paperworkStore
         .getPaperworksById($route.params.id as string)
         .then((response: GenericResponseData | undefined) => {
           paperwork.value = response?.data as PaperworkDetails;
           attachments.value = paperwork.value?.attachments || [];
           images.value = (paperwork.value?.images || []) as ImageInterface[];
-          imagesUrls.value = images.value.map((image) => getImgUrl(image.fileBlob));
+          imagesUrls.value = images.value.map((image) => getImgUrl(image.imageArrayBuffer!));
           $q.loading.hide();
         })
         .catch((err: GenericResponseData | any) => {
