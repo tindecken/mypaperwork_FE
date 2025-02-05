@@ -13,7 +13,7 @@
     "build": "quasar build"
   },
   "dependencies": {
-    "@quasar/extras": "^1.16.15",
+    "@quasar/extras": "^1.16.16",
     "@vueuse/components": "^10.11.1",
     "@vueuse/core": "^10.11.1",
     "@vueuse/integrations": "^11.0.3",

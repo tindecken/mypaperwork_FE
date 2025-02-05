@@ -123,7 +123,7 @@ onMounted(() => {
   paperworkStore
     .getPaperworksById($route.params.id as string)
     .then((response: GenericResponseData | undefined) => {
-      console.log('Fetched paperwork:', response?.data);
+      $q.loading.hide();
       paperwork.value = response?.data as PaperworkDetails;
       name.value = paperwork.value?.name;
       description.value = paperwork.value?.description;
@@ -135,7 +135,6 @@ onMounted(() => {
       attachments.value = paperwork.value?.attachments || [];
       images.value = paperwork.value?.images || [];
       imagesUrls.value = images.value.map((image) => getImgUrl(image.imageArrayBuffer!));
-      $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();

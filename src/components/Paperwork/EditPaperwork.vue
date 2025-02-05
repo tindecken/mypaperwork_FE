@@ -399,11 +399,11 @@ function addDocuments() {
       paperworkStore
         .getPaperworksById($route.params.id as string)
         .then((response: GenericResponseData | undefined) => {
+          $q.loading.hide();
           paperwork.value = response?.data as PaperworkDetails;
           attachments.value = paperwork.value?.attachments || [];
           images.value = (paperwork.value?.images || []) as ImageInterface[];
           imagesUrls.value = images.value.map((image) => getImgUrl(image.imageArrayBuffer!));
-          $q.loading.hide();
         })
         .catch((err: GenericResponseData | any) => {
           $q.loading.hide();
