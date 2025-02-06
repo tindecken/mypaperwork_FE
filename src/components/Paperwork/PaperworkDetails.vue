@@ -159,6 +159,7 @@ async function onDownloadAttachment(attachmentId: string, attachmentFileName: st
       console.log('body:', body);
       console.log('Downloaded attachment:', response);
       if (response?.data) {
+        $q.loading.hide();
         const uint8Array = new Uint8Array(Object.values(response.data!));
         // Create a Blob from the Uint8Array
         const blob = new Blob([uint8Array], { type: 'application/octet-stream' }); // Change the MIME type as needed
@@ -177,7 +178,7 @@ async function onDownloadAttachment(attachmentId: string, attachmentFileName: st
         // Clean up and remove the link
         document.body.removeChild(link);
         window.URL.revokeObjectURL(link.href);
-        $q.loading.hide();
+
         $q.notify({
           type: 'positive',
           message: response?.message,
