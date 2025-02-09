@@ -46,7 +46,15 @@
       <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="images.length" />
     </div>
     <div class="row q-mt-md q-col-gutter-lg">
-      <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
+      <div
+        v-for="image in images"
+        :key="image.id"
+        :class="{
+          'col-6 col-md-4 col-lg-3': images.length > 10,
+          'col-6': images.length <= 10,
+        }"
+        style="max-width: 300px; height: 150px"
+      >
         <q-img :src="getImageUrl(image.imageBase64!)" @click="showImages(image, images)" class="images">
           <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 2px; right: 2px">
             <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
@@ -251,4 +259,8 @@ function back() {
   height: 16px
 .truncate-chip-labels > .q-chip
   max-width: 140px
+
+@media (max-width: 600px)
+  .col-6
+    max-width: 50%
 </style>

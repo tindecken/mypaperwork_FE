@@ -71,7 +71,15 @@
         </template>
       </q-table>
       <div class="row q-mt-sm q-col-gutter-lg">
-        <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
+        <div
+          v-for="image in images"
+          :key="image.id"
+          :class="{
+            'col-6 col-md-4 col-lg-3': images.length > 10,
+            'col-6': images.length <= 10,
+          }"
+          style="max-width: 300px; height: 150px"
+        >
           <q-img :src="getImageUrl(image.imageBase64!)" @click="showImages(image, images)" class="row images self-center">
             <q-tooltip style="font-size: small">{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
             <q-btn v-if="image.isCover" size="sm" flat round icon="star" color="primary" style="top: 1px; left: 1px">
@@ -467,4 +475,7 @@ async function updateCategories() {
   box-shadow: $shadow-1
 .truncate-chip-labels > .q-chip
   max-width: 140px
+@media (max-width: 600px)
+  .col-6
+    max-width: 50%
 </style>
