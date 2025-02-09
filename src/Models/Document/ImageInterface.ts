@@ -4,5 +4,5 @@ export interface ImageInterface {
   fileSize: number;
   filePath: string;
   isCover: boolean;
-  imageArrayBuffer?: Uint8Array;
+  imageBase64?: string;
 }

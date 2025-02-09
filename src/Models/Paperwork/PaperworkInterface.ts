@@ -11,7 +11,7 @@ export interface Paperwork {
   updatedBy: string;
   isDeleted: boolean;
   categories: string[];
-  coverArrayBuffer?: Uint8Array;
+  coverBase64?: string;
   coverFileName?: string;
   documentCount?: number;
 }

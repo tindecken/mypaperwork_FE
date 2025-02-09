@@ -69,7 +69,7 @@ export const usePaperworkStore = defineStore('paperwork', {
     },
     async getPaperworksById(paperworkId: string): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.get(`/paperworks/get/${paperworkId}`, {
+        const axiosResponse = await api.get(`/paperworks/getreturnblob/${paperworkId}`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${userStore.token}`,

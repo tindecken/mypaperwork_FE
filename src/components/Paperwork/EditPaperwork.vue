@@ -72,7 +72,7 @@
       </q-table>
       <div class="row q-mt-sm q-col-gutter-lg">
         <div class="col" v-for="image in images" :key="image.id" style="max-width: 300px; height: 150px">
-          <q-img :src="getImgUrl(image.imageArrayBuffer!)" @click="showImages(image, images)" class="row images self-center">
+          <q-img :src="getImageUrl(image.imageBase64!)" @click="showImages(image, images)" class="row images self-center">
             <q-tooltip style="font-size: small">{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
             <q-btn v-if="image.isCover" size="sm" flat round icon="star" color="primary" style="top: 1px; left: 1px">
               <q-tooltip style="font-size: small">Cover</q-tooltip>
@@ -126,6 +126,8 @@ import UpdateCategoriesDialog from './Dialogs/UpdateCategoriesDialog.vue';
 import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachmentRequestModel';
 import { UpdatePaperworkRequestModel } from 'src/Models/Paperwork/UpdatePaperworkRequestModel';
 import { SetCoverRequestModel } from 'src/Models/Document/SetCoverRequestModel';
+import { getImageUrl } from 'src/utils/getImageUrl';
+
 const truncate = ref(true);
 const $route = useRoute();
 const $router = useRouter();
@@ -176,7 +178,7 @@ onMounted(() => {
       categories.value = paperwork.value?.categories;
       attachments.value = paperwork.value?.attachments || [];
       images.value = paperwork.value?.images || [];
-      imagesUrls.value = images.value.map((image) => getImgUrl(image.imageArrayBuffer!));
+      imagesUrls.value = images.value.map((image) => getImageUrl(image.imageBase64!));
       $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
@@ -230,16 +232,10 @@ async function onDownloadAttachment(attachmentId: string, attachmentFileName: st
       });
     });
 }
-function getImgUrl(arrayBuffer: Uint8Array) {
-  const coverUnit8Array = new Uint8Array(Object.values(arrayBuffer));
-  const blob = new Blob([coverUnit8Array], { type: 'image/jpeg' });
-  var urlCreator = window.URL || window.webkitURL;
-  var imageUrl = urlCreator.createObjectURL(blob);
-  return imageUrl;
-}
+
 async function showImages(currentImage: ImageInterface, images: ImageInterface[]) {
   const imageUrls = images.map((image) => ({
-    source: getImgUrl(image.imageArrayBuffer!),
+    source: getImageUrl(image.imageBase64!),
     fileName: image.fileName,
     fileSize: prettyBytes(image.fileSize),
     alt: image.fileName,
@@ -403,7 +399,7 @@ function addDocuments() {
           paperwork.value = response?.data as PaperworkDetails;
           attachments.value = paperwork.value?.attachments || [];
           images.value = (paperwork.value?.images || []) as ImageInterface[];
-          imagesUrls.value = images.value.map((image) => getImgUrl(image.imageArrayBuffer!));
+          imagesUrls.value = images.value.map((image) => getImageUrl(image.imageBase64!));
         })
         .catch((err: GenericResponseData | any) => {
           $q.loading.hide();

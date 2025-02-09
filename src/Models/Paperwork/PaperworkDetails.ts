@@ -11,6 +11,6 @@ export interface PaperworkDetails extends Paperwork {
     fileSize: number;
     filePath: string;
     isCover: boolean;
-    imageArrayBuffer?: Uint8Array;
+    imageArrayBuffer?: Uint8Array | string;
   }[];
 }

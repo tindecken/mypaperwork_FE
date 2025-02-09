@@ -29,7 +29,7 @@
             </q-btn>
           </div>
         </q-card-section>
-        <img v-if="pw.coverArrayBuffer" :src="getImgUrl(pw.coverArrayBuffer)" />
+        <img v-if="pw.coverBase64" :src="getImageUrl(pw.coverBase64)" />
       </q-card>
     </div>
     <q-separator class="row q-mt-xs q-mb-xs" inset />
@@ -53,6 +53,7 @@ import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
 import { Paging } from 'src/Models/PagingInterface';
 import ConfirmDeletePaperworkDialog from './Dialogs/ConfirmDeletePaperworkDialog.vue';
+import { getImageUrl } from 'src/utils/getImageUrl';
 
 const $router = useRouter();
 const $q = useQuasar();
@@ -66,14 +67,6 @@ const searchText = ref('');
 const papperworks = computed(() => paperworkStore.paperworks);
 
 const props = defineProps<{ categoryId?: string }>();
-function getImgUrl(coverArrayBuffer: Uint8Array) {
-  const coverUnit8Array = new Uint8Array(Object.values(coverArrayBuffer));
-  const blob = new Blob([coverUnit8Array], { type: 'image/jpeg' });
-  console.log('blob', blob);
-  var urlCreator = window.URL || window.webkitURL;
-  var imageUrl = urlCreator.createObjectURL(blob);
-  return imageUrl;
-}
 function openPaperwork(pw: Paperwork) {
   // routing to paperwork-details page
   $router.push(`/paperwork-details/${pw.id}`);
