@@ -99,7 +99,7 @@ async function createPaperwork() {
   const requestModel: CreatePaperworkRequestModel = {
     name: name.value,
     description: description.value,
-    categoryId: selectedCategory.value.id,
+    categoryId: selectedCategory.value ? selectedCategory.value.id : '',
     price: price.value,
     priceCurrency: priceCurrency.value,
     issueAt: issueAt.value,
