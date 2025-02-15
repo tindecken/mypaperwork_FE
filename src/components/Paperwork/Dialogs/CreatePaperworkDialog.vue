@@ -18,7 +18,7 @@
             <q-input class="col-grow" outlined dense v-model="name" label="Name *" :rules="[(val) => !!val || 'Name is required']"> </q-input>
           </div>
           <div class="row q-mt-md">
-            <q-input type="textarea" class="col-grow" outlined dense v-model="description" label="Description"> </q-input>
+            <q-input type="textarea" class="col-grow" outlined dense v-model="description" label="Note (max 1000 chars)" :rules="[(val) => val.length <= 1000 || 'Maximum 1000 chars']"> </q-input>
           </div>
           <div class="row q-mt-md q-col-gutter-sm">
             <q-select class="col-6" outlined v-model="selectedCategory" :options="categories" option-label="name" option-value="id" label="Category" @update:model-value="onSelectedCategory($event)" />

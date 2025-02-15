@@ -6,7 +6,7 @@
       </div>
       <q-form @submit="savePaperwork()">
         <div class="row justify-end q-col-gutter-md q-mt-xs">
-          <q-input outlined class="col-6" v-model="name" label="Name *" />
+          <q-input outlined class="col-6" v-model="name" label="Name *" :rules="[(val) => !!val || 'Name is required']" />
           <q-input class="col-6" outlined v-model="issueAt" label="Issue Date" mask="date">
             <template v-slot:append>
               <q-icon name="event" class="cursor-pointer">
@@ -22,7 +22,7 @@
           </q-input>
         </div>
         <div class="row justify-end q-col-gutter-md q-mt-xs">
-          <q-input type="textarea" autogrow outlined class="col-6" v-model="description" label="Description" />
+          <q-input type="textarea" autogrow outlined class="col-6" v-model="description" label="Note (max 1000 chars)" :rules="[(val) => val.length <= 1000 || 'Maximum 1000 chars']" />
           <q-input type="number" outlined class="col-3" v-model.number="price" label="Price" />
           <q-input outlined class="col-3" v-model="priceCurrency" label="Currency" />
         </div>

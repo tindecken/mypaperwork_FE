@@ -22,7 +22,7 @@
           <q-avatar icon="sym_o_folder" />
           <q-item-section @mouseover="hoveredCategoryId = cat.id" @mouseleave="hoveredCategoryId = null">
             <div class="row inline justify-between no-wrap" style="width: -webkit-fill-available">
-              <span class="col-11" style="text-overflow: ellipsis; overflow: hidden">{{ cat.name }} ({{ cat.paperworkCount }})</span>
+              <span class="col-10" style="text-overflow: ellipsis; overflow: hidden">{{ cat.name }} ({{ cat.paperworkCount }})</span>
               <q-btn flat size="sm" icon="sym_o_edit" class="col-auto q-pa-none" @click.stop="onEditCategory(cat)" v-if="hoveredCategoryId === cat.id">
                 <q-tooltip> Edit </q-tooltip>
               </q-btn>

@@ -12,7 +12,7 @@
       <q-input readonly outlined class="col-6" v-model="issueAt" label="Issue At" />
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
-      <q-input type="textarea" autogrow readonly outlined class="col-6" v-model="description" label="Description" />
+      <q-input type="textarea" autogrow readonly outlined class="col-6" v-model="description" label="Note" />
       <q-input readonly outlined class="col-3" v-model="price" label="Price" />
       <q-input readonly outlined class="col-3" v-model="priceCurrency" label="Currency" />
     </div>

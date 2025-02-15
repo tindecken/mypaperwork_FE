@@ -18,7 +18,7 @@
             <q-input class="col-grow" outlined dense v-model="name" label="Name *" :rules="[(val) => !!val || 'Name is required']"> </q-input>
           </div>
           <div class="row q-mt-md">
-            <q-input type="textarea" class="col-grow" outlined dense v-model="description" label="Description"> </q-input>
+            <q-input type="textarea" class="col-grow" outlined dense v-model="description" label="Note (max 1000 chars)" :rules="[(val) => val.length <= 1000 || 'Maximum 1000 chars']"> </q-input>
           </div>
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="q-mt-sm row justify-end">
