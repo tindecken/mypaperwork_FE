@@ -13,7 +13,7 @@
     "build": "quasar build"
   },
   "dependencies": {
-    "@quasar/extras": "^1.16.16",
+    "@quasar/extras": "^1.16.17",
     "@vueuse/components": "^10.11.1",
     "@vueuse/core": "^10.11.1",
     "@vueuse/integrations": "^11.0.3",
@@ -23,7 +23,7 @@
     "jwt-decode": "^4",
     "pinia": "^2.0.11",
     "pretty-bytes": "^6.1.1",
-    "quasar": "^2.17.7",
+    "quasar": "^2.18.0",
     "v-viewer": "^3.0.20",
     "viewerjs": "^1.11.6",
     "vue": "^3.4.18",
