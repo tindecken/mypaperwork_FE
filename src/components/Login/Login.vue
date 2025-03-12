@@ -88,6 +88,7 @@ const onClickLogin = async () => {
     .then((response: GenericResponseData | undefined) => {
       $q.loading.hide();
       const redirectUrl = `/${$route.query.redirect || 'selectfile'}`;
+      console.log('Redirecting to:', redirectUrl);
       void $router.replace(redirectUrl);
       $q.notify({
         type: 'positive',
