@@ -79,7 +79,8 @@ export const useUserStore = defineStore('user', {
         handleError(error);
       }
     },
-    logout() {
+    async logout() {
+      await authClient.signOut();
       this.$reset();
     },
     async loginWithBetterAuth(authenticateRequestModel: AuthenticateRequestModel): Promise<GenericResponseData | undefined> {
@@ -89,8 +90,6 @@ export const useUserStore = defineStore('user', {
           email: authenticateRequestModel.email,
           password: authenticateRequestModel.password,
         });
-        console.log('authenticateRequestModel: ', authenticateRequestModel);
-        console.log('response:', response);
         if (response.error) {
           throw new Error(response.error.message || 'Authentication failed');
         }
@@ -98,7 +97,7 @@ export const useUserStore = defineStore('user', {
         // Extract token and user info from the response
         const token = response.data?.token;
         const userInfo = response.data?.user;
-
+        console.log('userInfo', userInfo);
         if (!token || !userInfo) {
           throw new Error('Invalid response from authentication server');
         }

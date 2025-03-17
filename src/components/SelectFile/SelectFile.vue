@@ -46,6 +46,8 @@ import { useRoute, useRouter } from 'vue-router';
 import AppFooter from '../AppFooter/AppFooter.vue';
 import User from '../User/User.vue';
 import { useUserStore } from 'src/stores/userStore';
+import { authClient } from 'src/utils/auth-client';
+
 const $route = useRoute();
 const $router = useRouter();
 const userStore = useUserStore();

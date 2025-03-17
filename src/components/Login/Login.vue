@@ -26,11 +26,6 @@ import { AuthenticateRequestModel } from 'src/Models/Authentication/Authenticate
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { authClient } from 'src/utils/auth-client';
 
-onMounted(async () => {
-  const { data: session } = await authClient.getSession();
-  console.log('Session:', session);
-});
-
 const $q = useQuasar();
 const $route = useRoute();
 const $router = useRouter();
@@ -88,7 +83,6 @@ const onClickLogin = async () => {
     .then((response: GenericResponseData | undefined) => {
       $q.loading.hide();
       const redirectUrl = `/${$route.query.redirect || 'selectfile'}`;
-      console.log('Redirecting to:', redirectUrl);
       void $router.replace(redirectUrl);
       $q.notify({
         type: 'positive',
