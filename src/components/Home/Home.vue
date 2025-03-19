@@ -32,7 +32,9 @@ import { GenericResponseData } from 'src/Models/GenericResponseData';
 import User from 'src/components/User/User.vue';
 import AppFooter from 'src/components/AppFooter/AppFooter.vue';
 import LeftDrawer from 'src/components/LeftDrawer/LeftDrawer.vue';
+import { authClient } from 'src/utils/auth-client';
 
+const session = authClient.useSession();
 const categoryStore = useCategoryStore();
 const $router = useRouter();
 const userStore = useUserStore();
