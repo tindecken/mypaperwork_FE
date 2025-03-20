@@ -117,6 +117,7 @@ const onClickLogin = async () => {
     .loginByEmailPassword(payload)
     .then((response: GenericResponseData | undefined) => {
       $q.loading.hide();
+      console.log('Login success', `/${$route.query.redirect || 'selectfile'}`);
       const redirectUrl = `/${$route.query.redirect || 'selectfile'}`;
       void $router.replace(redirectUrl);
       $q.notify({

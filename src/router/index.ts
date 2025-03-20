@@ -3,7 +3,6 @@ import { createMemoryHistory, createRouter, createWebHashHistory, createWebHisto
 
 import routes from './routes';
 import { authClient } from 'src/utils/auth-client';
-const { data: session } = await authClient.getSession();
 
 /*
  * If not building with SSR mode, you can
@@ -27,14 +26,8 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
-  Router.beforeEach((to, from, next) => {
-    // const user = localStorage.getItem('user');
-    // let isAuthenticated = false;
-    // if (user) {
-    //   const userObject = JSON.parse(user);
-    //   isAuthenticated = !!userObject.token;
-    // }
-
+  Router.beforeEach(async (to, from, next) => {
+    const { data: session } = await authClient.getSession();
     if (to.meta.requiresAuth && !session) {
       // if require login but no token --> go to login
       next({ path: 'login' });

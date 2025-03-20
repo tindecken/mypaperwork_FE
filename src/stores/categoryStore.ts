@@ -21,10 +21,7 @@ export const useCategoryStore = defineStore('category', {
     async getCategoriesByFileId(): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.get('/categories/getCategories', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         this.$patch({

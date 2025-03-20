@@ -18,20 +18,20 @@ declare module '@vue/runtime-core' {
 // for each client)
 
 const api = axios.create({ baseURL: process.env.API_BASEURL });
-api.interceptors.request.use((request) => {
-  const userStore = useUserStore();
-  if (userStore.token) {
-    const decodedJwt = useJwt(userStore.token);
-    const token = decodedJwt.payload.value as UserInfoInterface;
-    const currentTime = Math.floor(Date.now() / 1000);
-    if (token.exp && token.exp < currentTime) {
-      userStore.$reset();
-      window.location.href = '#/login';
-      return Promise.reject('Your session has been expired, please login again.');
-    }
-  }
-  return request;
-});
+// api.interceptors.request.use((request) => {
+//   const userStore = useUserStore();
+//   if (userStore.token) {
+//     const decodedJwt = useJwt(userStore.token);
+//     const token = decodedJwt.payload.value as UserInfoInterface;
+//     const currentTime = Math.floor(Date.now() / 1000);
+//     if (token.exp && token.exp < currentTime) {
+//       userStore.$reset();
+//       window.location.href = '#/login';
+//       return Promise.reject('Your session has been expired, please login again.');
+//     }
+//   }
+//   return request;
+// });
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
