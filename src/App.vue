@@ -30,7 +30,6 @@ userStore.$subscribe(() => {
       userId: userStore.userInfo.userId,
       userName: userStore.userInfo.userName,
       email: userStore.userInfo.email,
-      systemRole: userStore.userInfo.systemRole,
       name: userStore.userInfo.name,
       selectedFileId: userStore.userInfo.selectedFileId,
       role: userStore.userInfo.role,
@@ -55,7 +54,6 @@ onBeforeMount(() => {
     userStore.userInfo.userId = userObj.userId;
     userStore.userInfo.userName = userObj.userName;
     userStore.userInfo.email = userObj.email;
-    userStore.userInfo.systemRole = userObj.systemRole;
     userStore.userInfo.name = userObj.name;
     userStore.userInfo.selectedFileId = userObj.selectedFileId;
     userStore.userInfo.role = userObj.role;

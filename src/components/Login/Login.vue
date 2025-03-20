@@ -9,6 +9,7 @@
             <q-btn label="Submit" type="submit" color="primary" />
             <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
             <q-btn label="Register" @click="onRegister()" color="primary" flat class="q-ml-sm" />
+            <q-btn label="Logout" @click="onLogout()" color="primary" flat class="q-ml-sm" />
           </div>
         </q-form>
       </div>
@@ -43,6 +44,7 @@ const onRegister = async () => {
       name: 'tindecken',
       email: 'tindecken@gmail.com',
       password: 'zzivaldo',
+      isDeleted: 0,
     });
 
     $q.loading.hide();
@@ -70,6 +72,39 @@ const onRegister = async () => {
     });
   }
 };
+const onLogout = async () => {
+  try {
+    $q.loading.show({
+      message: 'Logout new user...',
+    });
+
+    const response = await authClient.signOut();
+
+    $q.loading.hide();
+
+    if (response.error) {
+      $q.notify({
+        type: 'negative',
+        message: response.error.message || 'Logout failed',
+      });
+    } else {
+      $q.notify({
+        type: 'positive',
+        message: 'Logout success',
+      });
+
+      // Optionally auto-fill the login form with the registered credentials
+      email.value = 'tindecken@gmail.com';
+      password.value = 'zzivaldo';
+    }
+  } catch (error: any) {
+    $q.loading.hide();
+    $q.notify({
+      type: 'negative',
+      message: error.message || 'Registration failed',
+    });
+  }
+};
 const onClickLogin = async () => {
   $q.loading.show({
     message: 'Authenticating...',
@@ -79,7 +114,7 @@ const onClickLogin = async () => {
     password: password.value,
   };
   userStore
-    .loginWithBetterAuth(payload)
+    .loginByEmailPassword(payload)
     .then((response: GenericResponseData | undefined) => {
       $q.loading.hide();
       const redirectUrl = `/${$route.query.redirect || 'selectfile'}`;

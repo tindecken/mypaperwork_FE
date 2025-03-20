@@ -35,6 +35,7 @@ import { useUserStore } from 'stores/userStore';
 import { useRoute, useRouter } from 'vue-router';
 import ChangePasswordDialog from './Dialogs/ChangePasswordDialog.vue';
 import { useGlobalStore } from 'src/stores/globalStore';
+import { authClient } from 'src/utils/auth-client';
 
 const $route = useRoute();
 const $router = useRouter();
@@ -42,8 +43,9 @@ const userStore = useUserStore();
 const globalStore = useGlobalStore();
 
 const $q = useQuasar();
-const logout = () => {
+const logout = async () => {
   userStore.$reset();
+  await authClient.signOut();
   const redirectUrl = `/${$route.query.redirect || 'login'}`;
   void $router.replace(redirectUrl);
 };

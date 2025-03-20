@@ -16,7 +16,6 @@ export const useUserStore = defineStore('user', {
       userInfo: {
         email: '',
         name: '',
-        systemRole: '',
         userId: '',
         userName: '',
         selectedFileId: '',
@@ -49,7 +48,6 @@ export const useUserStore = defineStore('user', {
         this.$patch({
           userInfo: {
             email: payload.email,
-            systemRole: payload.systemRole,
             userName: payload.userName,
             userId: payload.userId,
             name: payload.name,
@@ -83,7 +81,7 @@ export const useUserStore = defineStore('user', {
       await authClient.signOut();
       this.$reset();
     },
-    async loginWithBetterAuth(authenticateRequestModel: AuthenticateRequestModel): Promise<GenericResponseData | undefined> {
+    async loginByEmailPassword(authenticateRequestModel: AuthenticateRequestModel): Promise<GenericResponseData | undefined> {
       try {
         // Use authClient to authenticate
         const response = await authClient.signIn.email({
@@ -93,7 +91,7 @@ export const useUserStore = defineStore('user', {
         if (response.error) {
           throw new Error(response.error.message || 'Authentication failed');
         }
-
+        console.log('response: ', response);
         // Extract token and user info from the response
         const token = response.data?.token;
         const userInfo = response.data?.user;
@@ -101,20 +99,28 @@ export const useUserStore = defineStore('user', {
         if (!token || !userInfo) {
           throw new Error('Invalid response from authentication server');
         }
-
-        // // Update the store state
-        // this.$patch({
-        //   userInfo: {
-        //     email: userInfo.email,
-        //     name: userInfo.name,
-        //     systemRole: userInfo.systemRole,
-        //     userId: userInfo.userId,
-        //     userName: userInfo.userName,
-        //     selectedFileId: userInfo.selectedFileId,
-        //     role: userInfo.role,
-        //   },
-        //   token: token,
-        // });
+        // call api to get selectedFileId and role
+        let selectedFileId = null;
+        let role = null;
+        const responseSelectedFileId = await api.get('/files/getSelectedFile', {
+          withCredentials: true,
+        });
+        console.log('responseSelectedFileId', responseSelectedFileId);
+        if (responseSelectedFileId.status === 200) {
+          selectedFileId = responseSelectedFileId.data.data.fileId;
+          role = responseSelectedFileId.data.data.role;
+        } // Update the store state
+        this.$patch({
+          userInfo: {
+            email: userInfo.email,
+            name: userInfo.name,
+            userId: userInfo.id,
+            userName: userInfo.name,
+            selectedFileId: selectedFileId,
+            role: role,
+          },
+          token: token,
+        });
 
         // Return a GenericResponseData object for consistency
         return {

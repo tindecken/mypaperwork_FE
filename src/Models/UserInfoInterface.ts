@@ -6,7 +6,6 @@ export interface UserInfoInterface {
   name: string;
   role: string | null;
   selectedFileId: string | null;
-  systemRole: string;
   userId: string;
   userName: string;
 }
