@@ -27,11 +27,9 @@ export const usePaperworkStore = defineStore('paperwork', {
       try {
         let query = '';
         query = handlePaging(paging);
+        console.log('query: ', query);
         const axiosResponse = await api.get(`/paperworks/getPaperworks${query}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         console.log('responseData.data', responseData.data);
@@ -50,10 +48,7 @@ export const usePaperworkStore = defineStore('paperwork', {
         let query = '';
         query = handlePaging(paging);
         const axiosResponse = await api.get(`/paperworks/getPaperworks/${categoryId}/${query}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         console.log('responseData.data', responseData.data);
@@ -70,10 +65,7 @@ export const usePaperworkStore = defineStore('paperwork', {
     async getPaperworksById(paperworkId: string): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.get(`/paperworks/getreturnblob/${paperworkId}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         this.$patch({
@@ -99,10 +91,7 @@ export const usePaperworkStore = defineStore('paperwork', {
         });
 
         const axiosResponse = await api.post('/paperworks/create', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-datan',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         // Reload categories after creating a new paperwork
@@ -116,10 +105,7 @@ export const usePaperworkStore = defineStore('paperwork', {
     async deletePaperwork(paperworkId: string): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.delete(`/paperworks/delete/${paperworkId}`, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         // Reload categories after creating a new paperwork
@@ -133,10 +119,7 @@ export const usePaperworkStore = defineStore('paperwork', {
     async updatePaperwork(model: UpdatePaperworkRequestModel): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.put(`/paperworks/update/${model.id}`, model, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         return responseData;
