@@ -71,6 +71,7 @@ import { GenericResponseData } from 'src/Models/GenericResponseData';
 
 const userStore = useUserStore();
 const $route = useRoute();
+const $router = useRouter();
 interface FormData {
   name: string;
   email: string;

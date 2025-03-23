@@ -149,7 +149,6 @@ export const useUserStore = defineStore('user', {
           name: registerRequestModel.name,
           email: registerRequestModel.email,
           password: registerRequestModel.password,
-          isDeleted: 0,
         });
         if (response.error) {
           throw new Error(response.error.message || 'Register failed');
@@ -157,8 +156,23 @@ export const useUserStore = defineStore('user', {
         console.log('response: ', response);
         // Extract token and user info from the response
         const token = response.data?.token;
+        console.log('token', token);
         const userInfo = response.data?.user;
         console.log('userInfo', userInfo);
+        if (!token || !userInfo) {
+          throw new Error('Invalid response from registration server');
+        }
+        this.$patch({
+          userInfo: {
+            email: userInfo.email,
+            name: userInfo.name,
+            userId: userInfo.id,
+            userName: userInfo.name,
+            selectedFileId: '',
+            role: '',
+          },
+          token: token,
+        });
         // Return a GenericResponseData object for consistency
         return {
           success: true,
