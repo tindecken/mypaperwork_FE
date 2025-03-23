@@ -64,6 +64,13 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/register',
+    component: () => import('components/Register/Register.vue'),
+    meta: {
+      requiresUnAuth: true,
+    },
+  },
+  {
     path: '/selectfile',
     component: () => import('src/components/SelectFile/SelectFile.vue'),
     meta: {

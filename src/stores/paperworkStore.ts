@@ -27,12 +27,10 @@ export const usePaperworkStore = defineStore('paperwork', {
       try {
         let query = '';
         query = handlePaging(paging);
-        console.log('query: ', query);
         const axiosResponse = await api.get(`/paperworks/getPaperworks${query}`, {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('responseData.data', responseData.data);
         this.$patch({
           paperworks: responseData.data as Paperwork[],
           totalRecords: responseData.totalRecords,

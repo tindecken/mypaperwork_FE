@@ -36,10 +36,7 @@ export const useCategoryStore = defineStore('category', {
     async updateCategoriesByFileId(body: UpdateCategoriesRequestModel): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.put('/categories/updateCategories', body, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         console.log('responseData', responseData);
@@ -53,10 +50,7 @@ export const useCategoryStore = defineStore('category', {
     async createCategory(body: CreateCategoryRequestModel): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.post('/categories/create', body, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         console.log('responseData create category', responseData);
@@ -68,10 +62,7 @@ export const useCategoryStore = defineStore('category', {
     async editCategory(body: EditCategoryRequestModel): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.put('/categories/editCategory', body, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         console.log('responseData edit category', responseData);
@@ -83,10 +74,7 @@ export const useCategoryStore = defineStore('category', {
     async deleteCategory(body: DeleteCategoryRequestModel): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.delete('/categories/deleteCategory', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
           data: body,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;

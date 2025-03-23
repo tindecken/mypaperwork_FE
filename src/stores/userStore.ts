@@ -8,6 +8,7 @@ import { ChangePasswordRequestModel } from 'src/Models/User/ChangePasswordReques
 import { useJwt } from '@vueuse/integrations/useJwt';
 import { UserInfoInterface } from 'src/Models/UserInfoInterface';
 import { authClient } from 'src/utils/auth-client';
+import { RegisterRequestModel } from 'src/Models/Authentication/RegisterRequestModel';
 
 export const useUserStore = defineStore('user', {
   state: () => {
@@ -106,7 +107,7 @@ export const useUserStore = defineStore('user', {
           withCredentials: true,
         });
         console.log('responseSelectedFileId', responseSelectedFileId);
-        if (responseSelectedFileId.status === 200) {
+        if (responseSelectedFileId.status === 200 && responseSelectedFileId.data.data != null) {
           selectedFileId = responseSelectedFileId.data.data.fileId;
           role = responseSelectedFileId.data.data.role;
         } // Update the store state
@@ -138,6 +139,37 @@ export const useUserStore = defineStore('user', {
           success: false,
           message: error.message || 'Login failed',
           // data: null,
+        };
+      }
+    },
+    async register(registerRequestModel: RegisterRequestModel): Promise<GenericResponseData | undefined> {
+      try {
+        // Use authClient to authenticate
+        const response = await authClient.signUp.email({
+          name: registerRequestModel.name,
+          email: registerRequestModel.email,
+          password: registerRequestModel.password,
+          isDeleted: 0,
+        });
+        if (response.error) {
+          throw new Error(response.error.message || 'Register failed');
+        }
+        console.log('response: ', response);
+        // Extract token and user info from the response
+        const token = response.data?.token;
+        const userInfo = response.data?.user;
+        console.log('userInfo', userInfo);
+        // Return a GenericResponseData object for consistency
+        return {
+          success: true,
+          message: 'Register successful',
+        };
+      } catch (error: any) {
+        this.$reset();
+        handleError(error);
+        return {
+          success: false,
+          message: error.message || 'Register failed',
         };
       }
     },

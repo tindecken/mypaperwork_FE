@@ -23,10 +23,7 @@ export const useDocumentStore = defineStore('document', {
             documentId: body.documentId,
           },
           {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${userStore.token}`,
-            },
+            withCredentials: true,
           }
         );
         const responseData = (await axiosResponse.data) as GenericResponseData;
@@ -39,10 +36,7 @@ export const useDocumentStore = defineStore('document', {
     async removeAttachment(body: RemoveAttachmentRequestModel): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.delete('/documents/remove', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
           data: {
             paperworkId: body.paperworkId,
             documentId: body.documentId,
@@ -62,10 +56,7 @@ export const useDocumentStore = defineStore('document', {
           formData.append('paperworkId', model.paperworkId);
           formData.append('file', file);
           return await api.post('/documents/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Authorization: `Bearer ${userStore.token}`,
-            },
+            withCredentials: true,
           });
         });
         await Promise.all(promises);
@@ -82,10 +73,7 @@ export const useDocumentStore = defineStore('document', {
             documentId: model.documentId,
           },
           {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${userStore.token}`,
-            },
+            withCredentials: true,
           }
         );
         const responseData = (await axiosResponse.data) as GenericResponseData;

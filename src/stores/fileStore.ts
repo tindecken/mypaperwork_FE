@@ -23,13 +23,9 @@ export const useFileStore = defineStore('file', {
     async getAssociatedFiles(): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.get('/files/getFiles', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userStore.token}`,
-          },
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('Associated Files:', responseData);
         this.$patch({
           files: responseData.data as FilesTable[],
         });
