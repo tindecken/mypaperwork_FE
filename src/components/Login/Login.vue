@@ -9,10 +9,6 @@
             <q-btn label="Login" type="submit" color="primary" />
           </div>
         </q-form>
-        <q-separator class="q-mt-md q-mb-xs"></q-separator>
-        <q-btn label="Login with Google Account" @click="handleLoginGoogle"></q-btn>
-        <q-separator class="q-mt-md q-mb-xs"></q-separator>
-        <span class="text-subtitle1">Don't have account? <a href="#/register">Register one.</a></span>
       </div>
     </q-page-container>
     <q-footer reveal bordered class="bg-primary text-white" style="height: 24px"> Tindecken @ 2023 - Quasar: {{ $q.version }} </q-footer>
