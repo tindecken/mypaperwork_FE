@@ -7,6 +7,10 @@
           <q-input filled type="password" v-model="password" label="Your password" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Password is required']" />
           <div>
             <q-btn label="Login" type="submit" color="primary" />
+            <q-separator class="q-mt-md q-mb-xs"></q-separator>
+            <q-btn label="Login with Google Account" @click="handleLoginGoogle"></q-btn>
+            <q-separator class="q-mt-md q-mb-xs"></q-separator>
+            <span class="text-subtitle1">Don't have account? <a href="#/register">Register one.</a></span>
           </div>
         </q-form>
       </div>
