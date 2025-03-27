@@ -1,5 +1,5 @@
 <template>
-  <q-btn flat :label="userStore.userInfo.userName">
+  <q-btn flat :label="userStore.userInfo.name">
     <q-menu>
       <q-list style="min-width: 100px">
         <q-item clickable v-close-popup @click="changePassword()">
@@ -41,7 +41,6 @@ const $route = useRoute();
 const $router = useRouter();
 const userStore = useUserStore();
 const globalStore = useGlobalStore();
-
 const $q = useQuasar();
 const logout = async () => {
   userStore.$reset();

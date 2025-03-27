@@ -69,15 +69,22 @@ const onLogout = async () => {
   }
 };
 const handleLoginGoogle = async () => {
-  const data = await authClient.signIn.social({
-    provider: 'google',
-    callbackURL: 'http://localhost:1000',
-  });
-  console.log('handleLoginGoogle', data);
-  $q.notify({
-    type: 'positive',
-    message: 'Login with Google success',
-  });
+  userStore
+    .loginWithGoogle()
+    .then((response: GenericResponseData | undefined) => {
+      $q.notify({
+        type: 'positive',
+        message: response?.message,
+      });
+      const redirectUrl = `/${$route.query.redirect || 'selectfile'}`;
+      void $router.replace(redirectUrl);
+    })
+    .catch((err: GenericResponseData | any) => {
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
+    });
 };
 const onClickLogin = async () => {
   $q.loading.show({

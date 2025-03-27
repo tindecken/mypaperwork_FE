@@ -30,7 +30,7 @@
         </q-card>
       </div>
       <div class="row justify-center">
-        <q-btn outline color="primary" label="Create new file" />
+        <q-btn outline color="primary" label="Create new file" @click="onCreateFile" />
       </div>
     </q-page-container>
     <q-footer reveal bordered class="bg-primary text-white row inline justify-between" style="height: 24px">
@@ -47,18 +47,41 @@ import AppFooter from '../AppFooter/AppFooter.vue';
 import User from '../User/User.vue';
 import { useUserStore } from 'src/stores/userStore';
 import { authClient } from 'src/utils/auth-client';
+import CreateFileDialog from '../SelectFile/CreateFileDialog.vue';
 
 const $route = useRoute();
 const $router = useRouter();
 const userStore = useUserStore();
 const $q = useQuasar();
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
+  const { data: session, error } = await authClient.getSession();
+  if (session) {
+    userStore.userInfo.name = session.user.name;
+    userStore.userInfo.email = session.user.email;
+    userStore.userInfo.userId = session.user.id;
+  }
+  console.log('session', session);
   if (userStore.userInfo.selectedFileId) {
     const redirectUrl = `/${$route.query.redirect || 'home'}`;
     void $router.replace(redirectUrl);
   }
 });
+
+function onCreateFile() {
+  $q.dialog({
+    component: CreateFileDialog,
+  })
+    .onOk(async () => {
+      // TODO
+    })
+    .onCancel(async () => {
+      // TODO
+    })
+    .onDismiss(() => {
+      // TODO
+    });
+}
 </script>
 
 <style lang="sass" scoped>
