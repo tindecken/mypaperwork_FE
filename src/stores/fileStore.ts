@@ -37,9 +37,8 @@ export const useFileStore = defineStore('file', {
     },
     async createNewFile(body: any): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.post('/files/create', {
+        const axiosResponse = await api.post('/files/create', body, {
           withCredentials: true,
-          body,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         console.log('responseData', responseData);

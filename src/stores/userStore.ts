@@ -202,6 +202,8 @@ export const useUserStore = defineStore('user', {
 
         console.log('sessions', sessions);
         console.log('response: ', response);
+        // TODO: get selectedFileId and role
+        
         localStorage.setItem(
           'global',
           JSON.stringify({

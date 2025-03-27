@@ -53,8 +53,7 @@ const isDark = computed(() => globalStore.darkTheme);
 const description = ref('');
 const name = ref('');
 async function createFile() {
-  const requestModel: CreateCategoryRequestModel = {
-    fileId: userStore.userInfo.selectedFileId!,
+  const requestModel = {
     name: name.value,
     description: description.value,
   };
@@ -69,7 +68,6 @@ async function createFile() {
         type: 'positive',
         message: 'File created successfully!',
       });
-      await categoryStore.getCategoriesByFileId();
       onDialogOK();
     })
     .catch((err: GenericResponseData | any) => {
