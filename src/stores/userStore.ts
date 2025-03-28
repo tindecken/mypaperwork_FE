@@ -28,56 +28,6 @@ export const useUserStore = defineStore('user', {
     IsAuthenticated: (state) => !!state.token,
   },
   actions: {
-    async login(authenticateRequestModel: AuthenticateRequestModel): Promise<GenericResponseData | undefined> {
-      try {
-        const axiosResponse = await api.post(
-          '/auth/login',
-          {
-            email: authenticateRequestModel.email,
-            password: authenticateRequestModel.password,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-        const responseData = (await axiosResponse.data) as GenericResponseData;
-        const auRes = responseData.data as AuthenticateResponse;
-        const decodedJwt = useJwt(auRes.token);
-        const payload = decodedJwt.payload.value as UserInfoInterface;
-        this.$patch({
-          userInfo: {
-            email: payload.email,
-            userName: payload.userName,
-            userId: payload.userId,
-            name: payload.name,
-            selectedFileId: payload.selectedFileId,
-            role: payload.role,
-          },
-          token: auRes.token,
-        });
-        return responseData;
-      } catch (error: any) {
-        this.$reset();
-        handleError(error);
-      }
-    },
-    async changePassword(changePasswordRequestModel: ChangePasswordRequestModel): Promise<GenericResponseData | undefined> {
-      try {
-        const axiosResponse = await api.post('/auth/changepassword', changePasswordRequestModel, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`,
-          },
-        });
-        const responseData = (await axiosResponse.data) as GenericResponseData;
-        return responseData;
-      } catch (error: any) {
-        this.$reset();
-        handleError(error);
-      }
-    },
     async logout() {
       await authClient.signOut();
       this.$reset();
@@ -190,47 +140,41 @@ export const useUserStore = defineStore('user', {
     async loginWithGoogle(): Promise<GenericResponseData | undefined> {
       try {
         // Use authClient to authenticate
-        const response = await authClient.signIn.social({
-          provider: 'google',
-          callbackURL: 'http://localhost:1000',
-        });
-        if (response.error) {
-          throw new Error(response.error.message || 'Register failed');
-        }
-        // get token and user info from response
-        const sessions = await authClient.getSession();
-
-        console.log('sessions', sessions);
-        console.log('response: ', response);
-        // TODO: get selectedFileId and role
-        
-        localStorage.setItem(
-          'global',
-          JSON.stringify({
-            response: response,
-            sessions: sessions,
-          })
+        await authClient.signIn.social(
+          {
+            provider: 'google',
+            callbackURL: 'http://localhost:1000',
+          },
+          {
+            onSuccess: async (response) => {
+              console.log('aaaaaaaaaaaaaaaaaaa');
+              console.log('onSuccess', response);
+              // get token and user info from response
+              const sessions = await authClient.getSession();
+              console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+              console.log('sessions', sessions);
+              console.log('response: ', response);
+              // call api to get selectedFileId and role
+              let selectedFileId = null;
+              let role = null;
+              const responseSelectedFileId = await api.get('/files/getSelectedFile', {
+                withCredentials: true,
+              });
+              console.log('responseSelectedFileId', responseSelectedFileId);
+              if (responseSelectedFileId.status === 200 && responseSelectedFileId.data.data != null) {
+                selectedFileId = responseSelectedFileId.data.data.fileId;
+                role = responseSelectedFileId.data.data.role;
+              } // Update the store state
+              this.userInfo.selectedFileId = selectedFileId;
+              this.userInfo.role = role;
+            },
+          }
         );
-        // // Extract token and user info from the response
-        // const token = response.data?.token;
-        // console.log('token', token);
-        // const userInfo = response.data?.user;
-        // console.log('userInfo', userInfo);
-        // if (!token || !userInfo) {
-        //   throw new Error('Invalid response from registration server');
+        // if (response.error) {
+        //   throw new Error(response.error.message || 'Register failed');
         // }
-        // this.$patch({
-        //   userInfo: {
-        //     email: userInfo.email,
-        //     name: userInfo.name,
-        //     userId: userInfo.id,
-        //     userName: userInfo.name,
-        //     selectedFileId: '',
-        //     role: '',
-        //   },
-        //   token: token,
-        // });
-        // Return a GenericResponseData object for consistency
+        // console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+
         return {
           success: true,
           message: 'Login successful',
