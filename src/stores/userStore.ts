@@ -9,6 +9,7 @@ import { useJwt } from '@vueuse/integrations/useJwt';
 import { UserInfoInterface } from 'src/Models/UserInfoInterface';
 import { authClient } from 'src/utils/auth-client';
 import { RegisterRequestModel } from 'src/Models/Authentication/RegisterRequestModel';
+import { SuccessContext } from 'better-auth/vue';
 
 export const useUserStore = defineStore('user', {
   state: () => {
@@ -184,63 +185,6 @@ export const useUserStore = defineStore('user', {
         return {
           success: false,
           message: error.message || 'Register failed',
-        };
-      }
-    },
-    async loginWithGoogle(): Promise<GenericResponseData | undefined> {
-      try {
-        // Use authClient to authenticate
-        const response = await authClient.signIn.social({
-          provider: 'google',
-          callbackURL: 'http://localhost:1000',
-        });
-        if (response.error) {
-          throw new Error(response.error.message || 'Register failed');
-        }
-        // get token and user info from response
-        const sessions = await authClient.getSession();
-
-        console.log('sessions', sessions);
-        console.log('response: ', response);
-        // TODO: get selectedFileId and role
-        
-        localStorage.setItem(
-          'global',
-          JSON.stringify({
-            response: response,
-            sessions: sessions,
-          })
-        );
-        // // Extract token and user info from the response
-        // const token = response.data?.token;
-        // console.log('token', token);
-        // const userInfo = response.data?.user;
-        // console.log('userInfo', userInfo);
-        // if (!token || !userInfo) {
-        //   throw new Error('Invalid response from registration server');
-        // }
-        // this.$patch({
-        //   userInfo: {
-        //     email: userInfo.email,
-        //     name: userInfo.name,
-        //     userId: userInfo.id,
-        //     userName: userInfo.name,
-        //     selectedFileId: '',
-        //     role: '',
-        //   },
-        //   token: token,
-        // });
-        // Return a GenericResponseData object for consistency
-        return {
-          success: true,
-          message: 'Login successful',
-        };
-      } catch (error: any) {
-        this.$reset();
-        handleError(error);
-        return {
-          success: false,
-          message: error.message || 'Login failed',
         };
       }
     },

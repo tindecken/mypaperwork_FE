@@ -40,8 +40,8 @@ export const useFileStore = defineStore('file', {
         const axiosResponse = await api.post('/files/create', body, {
           withCredentials: true,
         });
+        console.log('axiosResponse', axiosResponse);
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('responseData', responseData);
         return responseData;
       } catch (error: any) {
         this.$reset();

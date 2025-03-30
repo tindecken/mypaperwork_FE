@@ -43,7 +43,6 @@ const totalRecords = computed(() => paperworkStore.totalRecords);
 onBeforeMount(() => {
   if (!userStore.userInfo.selectedFileId) {
     $router.push('/selectfile');
-  } else {
   }
 });
 onMounted(async () => {

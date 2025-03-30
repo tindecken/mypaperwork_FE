@@ -104,7 +104,6 @@ const handleSubmit = async () => {
     loading.value = true;
     // Here you would typically make an API call to register the user
     console.log('Form submitted:', formData.value);
-
     userStore
       .register(formData.value)
       .then((res: GenericResponseData | undefined) => {

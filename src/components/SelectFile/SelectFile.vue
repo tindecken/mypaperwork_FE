@@ -48,6 +48,7 @@ import User from '../User/User.vue';
 import { useUserStore } from 'src/stores/userStore';
 import { authClient } from 'src/utils/auth-client';
 import CreateFileDialog from '../SelectFile/CreateFileDialog.vue';
+import { api } from '../../boot/axios';
 
 const $route = useRoute();
 const $router = useRouter();
@@ -63,8 +64,25 @@ onBeforeMount(async () => {
   }
   console.log('session', session);
   if (userStore.userInfo.selectedFileId) {
+    console.log('userStore.userInfo.selectedFileId', userStore.userInfo.selectedFileId);
     const redirectUrl = `/${$route.query.redirect || 'home'}`;
     void $router.replace(redirectUrl);
+  } else {
+    // call api to get selectedFileId and role
+    let selectedFileId = null;
+    let role = null;
+    const responseSelectedFileId = await api.get('/files/getSelectedFile', {
+      withCredentials: true,
+    });
+    console.log('responseSelectedFileId', responseSelectedFileId);
+    if (responseSelectedFileId.status === 200 && responseSelectedFileId.data.data != null) {
+      selectedFileId = responseSelectedFileId.data.data.fileId;
+      role = responseSelectedFileId.data.data.role;
+      userStore.userInfo.selectedFileId = selectedFileId;
+      userStore.userInfo.role = role;
+      const redirectUrl = `/${$route.query.redirect || 'home'}`;
+      void $router.replace(redirectUrl);
+    } // Update the store state
   }
 });
 
