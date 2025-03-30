@@ -62,7 +62,6 @@ onBeforeMount(async () => {
     userStore.userInfo.email = session.user.email;
     userStore.userInfo.userId = session.user.id;
   }
-  console.log('session', session);
   if (userStore.userInfo.selectedFileId) {
     console.log('userStore.userInfo.selectedFileId', userStore.userInfo.selectedFileId);
     const redirectUrl = `/${$route.query.redirect || 'home'}`;
