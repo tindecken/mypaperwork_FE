@@ -62,13 +62,13 @@ async function createFile() {
   });
   fileStore
     .createNewFile(requestModel)
-    .then(async () => {
+    .then(async (responseData: any) => {
       $q.loading.hide();
       $q.notify({
         type: 'positive',
         message: 'File created successfully!',
       });
-      onDialogOK();
+      onDialogOK(responseData.data.id as string);
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();

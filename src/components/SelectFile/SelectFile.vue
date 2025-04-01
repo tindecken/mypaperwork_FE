@@ -89,8 +89,14 @@ function onCreateFile() {
   $q.dialog({
     component: CreateFileDialog,
   })
-    .onOk(async () => {
-      // TODO
+    .onOk(async (fileId: string) => {
+      // set fileId in userStore as selectedFileId
+      userStore.userInfo.selectedFileId = fileId;
+      // set role in userStore as owner
+      userStore.userInfo.role = 'owner';
+      // route to /home
+      const redirectUrl = `/${$route.query.redirect || 'home'}`;
+      void $router.replace(redirectUrl);
     })
     .onCancel(async () => {
       // TODO
