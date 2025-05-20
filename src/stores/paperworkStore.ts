@@ -1,3 +1,5 @@
+import { treaty } from 'elysia/eden';
+import type { App } from '../../mypaperwork/server';
 import { defineStore } from 'pinia';
 import { api } from '../boot/axios';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
@@ -11,6 +13,7 @@ import { useCategoryStore } from './categoryStore';
 import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
 import { UpdatePaperworkRequestModel } from 'src/Models/Paperwork/UpdatePaperworkRequestModel';
 
+const client = treaty<App>('localhost:3001');
 const userStore = useUserStore();
 const categoryStore = useCategoryStore();
 export const usePaperworkStore = defineStore('paperwork', {
@@ -62,6 +65,7 @@ export const usePaperworkStore = defineStore('paperwork', {
     },
     async getPaperworksById(paperworkId: string): Promise<GenericResponseData | undefined> {
       try {
+        const { data } = await client.
         const axiosResponse = await api.get(`/paperworks/getreturnblob/${paperworkId}`, {
           withCredentials: true,
         });
