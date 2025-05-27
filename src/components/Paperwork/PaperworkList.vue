@@ -94,7 +94,7 @@ function updatePaperworks() {
       });
   } else {
     paperworkStore
-      .getPaperworksBySelectedFile(paging)
+      .getPaperworks(paging)
       .then((response: GenericResponseData | undefined) => {
         $q.loading.hide();
       })

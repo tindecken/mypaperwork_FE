@@ -1,6 +1,7 @@
 export interface EditCategoryRequestModel {
-  fileId: string;
+  userId: string;
   categoryId: string;
   name: string;
+  icon: string;
   description?: string;
 }

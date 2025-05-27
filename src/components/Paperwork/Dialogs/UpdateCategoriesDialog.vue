@@ -64,20 +64,20 @@ async function updateCategories() {
   const model: UpdateCategoriesRequestModel = {
     paperworkId: props.paperworkId,
     categoryIds: selectedCategories.value,
-  }
+  };
   $q.loading.show({
-    message: 'Updating ...'
+    message: 'Updating ...',
   });
-  categoryStore.updateCategoriesByFileId(model)
+  categoryStore
+    .updateCategories(model)
     .then((response: GenericResponseData | undefined) => {
       $q.notify({
-        type:'positive',
-        message: `${response?.message}`
+        type: 'positive',
+        message: `${response?.message}`,
+      });
+      $q.loading.hide();
+      onDialogOK();
     })
-    $q.loading.hide();
-    onDialogOK();
-
-  })
     .catch((err: GenericResponseData | any) => {
       $q.notify({
         type: 'negative',

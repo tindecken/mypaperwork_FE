@@ -109,7 +109,7 @@ function onSelectAllItems() {
     message: 'Getting paperworks...',
   });
   paperworkStore
-    .getPaperworksBySelectedFile()
+    .getPaperworks()
     .then((response: GenericResponseData | undefined) => {
       $q.loading.hide();
     })

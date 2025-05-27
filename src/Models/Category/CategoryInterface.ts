@@ -1,7 +1,8 @@
 export interface Category {
   id: string;
-  fileId: string;
+  userId: string;
   name: string;
+  icon: string;
   description: string;
   createdAt: Date;
   createdBy: string;

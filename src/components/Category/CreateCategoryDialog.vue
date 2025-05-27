@@ -54,7 +54,6 @@ const description = ref('');
 const name = ref('');
 async function createCategory() {
   const requestModel: CreateCategoryRequestModel = {
-    fileId: userStore.userInfo.selectedFileId!,
     name: name.value,
     description: description.value,
   };
@@ -69,7 +68,7 @@ async function createCategory() {
         type: 'positive',
         message: 'Category created successfully!',
       });
-      await categoryStore.getCategoriesByFileId();
+      await categoryStore.getCategories();
       onDialogOK();
     })
     .catch((err: GenericResponseData | any) => {

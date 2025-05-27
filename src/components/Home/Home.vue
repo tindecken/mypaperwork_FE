@@ -40,17 +40,12 @@ const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
 const totalRecords = computed(() => paperworkStore.totalRecords);
 
-onBeforeMount(() => {
-  if (!userStore.userInfo.selectedFileId) {
-    $router.push('/selectfile');
-  }
-});
 onMounted(async () => {
   $q.loading.show({
     message: 'Getting paperworks...',
   });
   paperworkStore
-    .getPaperworksBySelectedFile()
+    .getPaperworks()
     .then((response: GenericResponseData | undefined) => {
       $q.loading.hide();
     })
@@ -62,7 +57,7 @@ onMounted(async () => {
       });
     });
   categoryStore
-    .getCategoriesByFileId()
+    .getCategories()
     .then()
     .catch((err: GenericResponseData | any) => {
       $q.notify({

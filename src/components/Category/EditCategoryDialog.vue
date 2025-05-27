@@ -76,7 +76,6 @@ const name = ref(props.category.name);
 const confirmDelete = ref(false);
 async function editCategory() {
   const requestModel: EditCategoryRequestModel = {
-    fileId: userStore.userInfo.selectedFileId!,
     categoryId: props.category.id,
     name: name.value,
     description: description.value,
@@ -92,7 +91,7 @@ async function editCategory() {
         type: 'positive',
         message: 'Edit category successfully!',
       });
-      await categoryStore.getCategoriesByFileId();
+      await categoryStore.getCategories();
       onDialogOK();
     })
     .catch((err: GenericResponseData | any) => {
@@ -110,7 +109,6 @@ async function onDeleteCategory() {
 
   try {
     const requestModel: DeleteCategoryRequestModel = {
-      fileId: userStore.userInfo.selectedFileId!,
       categoryId: props.category.id,
     };
     await categoryStore.deleteCategory(requestModel);
@@ -119,7 +117,7 @@ async function onDeleteCategory() {
       message: 'Category deleted successfully!',
     });
 
-    await categoryStore.getCategoriesByFileId();
+    await categoryStore.getCategories();
     onDialogOK();
   } catch (err: any) {
     $q.notify({

@@ -71,13 +71,6 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/selectfile',
-    component: () => import('src/components/SelectFile/SelectFile.vue'),
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
     path: '/test',
     component: () => import('src/components/Test/Test.vue'),
     meta: {

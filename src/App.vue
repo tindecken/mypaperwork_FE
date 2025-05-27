@@ -31,7 +31,6 @@ userStore.$subscribe(() => {
       userName: userStore.userInfo.userName,
       email: userStore.userInfo.email,
       name: userStore.userInfo.name,
-      selectedFileId: userStore.userInfo.selectedFileId,
       role: userStore.userInfo.role,
     })
   );
@@ -55,7 +54,6 @@ onBeforeMount(() => {
     userStore.userInfo.userName = userObj.userName;
     userStore.userInfo.email = userObj.email;
     userStore.userInfo.name = userObj.name;
-    userStore.userInfo.selectedFileId = userObj.selectedFileId;
     userStore.userInfo.role = userObj.role;
     userStore.token = userObj.token;
   }

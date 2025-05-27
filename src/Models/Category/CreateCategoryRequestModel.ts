@@ -1,5 +1,6 @@
 export interface CreateCategoryRequestModel {
-  fileId: string;
   name: string;
+  userId: string;
+  icon: string;
   description?: string;
 }

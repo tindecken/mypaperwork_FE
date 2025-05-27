@@ -9,7 +9,6 @@ import { useJwt } from '@vueuse/integrations/useJwt';
 import { UserInfoInterface } from 'src/Models/UserInfoInterface';
 import { authClient } from 'src/utils/auth-client';
 import { RegisterRequestModel } from 'src/Models/Authentication/RegisterRequestModel';
-import { SuccessContext } from 'better-auth/vue';
 
 export const useUserStore = defineStore('user', {
   state: () => {
@@ -20,7 +19,6 @@ export const useUserStore = defineStore('user', {
         name: '',
         userId: '',
         userName: '',
-        selectedFileId: '',
         role: '',
       } as UserInfoInterface,
     };
@@ -53,7 +51,6 @@ export const useUserStore = defineStore('user', {
             userName: payload.userName,
             userId: payload.userId,
             name: payload.name,
-            selectedFileId: payload.selectedFileId,
             role: payload.role,
           },
           token: auRes.token,
@@ -101,24 +98,12 @@ export const useUserStore = defineStore('user', {
         if (!token || !userInfo) {
           throw new Error('Invalid response from authentication server');
         }
-        // call api to get selectedFileId and role
-        let selectedFileId = null;
-        let role = null;
-        const responseSelectedFileId = await api.get('/files/getSelectedFile', {
-          withCredentials: true,
-        });
-        console.log('responseSelectedFileId', responseSelectedFileId);
-        if (responseSelectedFileId.status === 200 && responseSelectedFileId.data.data != null) {
-          selectedFileId = responseSelectedFileId.data.data.fileId;
-          role = responseSelectedFileId.data.data.role;
-        } // Update the store state
         this.$patch({
           userInfo: {
             email: userInfo.email,
             name: userInfo.name,
             userId: userInfo.id,
             userName: userInfo.name,
-            selectedFileId: selectedFileId,
             role: role,
           },
           token: token,
@@ -169,7 +154,6 @@ export const useUserStore = defineStore('user', {
             name: userInfo.name,
             userId: userInfo.id,
             userName: userInfo.name,
-            selectedFileId: '',
             role: '',
           },
           token: token,

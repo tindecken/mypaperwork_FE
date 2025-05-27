@@ -71,7 +71,7 @@ const onLogout = async () => {
 const handleLoginGoogle = async () => {
   await authClient.signIn.social({
     provider: 'google',
-    callbackURL: 'http://localhost:1000/#/selectfile',
+    callbackURL: 'http://localhost:1000/#/home',
   });
 };
 const onClickLogin = async () => {
@@ -86,8 +86,8 @@ const onClickLogin = async () => {
     .loginByEmailPassword(payload)
     .then((response: GenericResponseData | undefined) => {
       $q.loading.hide();
-      console.log('Login success', `/${$route.query.redirect || 'selectfile'}`);
-      const redirectUrl = `/${$route.query.redirect || 'selectfile'}`;
+      console.log('Login success', `/${$route.query.redirect || 'home'}`);
+      const redirectUrl = `/${$route.query.redirect || 'home'}`;
       void $router.replace(redirectUrl);
       $q.notify({
         type: 'positive',

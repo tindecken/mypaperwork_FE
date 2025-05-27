@@ -302,7 +302,7 @@ function savePaperwork() {
     });
 }
 async function cancel() {
-  await paperworkStore.getPaperworksBySelectedFile();
+  await paperworkStore.getPaperworks();
   $router.push('/home');
 }
 function onRemoveAttachment(attachmentId: string) {

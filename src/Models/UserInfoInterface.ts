@@ -5,7 +5,5 @@ export interface UserInfoInterface {
   maxEpx: number;
   name: string;
   role: string | null;
-  selectedFileId: string | null;
-  userId: string;
-  userName: string;
+  id: string;
 }

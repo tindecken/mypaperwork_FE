@@ -1,4 +1,4 @@
 export interface DeleteCategoryRequestModel {
-  fileId: string;
+  userId: string;
   categoryId: string;
 }

@@ -23,7 +23,7 @@ export const usePaperworkStore = defineStore('paperwork', {
   },
   getters: {},
   actions: {
-    async getPaperworksBySelectedFile(paging?: Paging): Promise<GenericResponseData | undefined> {
+    async getPaperworks(paging?: Paging): Promise<GenericResponseData | undefined> {
       try {
         let query = '';
         query = handlePaging(paging);
@@ -93,8 +93,8 @@ export const usePaperworkStore = defineStore('paperwork', {
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         // Reload categories after creating a new paperwork
-        await categoryStore.getCategoriesByFileId();
-        await this.getPaperworksBySelectedFile();
+        await categoryStore.getCategories();
+        await this.getPaperworks();
         return responseData;
       } catch (error: any) {
         handleError(error);
@@ -107,8 +107,8 @@ export const usePaperworkStore = defineStore('paperwork', {
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         // Reload categories after creating a new paperwork
-        await categoryStore.getCategoriesByFileId();
-        await this.getPaperworksBySelectedFile();
+        await categoryStore.getCategories();
+        await this.getPaperworks();
         return responseData;
       } catch (error: any) {
         handleError(error);
