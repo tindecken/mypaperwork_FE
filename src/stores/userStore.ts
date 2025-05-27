@@ -93,7 +93,7 @@ export const useUserStore = defineStore('user', {
         console.log('response: ', response);
         // Extract token and user info from the response
         const token = response.data?.token;
-        const userInfo = response.data?.user;
+        const userInfo = response.data?.user as UserInfoInterface;
         console.log('userInfo', userInfo);
         if (!token || !userInfo) {
           throw new Error('Invalid response from authentication server');
@@ -102,8 +102,7 @@ export const useUserStore = defineStore('user', {
           userInfo: {
             email: userInfo.email,
             name: userInfo.name,
-            userId: userInfo.id,
-            userName: userInfo.name,
+            id: userInfo.id,
             role: role,
           },
           token: token,

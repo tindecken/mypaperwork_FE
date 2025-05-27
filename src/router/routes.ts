@@ -77,6 +77,13 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true,
     },
   },
+  {
+    path: '/logout',
+    component: () => import('src/components/Logout/Logout.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
 
   {
     path: '/:catchAll(.*)*',
