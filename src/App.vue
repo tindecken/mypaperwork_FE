@@ -26,12 +26,7 @@ userStore.$subscribe(() => {
   localStorage.setItem(
     'user',
     JSON.stringify({
-      token: userStore.token,
-      userId: userStore.userInfo.userId,
-      userName: userStore.userInfo.userName,
-      email: userStore.userInfo.email,
-      name: userStore.userInfo.name,
-      role: userStore.userInfo.role,
+      userInfo: userStore.userInfo,
     })
   );
 });
@@ -50,12 +45,10 @@ onBeforeMount(() => {
   const userStorage = localStorage.getItem('user');
   if (userStorage) {
     const userObj = JSON.parse(userStorage);
-    userStore.userInfo.userId = userObj.userId;
-    userStore.userInfo.userName = userObj.userName;
-    userStore.userInfo.email = userObj.email;
-    userStore.userInfo.name = userObj.name;
-    userStore.userInfo.role = userObj.role;
-    userStore.token = userObj.token;
+    userStore.userInfo.email = userObj.userInfo.email;
+    userStore.userInfo.name = userObj.userInfo.name;
+    userStore.userInfo.id = userObj.userInfo.id;
+    userStore.userInfo.role = userObj.userInfo.role;
   }
   const globalStorage = localStorage.getItem('global');
 

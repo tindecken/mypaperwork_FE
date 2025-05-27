@@ -32,6 +32,8 @@ import { GenericResponseData } from 'src/Models/GenericResponseData';
 import User from 'src/components/User/User.vue';
 import AppFooter from 'src/components/AppFooter/AppFooter.vue';
 import LeftDrawer from 'src/components/LeftDrawer/LeftDrawer.vue';
+import { authClient } from 'src/utils/auth-client';
+import { UserInfoInterface } from 'src/Models/UserInfoInterface';
 
 const categoryStore = useCategoryStore();
 const $router = useRouter();
@@ -41,6 +43,31 @@ const paperworkStore = usePaperworkStore();
 const totalRecords = computed(() => paperworkStore.totalRecords);
 
 onMounted(async () => {
+  // Check for existing session from auth client
+  try {
+    const session = await authClient.getSession();
+    if (session && session.data) {
+      console.log('Found existing session:', session);
+
+      // Extract user info from the session
+      const userResponse = session.data.user;
+      console.log('User info from session:', userResponse);
+      const userInfo: UserInfoInterface = {
+        email: userResponse.email,
+        name: userResponse.name,
+        id: userResponse.id,
+        role: null, // Set default value since role doesn't exist in the response
+      };
+
+      // Update user store with session data
+      userStore.$patch({
+        userInfo: userInfo,
+      });
+    }
+  } catch (error) {
+    console.error('Error retrieving session:', error);
+  }
+
   $q.loading.show({
     message: 'Getting paperworks...',
   });

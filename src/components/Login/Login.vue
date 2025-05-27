@@ -8,7 +8,7 @@
           <div>
             <q-btn label="Login" type="submit" color="primary" />
             <q-separator class="q-mt-md q-mb-xs"></q-separator>
-            <q-btn label="Login with Google Account" @click="handleLoginGoogle"></q-btn>
+            <q-btn label="Login with Google Account" @click="loginWithGoogle"></q-btn>
             <q-separator class="q-mt-md q-mb-xs"></q-separator>
             <span class="text-subtitle1">Don't have account? <a href="#/register">Register one.</a></span>
           </div>
@@ -68,7 +68,7 @@ const onLogout = async () => {
     });
   }
 };
-const handleLoginGoogle = async () => {
+const loginWithGoogle = async () => {
   await authClient.signIn.social({
     provider: 'google',
     callbackURL: 'http://localhost:1000/#/home',
