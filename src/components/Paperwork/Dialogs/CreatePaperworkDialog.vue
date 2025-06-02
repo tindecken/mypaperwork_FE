@@ -15,10 +15,10 @@
       <div class="row q-pa-md">
         <q-form @submit="createPaperwork()" class="col-grow">
           <div class="row">
-            <q-input class="col-grow" outlined dense v-model="name" label="Name *" :rules="[(val) => !!val || 'Name is required']"> </q-input>
+            <q-input class="col-grow" outlined dense v-model="name" label="Name (max 200 chars)*" :rules="[(val) => !!val || 'Name is required', (val) => val.length <= 200 || 'Maximum 200 chars']"> </q-input>
           </div>
           <div class="row q-mt-md">
-            <q-input type="textarea" class="col-grow" outlined dense v-model="description" label="Note (max 1000 chars)" :rules="[(val) => val.length <= 1000 || 'Maximum 1000 chars']"> </q-input>
+            <q-input type="textarea" class="col-grow" outlined dense v-model="note" label="Note (max 2000 chars)" :rules="[(val) => val.length <= 2000 || 'Maximum 2000 chars']"> </q-input>
           </div>
           <div class="row q-mt-md q-col-gutter-sm">
             <q-select class="col-6" outlined v-model="selectedCategory" :options="categories" option-label="name" option-value="id" label="Category" @update:model-value="onSelectedCategory($event)" />
@@ -35,10 +35,6 @@
                 </q-icon>
               </template>
             </q-input>
-          </div>
-          <div class="row q-mt-md q-col-gutter-sm">
-            <q-input class="col-grow" type="number" outlined dense v-model.number="price" label="Price"> </q-input>
-            <q-input type="text" class="col-grow" outlined dense v-model="priceCurrency" label="Price Currency (USD, VND, ...)"> </q-input>
           </div>
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="row q-mt-sm">
@@ -84,26 +80,26 @@ const globalStore = useGlobalStore();
 const categories = computed(() => categoryStore.categories);
 const selectedCategory: Ref<Category> = ref(categoryStore.categories.filter((cat) => cat.name === 'Uncategorized')[0]);
 const $q = useQuasar();
-const issueAt: Ref<string | null> = ref(null);
 
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 const isDark = computed(() => globalStore.darkTheme);
-const description = ref('');
+const note = ref('');
 const name = ref('');
+const issueAt: Ref<string | null> = ref(null);
+const customFields = ref(null);
 const uploader = ref();
-const price: Ref<number | null> = ref(null);
-const priceCurrency = ref('');
 async function createPaperwork() {
   console.log('uploader.value?.files', uploader.value?.files);
+  // Create the request model with explicit type handling for issueAt
   const requestModel: CreatePaperworkRequestModel = {
     name: name.value,
-    description: description.value,
+    note: note.value,
     categoryId: selectedCategory.value ? selectedCategory.value.id : '',
-    price: price.value,
-    priceCurrency: priceCurrency.value,
-    issueAt: issueAt.value,
+    // Convert null to empty string to ensure compatibility
+    issueAt: issueAt.value || '',
     files: uploader.value?.files,
+    customFields: customFields.value,
   };
   console.log('Creating paperwork request model:', requestModel);
   $q.loading.show({

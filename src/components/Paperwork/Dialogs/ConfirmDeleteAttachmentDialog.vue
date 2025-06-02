@@ -24,15 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import { QInput, useDialogPluginComponent } from 'quasar';
-import { Ref, ref } from 'vue';
-import { useCategoryStore } from 'src/stores/categoryStore';
-import { usePaperworkStore } from 'src/stores/paperworkStore';
+import { useDialogPluginComponent } from 'quasar';
 import { computed } from 'vue';
-import { useQuasar, date } from 'quasar';
-import { Category } from 'src/Models/Category/CategoryInterface';
-import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
-import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { useGlobalStore } from 'src/stores/globalStore';
 
 const globalStore = useGlobalStore();

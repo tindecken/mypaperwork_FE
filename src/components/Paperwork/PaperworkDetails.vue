@@ -12,9 +12,7 @@
       <q-input readonly outlined class="col-6" v-model="issueAt" label="Issue At" />
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
-      <q-input type="textarea" autogrow readonly outlined class="col-6" v-model="description" label="Note" />
-      <q-input readonly outlined class="col-3" v-model="price" label="Price" />
-      <q-input readonly outlined class="col-3" v-model="priceCurrency" label="Currency" />
+      <q-input type="textarea" autogrow readonly outlined class="col-6" v-model="note" label="Note" />
     </div>
     <div class="row q-mt-md">
       <span class="self-center">Categories:</span>
@@ -101,9 +99,7 @@ const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
 const paperwork: Ref<PaperworkDetails | null> = ref(null);
 const name = ref('');
-const description = ref('');
-const price = ref('');
-const priceCurrency = ref('');
+const note = ref('');
 const categories: Ref<Category[]> = ref([]);
 const attachments: Ref<AttachmentInterface[]> = ref([]);
 const images: Ref<ImageInterface[]> = ref([]);
@@ -118,12 +114,12 @@ const columns = [
     name: 'fileName',
     required: true,
     label: 'File Name',
-    align: 'left',
+    align: 'left' as const,
     field: 'fileName',
     sortable: true,
   },
-  { name: 'fileSize', align: 'right', label: 'Size', field: 'fileSize', sortable: true, format: (val: number) => `${prettyBytes(val)}`, style: 'width: 50px' },
-  { name: 'actions', label: 'Actions', align: 'left' },
+  { name: 'fileSize', align: 'right' as const, label: 'Size', field: 'fileSize', sortable: true, format: (val: number) => `${prettyBytes(val)}`, style: 'width: 50px' },
+  { name: 'actions', label: 'Actions', field: 'actions', align: 'left' as const },
 ];
 onMounted(() => {
   $q.loading.show({
@@ -135,11 +131,9 @@ onMounted(() => {
       $q.loading.hide();
       paperwork.value = response?.data as PaperworkDetails;
       name.value = paperwork.value?.name;
-      description.value = paperwork.value?.description;
+      note.value = paperwork.value?.note || '';
       createdAt.value = paperwork.value?.createdAt?.toString();
       issueAt.value = paperwork.value?.issuedAt?.toString();
-      price.value = paperwork.value?.price?.toString();
-      priceCurrency.value = paperwork.value?.priceCurrency;
       categories.value = paperwork.value?.categories;
       attachments.value = paperwork.value?.attachments || [];
       images.value = paperwork.value?.images || [];

@@ -1,9 +1,8 @@
 export interface CreatePaperworkRequestModel {
   categoryId: string;
   name: string;
-  description: string;
-  price: number | null;
-  priceCurrency: string | null;
+  note?: string;
   issueAt: string | null;
+  customFields?: string | null;
   files?: string[];
 }

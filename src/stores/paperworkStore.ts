@@ -27,7 +27,7 @@ export const usePaperworkStore = defineStore('paperwork', {
       try {
         let query = '';
         query = handlePaging(paging);
-        const axiosResponse = await api.get(`/paperworks/getPaperworks${query}`, {
+        const axiosResponse = await api.get(`/paperworks/getAll${query}`, {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
@@ -45,7 +45,7 @@ export const usePaperworkStore = defineStore('paperwork', {
       try {
         let query = '';
         query = handlePaging(paging);
-        const axiosResponse = await api.get(`/paperworks/getPaperworks/${categoryId}/${query}`, {
+        const axiosResponse = await api.get(`/paperworks/getByCategory/${categoryId}${query}`, {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
@@ -62,7 +62,7 @@ export const usePaperworkStore = defineStore('paperwork', {
     },
     async getPaperworksById(paperworkId: string): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.get(`/paperworks/getreturnblob/${paperworkId}`, {
+        const axiosResponse = await api.get(`/paperworks/get/${paperworkId}`, {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
@@ -80,10 +80,11 @@ export const usePaperworkStore = defineStore('paperwork', {
         const formData = new FormData();
         formData.append('categoryId', model.categoryId || '');
         formData.append('name', model.name);
-        formData.append('description', model.description || '');
+        formData.append('note', model.note || '');
         formData.append('issueAt', model.issueAt?.toString() || '');
-        formData.append('price', model.price?.toString() || '');
-        formData.append('priceCurrency', model.priceCurrency?.toString() || '');
+        if (model.customFields) {
+          formData.append('customFields', model.customFields);
+        }
         model.files?.forEach((file: any) => {
           formData.append('files', file, file.name);
         });

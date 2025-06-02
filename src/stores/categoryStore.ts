@@ -20,7 +20,7 @@ export const useCategoryStore = defineStore('category', {
   actions: {
     async getCategories(): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.get('/categories/getCategories', {
+        const axiosResponse = await api.get('/categories/get', {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
