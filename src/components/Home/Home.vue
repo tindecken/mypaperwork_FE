@@ -73,7 +73,7 @@ onMounted(async () => {
   });
   paperworkStore
     .getPaperworks()
-    .then((response: GenericResponseData | undefined) => {
+    .then(() => {
       $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
@@ -85,8 +85,11 @@ onMounted(async () => {
     });
   categoryStore
     .getCategories()
-    .then()
+    .then(() => {
+      $q.loading.hide();
+    })
     .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
       $q.notify({
         type: 'negative',
         message: err.message || err.title || err,

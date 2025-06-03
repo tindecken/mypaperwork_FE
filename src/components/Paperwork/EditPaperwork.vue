@@ -156,6 +156,7 @@ import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachme
 import { UpdatePaperworkRequestModel } from 'src/Models/Paperwork/UpdatePaperworkRequestModel';
 import { SetCoverRequestModel } from 'src/Models/Document/SetCoverRequestModel';
 import { getImageUrl } from 'src/utils/getImageUrl';
+import { useCategoryStore } from 'src/stores/categoryStore';
 
 const truncate = ref(true);
 const $route = useRoute();
@@ -164,6 +165,7 @@ const userStore = useUserStore();
 const documentStore = useDocumentStore();
 const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
+const categoryStore = useCategoryStore();
 const paperwork: Ref<PaperworkDetails | null> = ref(null);
 const name = ref('');
 const note = ref('');
@@ -477,30 +479,33 @@ async function updateCategories() {
   $q.dialog({
     component: UpdateCategoriesDialog,
     componentProps: { existingCategories: categories.value, paperworkId: $route.params.id as string },
-  })
-    .onOk(async () => {
-      $q.loading.show({
-        message: 'Getting paperwork ...',
-      });
-      paperworkStore
-        .getPaperworksById($route.params.id as string)
-        .then((response: GenericResponseData | undefined) => {
-          if (response?.data && 'categories' in response.data) {
-            categories.value = (response.data as PaperworkDetails).categories;
-          }
-          $q.loading.hide();
-        })
-        .catch((err: GenericResponseData | any) => {
-          $q.loading.hide();
-          $q.notify({
-            type: 'negative',
-            message: err.message || err.title || err,
-          });
+  }).onOk(async () => {
+    $q.loading.show({
+      message: 'Getting paperwork ...',
+    });
+    paperworkStore
+      .getPaperworksById($route.params.id as string)
+      .then((response: GenericResponseData | undefined) => {
+        if (response?.data && 'categories' in response.data) {
+          categories.value = (response.data as PaperworkDetails).categories;
+        }
+        $q.loading.hide();
+      })
+      .catch((err: GenericResponseData | any) => {
+        $q.loading.hide();
+        $q.notify({
+          type: 'negative',
+          message: err.message || err.title || err,
         });
+      });
+  });
+  categoryStore
+    .getCategories()
+    .then(() => {
+      $q.loading.hide();
     })
-    .onCancel(async () => {})
-    .onDismiss(() => {
-      // TODO
+    .catch(() => {
+      $q.loading.hide();
     });
 }
 </script>
