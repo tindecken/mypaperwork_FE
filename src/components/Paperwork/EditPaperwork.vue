@@ -22,9 +22,30 @@
           </q-input>
         </div>
         <div class="row justify-end q-col-gutter-md q-mt-xs">
-          <q-input type="textarea" autogrow outlined class="col-6" v-model="description" label="Note (max 1000 chars)" :rules="[(val) => val.length <= 1000 || 'Maximum 1000 chars']" />
-          <q-input type="number" outlined class="col-3" v-model.number="price" label="Price" />
-          <q-input outlined class="col-3" v-model="priceCurrency" label="Currency" />
+          <q-input type="textarea" autogrow outlined class="col-12" v-model="note" label="Note (max 2000 chars)" :rules="[(val) => val.length <= 2000 || 'Maximum 2000 chars']" />
+        </div>
+
+        <!-- Custom Fields Section -->
+        <div class="row justify-start q-mt-md">
+          <span class="col title">Custom Fields</span>
+        </div>
+        <div class="row q-mt-xs">
+          <div class="col-12">
+            <div v-for="(field, index) in customFields" :key="index" class="row q-col-gutter-md q-mb-sm">
+              <div class="col-5">
+                <q-input outlined v-model="field.key" label="Name" dense :rules="[(val) => val.length <= 100 || 'Maximum 100 characters']" class="full-width" />
+              </div>
+              <div class="col-5">
+                <q-input outlined v-model="field.value" label="Value" dense :rules="[(val) => val.length <= 256 || 'Maximum 256 characters']" class="full-width" />
+              </div>
+              <div class="col-2 items-start pt-3">
+                <q-btn flat round color="negative" icon="delete" @click="removeCustomField(index)" size="md" />
+              </div>
+            </div>
+            <div class="row q-mt-md">
+              <q-btn outline color="primary" icon="add" label="Add" @click="addCustomField()" />
+            </div>
+          </div>
         </div>
 
         <div class="row justify-end q-mt-sm">
@@ -145,9 +166,8 @@ const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
 const paperwork: Ref<PaperworkDetails | null> = ref(null);
 const name = ref('');
-const description = ref('');
-const price = ref(0);
-const priceCurrency = ref('');
+const note = ref('');
+const customFields = ref<Array<{ key: string; value: string }>>([]);
 const categories: Ref<Category[]> = ref([]);
 const attachments: Ref<AttachmentInterface[]> = ref([]);
 const images: Ref<ImageInterface[]> = ref([]);
@@ -178,15 +198,35 @@ onMounted(() => {
       console.log('Fetched paperwork:', response?.data);
       paperwork.value = response?.data as PaperworkDetails;
       name.value = paperwork.value?.name;
-      description.value = paperwork.value?.description;
+      note.value = paperwork.value?.note || '';
       issueAt.value = paperwork.value?.issuedAt?.toString();
       createdAt.value = paperwork.value?.createdAt?.toString();
-      price.value = paperwork.value?.price;
-      priceCurrency.value = paperwork.value?.priceCurrency;
       categories.value = paperwork.value?.categories;
       attachments.value = paperwork.value?.attachments || [];
       images.value = paperwork.value?.images || [];
       imagesUrls.value = images.value.map((image) => getImageUrl(image.imageBase64!));
+
+      // Parse customFields if they exist
+      if (paperwork.value?.customFields) {
+        try {
+          // Check if it's already an object
+          if (typeof paperwork.value.customFields === 'object') {
+            customFields.value = paperwork.value.customFields;
+          } else if (typeof paperwork.value.customFields === 'string') {
+            // If it's a string, try to parse it as JSON
+            customFields.value = JSON.parse(paperwork.value.customFields);
+          } else {
+            console.warn('customFields has unexpected type:', typeof paperwork.value.customFields);
+            customFields.value = [];
+          }
+          console.log('Parsed customFields:', customFields.value);
+        } catch (error) {
+          console.error('Error handling customFields:', error);
+          customFields.value = [];
+        }
+      } else {
+        customFields.value = [];
+      }
       $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
@@ -277,12 +317,15 @@ function savePaperwork() {
     message: 'Updating ...',
   });
   const updateRequest: UpdatePaperworkRequestModel = {
-    id: paperwork.value?.id as string,
+    paperworkId: paperwork.value?.id as string,
     name: name.value,
-    description: description.value,
-    price: price.value,
-    priceCurrency: priceCurrency.value,
+    note: note.value,
     issueAt: issueAt.value ?? null,
+    customFields: (() => {
+      // Filter out empty fields
+      const filteredFields = customFields.value.filter((field) => field.key.trim() !== '' && field.value.trim() !== '');
+      return filteredFields.length > 0 ? JSON.stringify(filteredFields) : null;
+    })(),
   };
   paperworkStore
     .updatePaperwork(updateRequest)
@@ -304,6 +347,14 @@ function savePaperwork() {
 async function cancel() {
   await paperworkStore.getPaperworks();
   $router.push('/home');
+}
+
+function addCustomField() {
+  customFields.value.push({ key: '', value: '' });
+}
+
+function removeCustomField(index: number) {
+  customFields.value.splice(index, 1);
 }
 function onRemoveAttachment(attachmentId: string) {
   $q.dialog({

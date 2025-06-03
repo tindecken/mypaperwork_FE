@@ -12,7 +12,24 @@
       <q-input readonly outlined class="col-6" v-model="issueAt" label="Issue At" />
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
-      <q-input type="textarea" autogrow readonly outlined class="col-6" v-model="note" label="Note" />
+      <q-input type="textarea" autogrow readonly outlined class="col-12" v-model="note" label="Note" />
+    </div>
+
+    <!-- Custom Fields Section -->
+    <div class="row q-mt-md" v-if="customFields && customFields.length > 0">
+      <span class="col title">Custom Fields</span>
+    </div>
+    <div class="row q-col-gutter-md q-mt-xs" v-if="customFields && customFields.length > 0">
+      <div v-for="(field, index) in customFields" :key="index" class="col-12 q-mb-sm">
+        <div class="row q-col-gutter-md">
+          <div class="col-6">
+            <q-input readonly outlined dense v-model="field.key" label="Name" />
+          </div>
+          <div class="col-6">
+            <q-input readonly outlined dense v-model="field.value" label="Value" />
+          </div>
+        </div>
+      </div>
     </div>
     <div class="row q-mt-md">
       <span class="self-center">Categories:</span>
@@ -104,6 +121,7 @@ const categories: Ref<Category[]> = ref([]);
 const attachments: Ref<AttachmentInterface[]> = ref([]);
 const images: Ref<ImageInterface[]> = ref([]);
 const imagesUrls: Ref<string[]> = ref([]);
+const customFields = ref<Array<{ key: string; value: string }>>([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
 const issueAt = ref(paperwork.value?.issuedAt.toString());
 const globalStore = useGlobalStore();
@@ -128,6 +146,7 @@ onMounted(() => {
   paperworkStore
     .getPaperworksById($route.params.id as string)
     .then((response: GenericResponseData | undefined) => {
+      console.log('Fetched paperwork:', response?.data);
       $q.loading.hide();
       paperwork.value = response?.data as PaperworkDetails;
       name.value = paperwork.value?.name;
@@ -138,6 +157,28 @@ onMounted(() => {
       attachments.value = paperwork.value?.attachments || [];
       images.value = paperwork.value?.images || [];
       imagesUrls.value = images.value.map((image) => getImageUrl(image.imageBase64!));
+
+      // Handle customFields - could be a JSON string or already an object
+      if (paperwork.value?.customFields) {
+        try {
+          // Check if it's already an object
+          if (typeof paperwork.value.customFields === 'object') {
+            customFields.value = paperwork.value.customFields;
+          } else if (typeof paperwork.value.customFields === 'string') {
+            // If it's a string, try to parse it as JSON
+            customFields.value = JSON.parse(paperwork.value.customFields);
+          } else {
+            console.warn('customFields has unexpected type:', typeof paperwork.value.customFields);
+            customFields.value = [];
+          }
+          console.log('Parsed customFields:', customFields.value);
+        } catch (error) {
+          console.error('Error handling customFields:', error);
+          customFields.value = [];
+        }
+      } else {
+        customFields.value = [];
+      }
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();

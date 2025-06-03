@@ -33,20 +33,7 @@ export const useCategoryStore = defineStore('category', {
         handleError(error);
       }
     },
-    async updateCategories(body: UpdateCategoriesRequestModel): Promise<GenericResponseData | undefined> {
-      try {
-        const axiosResponse = await api.put('/categories/updateCategories', body, {
-          withCredentials: true,
-        });
-        const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('responseData', responseData);
-        await this.getCategories();
-        return responseData;
-      } catch (error: any) {
-        this.$reset();
-        handleError(error);
-      }
-    },
+
     async createCategory(body: CreateCategoryRequestModel): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.post('/categories/create', body, {

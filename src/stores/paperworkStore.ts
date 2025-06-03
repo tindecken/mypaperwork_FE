@@ -10,6 +10,7 @@ import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperwor
 import { useCategoryStore } from './categoryStore';
 import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
 import { UpdatePaperworkRequestModel } from 'src/Models/Paperwork/UpdatePaperworkRequestModel';
+import { UpdateCategoriesRequestModel } from 'src/Models/Paperwork/UpdateCategoriesRequestModel';
 
 const userStore = useUserStore();
 const categoryStore = useCategoryStore();
@@ -117,12 +118,26 @@ export const usePaperworkStore = defineStore('paperwork', {
     },
     async updatePaperwork(model: UpdatePaperworkRequestModel): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.put(`/paperworks/update/${model.id}`, model, {
+        const axiosResponse = await api.put('/paperworks/update', model, {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         return responseData;
       } catch (error: any) {
+        handleError(error);
+      }
+    },
+    async updateCategoriesByPaperworkId(body: UpdateCategoriesRequestModel): Promise<GenericResponseData | undefined> {
+      try {
+        const axiosResponse = await api.put('/paperworks/updateCategoriesByPaperworkId', body, {
+          withCredentials: true,
+        });
+        const responseData = (await axiosResponse.data) as GenericResponseData;
+        console.log('responseData', responseData);
+        await this.getPaperworks();
+        return responseData;
+      } catch (error: any) {
+        this.$reset();
         handleError(error);
       }
     },

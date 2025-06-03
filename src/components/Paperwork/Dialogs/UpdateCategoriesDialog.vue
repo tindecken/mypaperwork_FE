@@ -31,12 +31,13 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 import { PropType, ref } from 'vue';
+import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { computed } from 'vue';
 import { useQuasar } from 'quasar';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { useGlobalStore } from 'src/stores/globalStore';
-import { UpdateCategoriesRequestModel } from 'src/Models/Category/UpdateCategoriesRequestModel';
+import { UpdateCategoriesRequestModel } from 'src/Models/Paperwork/UpdateCategoriesRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 
 const props = defineProps({
@@ -54,6 +55,7 @@ const isDark = computed(() => globalStore.darkTheme);
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 const $q = useQuasar();
+const paperworkStore = usePaperworkStore();
 const categoryStore = useCategoryStore();
 
 const categoriesOptions = ref<Category[]>(categoryStore.categories);
@@ -68,8 +70,8 @@ async function updateCategories() {
   $q.loading.show({
     message: 'Updating ...',
   });
-  categoryStore
-    .updateCategories(model)
+  paperworkStore
+    .updateCategoriesByPaperworkId(model)
     .then((response: GenericResponseData | undefined) => {
       $q.notify({
         type: 'positive',

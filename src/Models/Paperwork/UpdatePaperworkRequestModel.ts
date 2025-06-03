@@ -1,8 +1,7 @@
 export interface UpdatePaperworkRequestModel {
-  id: string;
+  paperworkId: string;
   name: string | null;
-  description: string | null;
-  price: number | null;
-  priceCurrency: string | null;
+  note: string | null;
+  customFields: { key: string; value: string }[];
   issueAt: string | null;
 }

@@ -14,4 +14,6 @@ export interface Paperwork {
   coverBase64?: string;
   coverFileName?: string;
   documentCount?: number;
+  customFields?: string;
+  note?: string;
 }
