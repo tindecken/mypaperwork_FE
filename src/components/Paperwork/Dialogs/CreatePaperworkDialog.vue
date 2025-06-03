@@ -37,6 +37,34 @@
             </q-input>
           </div>
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
+
+          <!-- Custom Fields Section -->
+          <div class="row q-mt-sm">
+            <div class="col-12">
+              <div class="row items-center">
+                <div class="col">
+                  <span class="text-subtitle2">Custom Fields</span>
+                </div>
+                <div class="col-auto">
+                  <q-btn flat dense icon="add" color="primary" label="Add custom field" @click="addCustomField" />
+                </div>
+              </div>
+              <!-- List of custom fields -->
+              <div v-for="(field, index) in customFields" :key="index" class="row q-mt-xs q-col-gutter-sm">
+                <div class="col-5">
+                  <q-input class="full-width" outlined dense v-model="field.key" label="Name (max 100 chars)" :rules="[(val) => val.length <= 100 || 'Maximum 100 characters']" />
+                </div>
+                <div class="col-5">
+                  <q-input class="full-width" outlined dense v-model="field.value" label="Value (max 256 chars)" :rules="[(val) => val.length <= 256 || 'Maximum 256 characters']" />
+                </div>
+                <div class="col-2 flex items-start pt-3">
+                  <q-btn flat dense round icon="delete" color="negative" @click="removeCustomField(index)" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="row q-mt-sm">
             <q-uploader
               hide-upload-btn
@@ -87,7 +115,7 @@ const isDark = computed(() => globalStore.darkTheme);
 const note = ref('');
 const name = ref('');
 const issueAt: Ref<string | null> = ref(null);
-const customFields = ref(null);
+const customFields = ref<Array<{ key: string; value: string }>>([]);
 const uploader = ref();
 async function createPaperwork() {
   console.log('uploader.value?.files', uploader.value?.files);
@@ -99,7 +127,10 @@ async function createPaperwork() {
     // Convert null to empty string to ensure compatibility
     issueAt: issueAt.value || '',
     files: uploader.value?.files,
-    customFields: customFields.value,
+    customFields: (() => {
+      const filteredFields = customFields.value.filter((field) => field.key.trim() !== '' && field.value.trim() !== '');
+      return filteredFields.length > 0 ? JSON.stringify(filteredFields) : null;
+    })(),
   };
   console.log('Creating paperwork request model:', requestModel);
   $q.loading.show({
@@ -150,6 +181,17 @@ async function onRejected(rejectedEntries: any) {
 async function onSelectedCategory(cat: Category) {
   console.log('Selected category:', cat.id);
 }
+async function addCustomField() {
+  customFields.value.push({
+    key: '',
+    value: '',
+  });
+}
+
+async function removeCustomField(index: number) {
+  customFields.value.splice(index, 1);
+}
+
 async function onAdded(files: any) {
   console.log('Files added:', files);
   // loop for all files and check if the file type is not image type, check the size, if the size is > 2MB, notify the user and remove the file
