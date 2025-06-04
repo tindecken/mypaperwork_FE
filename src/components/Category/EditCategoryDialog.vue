@@ -104,7 +104,7 @@ async function editCategory() {
 }
 async function onDeleteCategory() {
   $q.loading.show({
-    message: 'Deleting Category...',
+    message: 'Deleting ...',
   });
 
   try {

@@ -35,39 +35,6 @@ const email = ref('');
 const password = ref('');
 const userStore = useUserStore();
 
-const onLogout = async () => {
-  try {
-    $q.loading.show({
-      message: 'Logout new user...',
-    });
-
-    const response = await authClient.signOut();
-
-    $q.loading.hide();
-
-    if (response.error) {
-      $q.notify({
-        type: 'negative',
-        message: response.error.message || 'Logout failed',
-      });
-    } else {
-      $q.notify({
-        type: 'positive',
-        message: 'Logout success',
-      });
-
-      // Optionally auto-fill the login form with the registered credentials
-      email.value = 'tindecken@gmail.com';
-      password.value = 'zzivaldo';
-    }
-  } catch (error: any) {
-    $q.loading.hide();
-    $q.notify({
-      type: 'negative',
-      message: error.message || 'Registration failed',
-    });
-  }
-};
 const loginWithGoogle = async () => {
   await authClient.signIn.social({
     provider: 'google',

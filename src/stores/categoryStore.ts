@@ -24,6 +24,7 @@ export const useCategoryStore = defineStore('category', {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
+        console.log('responseData get categories', responseData);
         this.$patch({
           categories: responseData.data as Category[],
         });
@@ -60,7 +61,7 @@ export const useCategoryStore = defineStore('category', {
     },
     async deleteCategory(body: DeleteCategoryRequestModel): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.delete('/categories/deleteCategory', {
+        const axiosResponse = await api.delete('/categories/delete', {
           withCredentials: true,
           data: body,
         });
