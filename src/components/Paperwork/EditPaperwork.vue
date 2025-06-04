@@ -485,10 +485,11 @@ async function updateCategories() {
     });
     paperworkStore
       .getPaperworksById($route.params.id as string)
-      .then((response: GenericResponseData | undefined) => {
+      .then(async (response: GenericResponseData | undefined) => {
         if (response?.data && 'categories' in response.data) {
           categories.value = (response.data as PaperworkDetails).categories;
         }
+        await categoryStore.getCategories();
         $q.loading.hide();
       })
       .catch((err: GenericResponseData | any) => {
@@ -499,14 +500,6 @@ async function updateCategories() {
         });
       });
   });
-  categoryStore
-    .getCategories()
-    .then(() => {
-      $q.loading.hide();
-    })
-    .catch(() => {
-      $q.loading.hide();
-    });
 }
 </script>
 
