@@ -3,7 +3,7 @@
     <q-header bordered class="bg-primary text-white">
       <q-toolbar style="height: 24px">
         <q-btn dense flat round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" />
-        <q-toolbar-title @click="goHome()">
+        <q-toolbar-title>
           <span @click="goHome()" style="cursor: pointer"> My Paperwork {{ $q.version }} </span>
         </q-toolbar-title>
         <user></user>
@@ -42,6 +42,19 @@ const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
 const totalRecords = computed(() => paperworkStore.totalRecords);
 
+paperworkStore
+  .getPaperworks()
+  .then(() => {
+    $q.loading.hide();
+  })
+  .catch((err: GenericResponseData | any) => {
+    $q.loading.hide();
+    $q.notify({
+      type: 'negative',
+      message: err.message || err.title || err,
+    });
+  });
+
 onMounted(async () => {
   // Check for existing session from auth client
   try {
@@ -71,18 +84,7 @@ onMounted(async () => {
   $q.loading.show({
     message: 'Getting paperworks...',
   });
-  paperworkStore
-    .getPaperworks()
-    .then(() => {
-      $q.loading.hide();
-    })
-    .catch((err: GenericResponseData | any) => {
-      $q.loading.hide();
-      $q.notify({
-        type: 'negative',
-        message: err.message || err.title || err,
-      });
-    });
+
   categoryStore
     .getCategories()
     .then(() => {
@@ -96,8 +98,9 @@ onMounted(async () => {
       });
     });
 });
-function goHome() {
-  $router.push('/');
+async function goHome() {
+  await paperworkStore.getPaperworks();
+  $router.push('/home');
 }
 const leftDrawerOpen = ref($q.platform.is.mobile ? false : true);
 </script>

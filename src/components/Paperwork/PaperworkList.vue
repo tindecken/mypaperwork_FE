@@ -71,7 +71,8 @@ function openPaperwork(pw: Paperwork) {
   // routing to paperwork-details page
   $router.push(`/paperwork-details/${pw.id}`);
 }
-function updatePaperworks() {
+async function updatePaperworks() {
+  console.log('updatePaperworks');
   $q.loading.show();
 
   const paging: Paging = {
@@ -79,10 +80,11 @@ function updatePaperworks() {
     pageSize: pageSize.value,
     filterValue: searchText.value,
   };
+  console.log('props.categoryId', props.categoryId);
   if (props.categoryId) {
     paperworkStore
       .getPaperworksByCategoryId(props.categoryId, paging)
-      .then((response: GenericResponseData | undefined) => {
+      .then(() => {
         $q.loading.hide();
       })
       .catch((err: GenericResponseData | any) => {
@@ -95,7 +97,7 @@ function updatePaperworks() {
   } else {
     paperworkStore
       .getPaperworks(paging)
-      .then((response: GenericResponseData | undefined) => {
+      .then(() => {
         $q.loading.hide();
       })
       .catch((err: GenericResponseData | any) => {
@@ -118,7 +120,8 @@ function deletePaperwork(pw: Paperwork) {
       $q.loading.show();
       paperworkStore
         .deletePaperwork(pw.id)
-        .then(() => {
+        .then(async () => {
+          await updatePaperworks();
           $q.notify({
             type: 'positive',
             message: 'Delete paperwork successfully!',

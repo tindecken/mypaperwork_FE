@@ -110,7 +110,7 @@ function onSelectAllItems() {
   });
   paperworkStore
     .getPaperworks()
-    .then((response: GenericResponseData | undefined) => {
+    .then(() => {
       $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {

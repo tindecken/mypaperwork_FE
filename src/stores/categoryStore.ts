@@ -24,6 +24,7 @@ export const useCategoryStore = defineStore('category', {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
+        console.log('responseData get categories', responseData);
         this.$patch({
           categories: responseData.data as Category[],
         });
