@@ -54,6 +54,19 @@ paperworkStore
     });
   });
 
+paperworkStore
+  .getPaperworks()
+  .then(() => {
+    $q.loading.hide();
+  })
+  .catch((err: GenericResponseData | any) => {
+    $q.loading.hide();
+    $q.notify({
+      type: 'negative',
+      message: err.message || err.title || err,
+    });
+  });
+
 onMounted(async () => {
   // Check for existing session from auth client
   try {
