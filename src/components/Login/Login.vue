@@ -38,7 +38,7 @@ const userStore = useUserStore();
 const loginWithGoogle = async () => {
   await authClient.signIn.social({
     provider: 'google',
-    callbackURL: process.env.WEB_BASEURL,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL,
   });
 };
 const onClickLogin = async () => {
