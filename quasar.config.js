@@ -68,6 +68,7 @@ module.exports = configure(function (/* ctx */) {
       env: {
         API_BASEURL: process.env.API_BASEURL,
         WEB_BASEURL: process.env.WEB_BASEURL,
+        GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
         DEFAULT_PAGESIZE: process.env.DEFAULT_PAGESIZE,
       },
       // rawDefine: {}
