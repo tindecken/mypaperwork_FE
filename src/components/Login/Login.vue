@@ -38,7 +38,7 @@ const userStore = useUserStore();
 const loginWithGoogle = async () => {
   await authClient.signIn.social({
     provider: 'google',
-    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+    // callbackURL: process.env.GOOGLE_CALLBACK_URL,
   });
 };
 const onClickLogin = async () => {
@@ -53,7 +53,6 @@ const onClickLogin = async () => {
     .loginByEmailPassword(payload)
     .then((response: GenericResponseData | undefined) => {
       $q.loading.hide();
-      console.log('Login success', `/${$route.query.redirect || 'home'}`);
       const redirectUrl = `/${$route.query.redirect || 'home'}`;
       void $router.replace(redirectUrl);
       $q.notify({
