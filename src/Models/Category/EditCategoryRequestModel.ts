@@ -2,6 +2,6 @@ export interface EditCategoryRequestModel {
   userId: string;
   categoryId: string;
   name: string;
-  icon: string;
-  description?: string;
+  note: string | null;
+  icon: string | null;
 }

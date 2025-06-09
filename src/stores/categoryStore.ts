@@ -49,7 +49,7 @@ export const useCategoryStore = defineStore('category', {
     },
     async editCategory(body: EditCategoryRequestModel): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.put('/categories/editCategory', body, {
+        const axiosResponse = await api.put('/categories/update', body, {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;

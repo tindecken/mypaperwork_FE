@@ -15,10 +15,10 @@
       <div class="row q-pa-md">
         <q-form @submit="editCategory()" class="col-grow">
           <div class="row">
-            <q-input class="col-grow" outlined dense v-model="name" label="Name *" :rules="[(val) => !!val || 'Name is required']"> </q-input>
+            <q-input class="col-grow" outlined dense v-model="name" label="Name *" :rules="[(val) => !!val || 'Name is required', (val) => val.length <= 100 || 'Maximum 100 chars']"> </q-input>
           </div>
           <div class="row q-mt-md">
-            <q-input type="textarea" class="col-grow" outlined dense v-model="description" label="Description"> </q-input>
+            <q-input type="textarea" class="col-grow" outlined dense v-model="note" label="Note (max 2000 chars)" :rules="[(val) => val.length <= 2000 || 'Maximum 2000 chars']"> </q-input>
           </div>
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="q-mt-sm row justify-between">
@@ -27,20 +27,19 @@
               <q-dialog v-model="confirmDelete" persistent>
                 <q-card>
                   <q-card-section class="row items-center">
-                    <q-avatar icon="delete" color="primary" text-color="white" />
-                    <span class="q-ml-sm q-mt-sm">Are you sure to delete this category? It will delete all the paperworks associated with this category.</span>
+                    <q-avatar icon="delete" color="primary" text-color="white" size="2rem" /><span class="q-ml-sm text-h6">Confirm deleting</span>
+                    <span class="q-ml-sm q-mt-md">Are you sure to delete this category? It will delete all the paperworks associated with this category.</span>
                   </q-card-section>
-
                   <q-card-actions align="right">
-                    <q-btn flat label="Cancel" color="primary" v-close-popup />
                     <q-btn flat label="Delete" color="negative" @click="onDeleteCategory()" />
+                    <q-btn flat label="Cancel" color="primary" v-close-popup />
                   </q-card-actions>
                 </q-card>
               </q-dialog>
             </div>
             <div class="row justify-end">
-              <q-btn class="q-mr-sm" flat color="primary" label="Cancel" @click="onDialogHide()" />
               <q-btn flat color="primary" type="submit" label="Edit" />
+              <q-btn class="q-mr-sm" flat color="primary" label="Cancel" @click="onDialogHide()" />
             </div>
           </div>
         </q-form>
@@ -51,7 +50,7 @@
 
 <script setup lang="ts">
 import { QInput, useDialogPluginComponent } from 'quasar';
-import { Ref, ref } from 'vue';
+import { ref } from 'vue';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { useUserStore } from 'src/stores/userStore';
 import { computed } from 'vue';
@@ -71,14 +70,16 @@ const props = defineProps<{ category: Category }>();
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 const isDark = computed(() => globalStore.darkTheme);
-const description = ref(props.category.description);
+const note = ref(props.category.note);
 const name = ref(props.category.name);
 const confirmDelete = ref(false);
 async function editCategory() {
   const requestModel: EditCategoryRequestModel = {
     categoryId: props.category.id,
     name: name.value,
-    description: description.value,
+    note: note.value,
+    icon: null,
+    userId: userStore.userInfo.id,
   };
   $q.loading.show({
     message: 'Edit Category...',
@@ -116,7 +117,8 @@ async function onDeleteCategory() {
       type: 'positive',
       message: 'Category deleted successfully!',
     });
-
+    // route to home page
+    $router.push('/');
     await categoryStore.getCategories();
     onDialogOK();
   } catch (err: any) {

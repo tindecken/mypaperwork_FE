@@ -22,8 +22,8 @@
           </div>
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="q-mt-sm row justify-end">
-            <q-btn class="q-mr-sm" flat color="primary" label="Cancel" @click="onDialogHide()" />
             <q-btn flat color="primary" type="submit" label="Create" />
+            <q-btn class="q-mr-sm" flat color="primary" label="Cancel" @click="onDialogHide()" />
           </div>
         </q-form>
       </div>
