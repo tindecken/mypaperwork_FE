@@ -51,6 +51,7 @@
 <script setup lang="ts">
 import { QInput, useDialogPluginComponent } from 'quasar';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { useUserStore } from 'src/stores/userStore';
 import { computed } from 'vue';
@@ -65,6 +66,7 @@ const categoryStore = useCategoryStore();
 const userStore = useUserStore();
 const globalStore = useGlobalStore();
 const $q = useQuasar();
+const router = useRouter();
 
 const props = defineProps<{ category: Category }>();
 defineEmits([...useDialogPluginComponent.emits]);
@@ -118,7 +120,7 @@ async function onDeleteCategory() {
       message: 'Category deleted successfully!',
     });
     // route to home page
-    $router.push('/');
+    router.push('/');
     await categoryStore.getCategories();
     onDialogOK();
   } catch (err: any) {

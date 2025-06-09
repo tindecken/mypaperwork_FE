@@ -1,7 +1,6 @@
 export interface Paperwork {
   id: string;
   name: string;
-  description: string;
   issuedAt: Date;
   price: number;
   priceCurrency: string;
