@@ -228,7 +228,7 @@ async function onAdded(files: any) {
   } else {
     // check if the file size is > 2MB, if so, notify the user and remove the file
     if (
-      files.some((file: File) => file.size > 2000000) // 2MB = 2000000 bytes
+      files.some((file: File) => file.size > 2097152) // 2MB = 2097152 bytes
     ) {
       $q.notify({
         type: 'warning',
