@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { api } from '../boot/axios';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import handleError from 'src/utils/handleError';
-import { useUserStore } from './userStore';
 import { Paperwork } from 'src/Models/Paperwork/PaperworkInterface';
 import handlePaging from 'src/utils/handlePaging';
 import { Paging } from 'src/Models/PagingInterface';
@@ -12,7 +11,6 @@ import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
 import { UpdatePaperworkRequestModel } from 'src/Models/Paperwork/UpdatePaperworkRequestModel';
 import { UpdateCategoriesRequestModel } from 'src/Models/Paperwork/UpdateCategoriesRequestModel';
 
-const userStore = useUserStore();
 const categoryStore = useCategoryStore();
 export const usePaperworkStore = defineStore('paperwork', {
   state: () => {

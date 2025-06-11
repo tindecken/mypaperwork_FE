@@ -2,14 +2,11 @@ import { defineStore } from 'pinia';
 import { api } from '../boot/axios';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import handleError from 'src/utils/handleError';
-import { useUserStore } from './userStore';
 import { Category } from 'src/Models/Category/CategoryInterface';
-import { UpdateCategoriesRequestModel } from 'src/Models/Category/UpdateCategoriesRequestModel';
 import { CreateCategoryRequestModel } from 'src/Models/Category/CreateCategoryRequestModel';
 import { EditCategoryRequestModel } from 'src/Models/Category/EditCategoryRequestModel';
 import { DeleteCategoryRequestModel } from 'src/Models/Category/DeleteCategoryRequestModel';
 
-const userStore = useUserStore();
 export const useCategoryStore = defineStore('category', {
   state: () => {
     return {

@@ -1,8 +1,5 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
-import { useUserStore } from 'src/stores/userStore';
-import { useJwt } from '@vueuse/integrations/useJwt';
-import { UserInfoInterface } from '../Models/UserInfoInterface';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {

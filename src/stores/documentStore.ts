@@ -2,13 +2,10 @@ import { defineStore } from 'pinia';
 import { api } from '../boot/axios';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import handleError from 'src/utils/handleError';
-import { useUserStore } from './userStore';
 import { DownloadAttachmentRequestModel } from 'src/Models/Document/DownloadAttachmentRequestModel';
 import { RemoveAttachmentRequestModel } from 'src/Models/Document/RemoveAttachmentRequestModel';
 import { UploadDocumentsRequestModel } from 'src/Models/Document/UploadDocumentsequestModel';
 import { SetCoverRequestModel } from 'src/Models/Document/SetCoverRequestModel';
-
-const userStore = useUserStore();
 export const useDocumentStore = defineStore('document', {
   state: () => {
     return {};
