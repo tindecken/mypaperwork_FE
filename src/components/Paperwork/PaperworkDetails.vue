@@ -176,7 +176,7 @@ const processPaperworkData = (response: GenericResponseData | undefined) => {
   }
 };
 
-watch(paperworkId, async (newPaperworkId, oldPaperworkId) => {
+watch(paperworkId, async (newPaperworkId) => {
   $q.loading.show({
     message: 'Loading ...',
   });
@@ -269,7 +269,7 @@ async function showImages(currentImage: ImageInterface, images: ImageInterface[]
   const index = images.findIndex((image) => image.id === currentImage.id);
   console.log('imageUrls', imageUrls);
   console.log('index:', index);
-  const $viewer = viewerApi({
+  viewerApi({
     images: imageUrls,
     options: {
       url: 'source',
