@@ -15,7 +15,7 @@ const $q = useQuasar();
 const categoryId = computed(() => $route.params.id as string);
 const paperworkStore = usePaperworkStore();
 // watch works directly on a ref
-watch(categoryId, async (newCategoryId, oldCategoryId) => {
+watch(categoryId, async (newCategoryId) => {
   $q.loading.show({
     message: 'Loading ...',
   });
