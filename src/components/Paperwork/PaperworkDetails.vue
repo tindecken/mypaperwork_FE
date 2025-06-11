@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-    <div class="row q-mt-md">
+    <div class="row q-mt-md title">
       <span class="self-center">Categories:</span>
       <q-chip outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
     </div>
