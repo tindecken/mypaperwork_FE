@@ -55,11 +55,21 @@ const isPwd = ref(true);
 const userStore = useUserStore();
 
 const loginWithGoogle = async () => {
-  await authClient.signIn.social({
-    provider: 'google',
-    callbackURL: process.env.GOOGLE_CALLBACK_URL,
-    errorCallbackURL: process.env.GOOGLE_ERROR_CALLBACK_URL,
-  });
+  await authClient.signIn.social(
+    {
+      provider: 'google',
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      errorCallbackURL: process.env.GOOGLE_ERROR_CALLBACK_URL,
+    },
+    {
+      onSuccess: () => {
+        console.log('Google login successful');
+      },
+      onError: (error) => {
+        console.error('Google login failed:', error);
+      },
+    }
+  );
 };
 const onClickLogin = async () => {
   $q.loading.show({

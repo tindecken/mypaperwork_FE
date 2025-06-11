@@ -26,7 +26,7 @@
     "titleBar.inactiveForeground": "#15202b99"
   },
   "peacock.color": "#f9e64f",
-  "oxc.enable": false,
+  "oxc.enable": true,
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   }
