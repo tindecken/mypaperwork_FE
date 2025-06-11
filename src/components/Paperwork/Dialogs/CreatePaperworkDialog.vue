@@ -139,12 +139,13 @@ async function createPaperwork() {
   paperworkStore
     .createPaperwork(requestModel)
     .then((response: GenericResponseData | undefined) => {
+      console.log('Created paperwork:', response?.data);
       $q.loading.hide();
       $q.notify({
         type: 'positive',
         message: response?.message,
       });
-      onDialogOK();
+      onDialogOK(response?.data);
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();

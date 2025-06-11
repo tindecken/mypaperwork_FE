@@ -34,7 +34,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Dark } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useGlobalStore } from 'src/stores/globalStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
@@ -54,7 +53,6 @@ const paperworkStore = usePaperworkStore();
 const categories = computed(() => categoryStore.categories);
 const $router = useRouter();
 const expandedCategories = ref(true);
-const globalStore = useGlobalStore();
 
 function onEditCategory(category: Category) {
   $q.dialog({
@@ -80,8 +78,8 @@ function onCreatePaperwork() {
   $q.dialog({
     component: CreatePaperworkDialog,
   })
-    .onOk(async () => {
-      // TODO
+    .onOk(async (paperworkId: string) => {
+      $router.push(`/paperwork-details/${paperworkId}`);
     })
     .onCancel(async () => {
       // TODO

@@ -87,11 +87,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted, computed } from 'vue';
+import { ref, Ref, onMounted, computed, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
-import { useUserStore } from 'src/stores/userStore';
 import { useDocumentStore } from 'src/stores/documentStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
@@ -110,7 +109,6 @@ import { getImageUrl } from 'src/utils/getImageUrl';
 
 const $route = useRoute();
 const $router = useRouter();
-const userStore = useUserStore();
 const documentStore = useDocumentStore();
 const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
@@ -139,6 +137,62 @@ const columns = [
   { name: 'fileSize', align: 'right' as const, label: 'Size', field: 'fileSize', sortable: true, format: (val: number) => `${prettyBytes(val)}`, style: 'width: 50px' },
   { name: 'actions', label: 'Actions', field: 'actions', align: 'left' as const },
 ];
+// watch works directly on a ref
+const paperworkId = computed(() => $route.params.id as string);
+// Function to process paperwork data from API response
+const processPaperworkData = (response: GenericResponseData | undefined) => {
+  console.log('Fetched paperwork:', response?.data);
+  $q.loading.hide();
+  paperwork.value = response?.data as PaperworkDetails;
+  name.value = paperwork.value?.name;
+  note.value = paperwork.value?.note || '';
+  createdAt.value = paperwork.value?.createdAt?.toString();
+  issueAt.value = paperwork.value?.issuedAt?.toString();
+  categories.value = paperwork.value?.categories;
+  attachments.value = paperwork.value?.attachments || [];
+  images.value = paperwork.value?.images || [];
+  imagesUrls.value = images.value.map((image) => getImageUrl(image.imageBase64!));
+
+  // Handle customFields - could be a JSON string or already an object
+  if (paperwork.value?.customFields) {
+    try {
+      // Check if it's already an object
+      if (typeof paperwork.value.customFields === 'object') {
+        customFields.value = paperwork.value.customFields;
+      } else if (typeof paperwork.value.customFields === 'string') {
+        // If it's a string, try to parse it as JSON
+        customFields.value = JSON.parse(paperwork.value.customFields);
+      } else {
+        console.warn('customFields has unexpected type:', typeof paperwork.value.customFields);
+        customFields.value = [];
+      }
+      console.log('Parsed customFields:', customFields.value);
+    } catch (error) {
+      console.error('Error handling customFields:', error);
+      customFields.value = [];
+    }
+  } else {
+    customFields.value = [];
+  }
+};
+
+watch(paperworkId, async (newPaperworkId, oldPaperworkId) => {
+  $q.loading.show({
+    message: 'Loading ...',
+  });
+  paperworkStore
+    .getPaperworksById(newPaperworkId as string)
+    .then((response: GenericResponseData | undefined) => {
+      processPaperworkData(response);
+    })
+    .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
+    });
+});
 onMounted(() => {
   $q.loading.show({
     message: 'Getting paperwork details...',
@@ -146,39 +200,7 @@ onMounted(() => {
   paperworkStore
     .getPaperworksById($route.params.id as string)
     .then((response: GenericResponseData | undefined) => {
-      console.log('Fetched paperwork:', response?.data);
-      $q.loading.hide();
-      paperwork.value = response?.data as PaperworkDetails;
-      name.value = paperwork.value?.name;
-      note.value = paperwork.value?.note || '';
-      createdAt.value = paperwork.value?.createdAt?.toString();
-      issueAt.value = paperwork.value?.issuedAt?.toString();
-      categories.value = paperwork.value?.categories;
-      attachments.value = paperwork.value?.attachments || [];
-      images.value = paperwork.value?.images || [];
-      imagesUrls.value = images.value.map((image) => getImageUrl(image.imageBase64!));
-
-      // Handle customFields - could be a JSON string or already an object
-      if (paperwork.value?.customFields) {
-        try {
-          // Check if it's already an object
-          if (typeof paperwork.value.customFields === 'object') {
-            customFields.value = paperwork.value.customFields;
-          } else if (typeof paperwork.value.customFields === 'string') {
-            // If it's a string, try to parse it as JSON
-            customFields.value = JSON.parse(paperwork.value.customFields);
-          } else {
-            console.warn('customFields has unexpected type:', typeof paperwork.value.customFields);
-            customFields.value = [];
-          }
-          console.log('Parsed customFields:', customFields.value);
-        } catch (error) {
-          console.error('Error handling customFields:', error);
-          customFields.value = [];
-        }
-      } else {
-        customFields.value = [];
-      }
+      processPaperworkData(response);
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();

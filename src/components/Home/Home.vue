@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useQuasar } from 'quasar';
