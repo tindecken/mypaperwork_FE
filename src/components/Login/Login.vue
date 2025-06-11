@@ -1,21 +1,39 @@
 <template>
-  <q-layout view="hHh LpR fFf">
-    <q-page-container class="row justify-center">
-      <div class="col-auto">
-        <q-form @submit="onClickLogin" @reset="onReset" style="min-width: 400px" class="q-mt-xl">
-          <q-input filled v-model="email" label="Email" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Email is required']" />
-          <q-input filled type="password" v-model="password" label="Your password" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Password is required']" />
-          <div>
-            <q-btn label="Login" type="submit" color="primary" />
-            <q-separator class="q-mt-md q-mb-xs"></q-separator>
-            <q-btn label="Login with Google Account" @click="loginWithGoogle"></q-btn>
-            <q-separator class="q-mt-md q-mb-xs"></q-separator>
-            <span class="text-subtitle1">Don't have account? <a href="#/register">Register one.</a></span>
+  <q-layout view="hHh LpR fFf" class="login-layout">
+    <q-page-container class="login-page-container">
+      <div class="col-auto login-container" style="max-width: 400px; width: 100%; padding: 20px">
+        <q-form @submit="onClickLogin" @reset="onReset" class="q-gutter-y-md">
+          <q-input outlined v-model="email" label="Email address" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Email is required']" />
+
+          <q-input outlined v-model="password" label="Password" :type="isPwd ? 'password' : 'text'" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Password is required']">
+            <template v-slot:append>
+              <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
+            </template>
+          </q-input>
+
+          <div class="text-left">
+            <a href="#/forgot-password" class="text-primary">Forgot password?</a>
           </div>
+
+          <q-btn label="Continue" type="submit" outline class="full-width q-py-sm" unelevated />
+
+          <div class="text-left q-my-md">Don't have an account? <a href="#/signup" class="text-primary">Sign up</a></div>
+
+          <div class="row items-center q-my-md">
+            <div class="col"><q-separator /></div>
+            <div class="col-auto q-px-sm">OR</div>
+            <div class="col"><q-separator /></div>
+          </div>
+
+          <q-btn outline class="full-width q-py-sm" @click="loginWithGoogle">
+            <div class="row items-center no-wrap">
+              <q-icon name="mdi-google" size="18px" class="q-mr-sm" />
+              <div>Continue with Google</div>
+            </div>
+          </q-btn>
         </q-form>
       </div>
     </q-page-container>
-    <q-footer reveal bordered class="bg-primary text-white" style="height: 24px"> Tindecken @ 2023 - Quasar: {{ $q.version }} </q-footer>
   </q-layout>
 </template>
 
@@ -33,6 +51,7 @@ const $route = useRoute();
 const $router = useRouter();
 const email = ref('');
 const password = ref('');
+const isPwd = ref(true);
 const userStore = useUserStore();
 
 const loginWithGoogle = async () => {
@@ -73,3 +92,16 @@ function onReset() {
   password.value = '';
 }
 </script>
+
+<style scoped>
+.login-layout {
+  height: 100vh;
+}
+
+.login-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+</style>

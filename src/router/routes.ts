@@ -64,8 +64,8 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/register',
-    component: () => import('components/Register/Register.vue'),
+    path: '/signup',
+    component: () => import('components/Signup/Signup.vue'),
     meta: {
       requiresUnAuth: true,
     },

@@ -2,15 +2,15 @@
   <q-layout view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-        <q-toolbar-title>Register</q-toolbar-title>
+        <q-toolbar-title>Sign up</q-toolbar-title>
       </q-toolbar>
     </q-header>
 
     <q-page-container>
       <q-page padding class="row justify-center items-center">
-        <q-card class="register-card">
+        <q-card class="signup-card">
           <q-card-section class="text-center">
-            <h4 class="text-h4 q-mb-md">Register</h4>
+            <h4 class="text-h4 q-mb-md">Sign up</h4>
           </q-card-section>
 
           <q-card-section>
@@ -52,7 +52,7 @@
               </q-input>
 
               <div class="row justify-center q-mt-md">
-                <q-btn type="submit" color="primary" label="Register" :loading="loading" class="full-width" />
+                <q-btn type="submit" color="primary" label="Sign up" :loading="loading" class="full-width" />
               </div>
             </q-form>
           </q-card-section>
@@ -102,7 +102,7 @@ const validateEmail = (email: string): boolean => {
 const handleSubmit = async () => {
   try {
     loading.value = true;
-    // Here you would typically make an API call to register the user
+    // Here you would typically make an API call to signup the user
     console.log('Form submitted:', formData.value);
     userStore
       .register(formData.value)
@@ -112,7 +112,7 @@ const handleSubmit = async () => {
         void $router.replace(redirectUrl);
         $q.notify({
           type: 'positive',
-          message: 'Registration successful!',
+          message: 'Sign up successful!',
         });
       })
       .catch((err: GenericResponseData | any) => {
@@ -125,7 +125,7 @@ const handleSubmit = async () => {
   } catch (error) {
     $q.notify({
       type: 'negative',
-      message: 'Registration failed. Please try again.',
+      message: 'Signup failed. Please try again.',
     });
   } finally {
     loading.value = false;
@@ -134,7 +134,7 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-.register-card {
+.signup-card {
   width: 100%;
   max-width: 400px;
 }
