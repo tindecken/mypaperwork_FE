@@ -59,7 +59,6 @@ const loginWithGoogle = async () => {
     {
       provider: 'google',
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
-      errorCallbackURL: process.env.GOOGLE_ERROR_CALLBACK_URL,
     },
     {
       onSuccess: () => {
