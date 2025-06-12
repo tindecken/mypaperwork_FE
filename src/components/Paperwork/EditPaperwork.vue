@@ -319,9 +319,10 @@ function savePaperwork() {
     customFields: (() => {
       // Filter out empty fields
       const filteredFields = customFields.value.filter((field) => field.key.trim() !== '' && field.value.trim() !== '');
-      return filteredFields; // Return the filtered array directly
+      return JSON.stringify(filteredFields); // Return the filtered array directly
     })(),
   };
+  console.log('updateRequest', updateRequest);
   paperworkStore
     .updatePaperwork(updateRequest)
     .then(() => {

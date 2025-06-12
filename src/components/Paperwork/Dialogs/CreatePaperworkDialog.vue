@@ -46,7 +46,7 @@
                   <span class="text-subtitle2">Custom Fields</span>
                 </div>
                 <div class="col-auto">
-                  <q-btn flat dense icon="add" color="primary" label="Add custom fields" @click="addCustomField" />
+                  <q-btn flat dense icon="add" label="Add custom fields" @click="addCustomField" />
                 </div>
               </div>
               <!-- List of custom fields -->
@@ -58,7 +58,7 @@
                   <q-input class="full-width" outlined dense v-model="field.value" label="Value (max 256 chars)" :rules="[(val) => val.length <= 256 || 'Maximum 256 characters']" />
                 </div>
                 <div class="col-2 flex items-start pt-3">
-                  <q-btn flat dense round icon="delete" color="negative" @click="removeCustomField(index)" />
+                  <q-btn flat dense round icon="sym_o_delete" @click="removeCustomField(index)" />
                 </div>
               </div>
             </div>

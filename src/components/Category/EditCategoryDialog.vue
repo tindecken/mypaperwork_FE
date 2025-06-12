@@ -23,7 +23,7 @@
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="q-mt-sm row justify-between">
             <div>
-              <q-btn class="q-mr-sm" flat color="negative" label="Delete" @click="confirmDelete = true" />
+              <q-btn class="q-mr-sm" flat label="Delete" @click="confirmDelete = true" />
               <q-dialog v-model="confirmDelete" persistent>
                 <q-card>
                   <q-card-section class="row items-center">
@@ -31,15 +31,15 @@
                     <span class="q-ml-sm q-mt-md">Are you sure to delete this category? It will delete all the paperworks associated with this category.</span>
                   </q-card-section>
                   <q-card-actions align="right">
-                    <q-btn flat label="Delete" color="negative" @click="onDeleteCategory()" />
-                    <q-btn flat label="Cancel" color="primary" v-close-popup />
+                    <q-btn flat label="Delete" @click="onDeleteCategory()" />
+                    <q-btn flat label="Cancel" v-close-popup />
                   </q-card-actions>
                 </q-card>
               </q-dialog>
             </div>
             <div class="row justify-end">
-              <q-btn flat color="primary" type="submit" label="Edit" />
-              <q-btn class="q-mr-sm" flat color="primary" label="Cancel" @click="onDialogHide()" />
+              <q-btn flat type="submit" label="Edit" />
+              <q-btn class="q-mr-sm" flat label="Cancel" @click="onDialogHide()" />
             </div>
           </div>
         </q-form>
