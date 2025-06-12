@@ -72,7 +72,6 @@ function openPaperwork(pw: Paperwork) {
   $router.push(`/paperwork-details/${pw.id}`);
 }
 async function updatePaperworks() {
-  console.log('updatePaperworks');
   $q.loading.show();
 
   const paging: Paging = {
@@ -80,7 +79,6 @@ async function updatePaperworks() {
     pageSize: pageSize.value,
     filterValue: searchText.value,
   };
-  console.log('props.categoryId', props.categoryId);
   if (props.categoryId) {
     paperworkStore
       .getPaperworksByCategoryId(props.categoryId, paging)

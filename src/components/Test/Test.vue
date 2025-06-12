@@ -25,7 +25,7 @@ const onCallAPI = async () => {
 const onCallAPIGetPaperworkById = async () => {
   paperworkStore
     .getPaperworksById('01J6DZDNMWTNMK97HXKWKPSNY3')
-    .then((response) => {})
+    .then(() => {})
     .catch((err: GenericResponseData | any) => {
       $q.notify({
         type: 'negative',

@@ -28,7 +28,6 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach(async (to, from, next) => {
     const { data: session } = await authClient.getSession();
-    console.log('session', session);
     if (to.meta.requiresAuth && !session) {
       next({ path: 'login' });
     } else if (to.meta.requiresUnAuth && session) {

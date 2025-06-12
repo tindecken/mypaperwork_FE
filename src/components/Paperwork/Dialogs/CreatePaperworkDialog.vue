@@ -21,7 +21,7 @@
             <q-input type="textarea" class="col-grow" outlined dense v-model="note" label="Note (max 2000 chars)" :rules="[(val) => val.length <= 2000 || 'Maximum 2000 chars']"> </q-input>
           </div>
           <div class="row q-mt-md q-col-gutter-sm">
-            <q-select class="col-6" outlined v-model="selectedCategory" :options="categories" option-label="name" option-value="id" label="Category" @update:model-value="onSelectedCategory($event)" />
+            <q-select class="col-6" outlined v-model="selectedCategory" :options="categories" option-label="name" option-value="id" label="Category" @update:model-value="onSelectedCategory()" />
             <q-input class="col-6" outlined v-model="issueAt" label="Issue Date">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
@@ -175,7 +175,7 @@ async function onRejected(rejectedEntries: any) {
     }
   }
 }
-async function onSelectedCategory(cat: Category) {}
+async function onSelectedCategory() {}
 async function addCustomField() {
   customFields.value.push({
     key: '',

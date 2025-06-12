@@ -141,7 +141,6 @@ const columns = [
 const paperworkId = computed(() => $route.params.id as string);
 // Function to process paperwork data from API response
 const processPaperworkData = (response: GenericResponseData | undefined) => {
-  console.log('Fetched paperwork:', response?.data);
   $q.loading.hide();
   paperwork.value = response?.data as PaperworkDetails;
   name.value = paperwork.value?.name;
@@ -166,7 +165,6 @@ const processPaperworkData = (response: GenericResponseData | undefined) => {
         console.warn('customFields has unexpected type:', typeof paperwork.value.customFields);
         customFields.value = [];
       }
-      console.log('Parsed customFields:', customFields.value);
     } catch (error) {
       console.error('Error handling customFields:', error);
       customFields.value = [];
@@ -222,8 +220,6 @@ async function onDownloadAttachment(attachmentId: string, attachmentFileName: st
   documentStore
     .downloadAttachment(body)
     .then((response: GenericResponseData | undefined) => {
-      console.log('body:', body);
-      console.log('Downloaded attachment:', response);
       if (response?.data) {
         $q.loading.hide();
         const uint8Array = new Uint8Array(Object.values(response.data!));
@@ -267,8 +263,6 @@ async function showImages(currentImage: ImageInterface, images: ImageInterface[]
     alt: image.fileName,
   }));
   const index = images.findIndex((image) => image.id === currentImage.id);
-  console.log('imageUrls', imageUrls);
-  console.log('index:', index);
   viewerApi({
     images: imageUrls,
     options: {

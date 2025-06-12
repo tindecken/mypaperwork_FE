@@ -21,7 +21,6 @@ export const useCategoryStore = defineStore('category', {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('responseData get categories', responseData);
         this.$patch({
           categories: responseData.data as Category[],
         });
@@ -38,7 +37,6 @@ export const useCategoryStore = defineStore('category', {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('responseData create category', responseData);
         return responseData;
       } catch (error: any) {
         handleError(error);
@@ -50,7 +48,6 @@ export const useCategoryStore = defineStore('category', {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('responseData edit category', responseData);
         return responseData;
       } catch (error: any) {
         handleError(error);
@@ -63,7 +60,6 @@ export const useCategoryStore = defineStore('category', {
           data: body,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('responseData delete category', responseData);
         return responseData;
       } catch (error: any) {
         handleError(error);

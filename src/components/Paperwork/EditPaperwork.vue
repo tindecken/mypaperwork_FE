@@ -286,7 +286,7 @@ async function showImages(currentImage: ImageInterface, images: ImageInterface[]
     alt: image.fileName,
   }));
   const index = images.findIndex((image) => image.id === currentImage.id);
-  const $viewer = viewerApi({
+  viewerApi({
     images: imageUrls,
     options: {
       url: 'source',
@@ -319,7 +319,7 @@ function savePaperwork() {
     customFields: (() => {
       // Filter out empty fields
       const filteredFields = customFields.value.filter((field) => field.key.trim() !== '' && field.value.trim() !== '');
-      return filteredFields.length > 0 ? JSON.stringify(filteredFields) : null;
+      return filteredFields; // Return the filtered array directly
     })(),
   };
   paperworkStore

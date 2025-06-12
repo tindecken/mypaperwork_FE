@@ -71,7 +71,6 @@ async function onRejected(rejectedEntries: any) {
   if (rejectedEntries.length > 0) {
     console.error('Rejected files:', rejectedEntries);
     if (rejectedEntries[0].failedPropValidation === 'duplicate') {
-      console.log('uploader.value', uploader.value?.files);
       // check if there is a duplicate file name in the uploader.value.files array, if so, notify the user
       if (checkIfDuplicateExists(uploader.value?.files)) {
         $q.notify({
@@ -115,19 +114,16 @@ async function addDocuments() {
     });
 }
 async function onAdded(files: any) {
-  console.log('Files added:', files);
   // loop for all files and check if the file type is not image type, check the size, if the size is > 2MB, notify the user and remove the file
   if (
     files.some((file: File) => {
       // get file type by file.name
       const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1);
-      console.log('File extension:', fileExtension);
       return IMAGE_FILE_TYPE.includes(fileExtension.toLowerCase());
     })
   ) {
     const convertedHEICFiles = await Promise.all(
       files.map(async (file: File) => {
-        console.log('Converting HEIC to JPEG:', file.name);
         if (file.name.toLowerCase().endsWith('.heic')) {
           $q.loading.show({
             message: 'Converting HEIC to JPEG...',

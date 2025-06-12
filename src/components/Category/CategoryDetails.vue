@@ -21,8 +21,7 @@ watch(categoryId, async (newCategoryId) => {
   });
   paperworkStore
     .getPaperworksByCategoryId(newCategoryId as string)
-    .then((response: GenericResponseData | undefined) => {
-      console.log('Fetched paperwork:', response?.data);
+    .then(() => {
       $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {
@@ -40,8 +39,7 @@ onMounted(() => {
   });
   paperworkStore
     .getPaperworksByCategoryId($route.params.id as string)
-    .then((response: GenericResponseData | undefined) => {
-      console.log('Fetched paperwork:', response?.data);
+    .then(() => {
       $q.loading.hide();
     })
     .catch((err: GenericResponseData | any) => {

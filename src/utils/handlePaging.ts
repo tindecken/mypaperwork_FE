@@ -1,7 +1,6 @@
 import { Paging } from 'src/Models/PagingInterface';
 
 export default function handlePaging(paging?: Paging): string {
-  console.log('Handling paging:', paging);
   let query = '?';
   // Pagesize
   if (paging && paging.pageNumber) {

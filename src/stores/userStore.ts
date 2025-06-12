@@ -31,9 +31,7 @@ export const useUserStore = defineStore('user', {
         if (response.error) {
           throw new Error(response.error.message || 'Authentication failed');
         }
-        console.log('response: ', response);
         const userResponse = response.data?.user;
-        console.log('userResponse', userResponse);
         if (!userResponse) {
           throw new Error('Invalid response from authentication server');
         }
@@ -79,9 +77,7 @@ export const useUserStore = defineStore('user', {
         if (response.error) {
           throw new Error(response.error.message || 'Register failed');
         }
-        console.log('response: ', response);
         const userInfo = response.data?.user;
-        console.log('userInfo', userInfo);
         if (!userInfo) {
           throw new Error('Invalid response from registration server');
         }

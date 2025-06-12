@@ -48,7 +48,6 @@ export const usePaperworkStore = defineStore('paperwork', {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('responseData.data', responseData.data);
         this.$patch({
           paperworks: responseData.data as Paperwork[],
           totalRecords: responseData.totalRecords,
@@ -130,7 +129,6 @@ export const usePaperworkStore = defineStore('paperwork', {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
-        console.log('responseData', responseData);
         await this.getPaperworks();
         return responseData;
       } catch (error: any) {
