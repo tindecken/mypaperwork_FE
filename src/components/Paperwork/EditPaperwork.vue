@@ -13,7 +13,7 @@
                 <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                   <q-date v-model="issueAt" today-btn mask="YYYY-MM-DD">
                     <div class="row items-center justify-end">
-                      <q-btn flat v-close-popup label="Close" color="primary" />
+                      <q-btn flat v-close-popup label="Close" />
                     </div>
                   </q-date>
                 </q-popup-proxy>
@@ -39,19 +39,19 @@
                 <q-input outlined v-model="field.value" label="Value" dense :rules="[(val) => val.length <= 256 || 'Maximum 256 characters']" class="full-width" />
               </div>
               <div class="col-2 items-start pt-3">
-                <q-btn flat round color="negative" icon="delete" @click="removeCustomField(index)" size="md" />
+                <q-btn flat round icon="sym_o_delete" @click="removeCustomField(index)" size="md" />
               </div>
             </div>
             <div class="row q-mt-md">
-              <q-btn outline color="primary" icon="add" label="Add" @click="addCustomField()" />
+              <q-btn outline icon="add" label="Add" @click="addCustomField()" />
             </div>
           </div>
         </div>
 
         <div class="row justify-end q-mt-sm">
           <div class="col-auto">
-            <q-btn flat outline color="primary" label="Save" type="submit" />
-            <q-btn flat outline class="q-ml-sm" color="primary" label="Cancel" @click="cancel()" />
+            <q-btn flat outline label="Save" type="submit" />
+            <q-btn flat outline class="q-ml-sm" label="Cancel" @click="cancel()" />
           </div>
         </div>
       </q-form>
@@ -59,16 +59,16 @@
     <div class="header q-pa-md q-mt-md q-mb-md">
       <div class="row">
         <span class="row self-center title">Categories</span>
-        <q-btn flat class="q-ml-md" color="primary" label="Update" @click="updateCategories()" />
+        <q-btn flat outline class="q-ml-md" label="Update" @click="updateCategories()" />
       </div>
-      <q-chip class="row q-mt-md" outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
+      <q-chip class="row q-mt-md" outlined v-for="cat in categories" :key="cat.id" outline icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
     </div>
     <div class="header q-pa-md q-mt-md q-mb-md">
       <div class="row">
         <span class="row title"
           >Documents
-          <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length + images.length" />
-          <q-btn flat class="q-ml-md" outline icon="sym_o_attach_file_add" color="primary" label="Add" @click="addDocuments()" />
+          <q-badge class="q-ml-xs badge" color="primary" :label="attachments.length + images.length" />
+          <q-btn flat class="q-ml-md" outline icon="sym_o_attach_file_add" label="Add" @click="addDocuments()" />
         </span>
       </div>
       <q-table dense :rows="attachments" :columns="columns" row-key="id" no-data-label="No attachments" flat bordered class="q-mt-md" separator="cell" v-if="attachments.length > 0">
@@ -103,10 +103,10 @@
         >
           <q-img :src="getImageUrl(image.imageBase64!)" @click="showImages(image, images)" class="row images self-center">
             <q-tooltip style="font-size: small">{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
-            <q-btn v-if="image.isCover" size="sm" flat round icon="star" color="primary" style="top: 1px; left: 1px">
+            <q-btn v-if="image.isCover" size="sm" flat round icon="star" style="top: 1px; left: 1px">
               <q-tooltip style="font-size: small">Cover</q-tooltip>
             </q-btn>
-            <q-btn size="sm" flat round icon="more_vert" color="primary" class="absolute all-pointer-events" style="top: 1px; right: 1px" @click.stop>
+            <q-btn size="sm" flat round icon="more_vert" class="absolute all-pointer-events" style="top: 1px; right: 1px" @click.stop>
               <q-menu>
                 <q-list style="min-width: 100px" dense>
                   <q-item clickable v-close-popup @click="setCover(image.id)">

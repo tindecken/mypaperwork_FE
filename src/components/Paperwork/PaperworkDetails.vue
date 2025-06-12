@@ -3,8 +3,8 @@
     <div class="row justify-end">
       <span class="col title">Infos</span>
       <div class="col-auto">
-        <q-btn flat color="primary" label="Edit" @click="editPaperwork()" />
-        <q-btn flat class="q-ml-sm" color="primary" label="Back" @click="back()" />
+        <q-btn flat label="Edit" @click="editPaperwork()" />
+        <q-btn flat class="q-ml-sm" label="Back" @click="back()" />
       </div>
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
@@ -33,11 +33,11 @@
     </div>
     <div class="row q-mt-md title">
       <span class="self-center">Categories:</span>
-      <q-chip outlined v-for="cat in categories" :key="cat.id" outline color="primary" text-color="white" icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
+      <q-chip outlined v-for="cat in categories" :key="cat.id" outline icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
     </div>
     <span class="row q-mt-md title"
       >Attachments
-      <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="attachments.length" />
+      <q-badge class="q-ml-xs badge" color="primary" :label="attachments.length" />
     </span>
     <q-table dense :rows="attachments" :columns="columns" row-key="id" no-data-label="No attachments" flat bordered class="q-mt-md" separator="cell" v-if="attachments.length > 0">
       <template v-slot:body="props">
@@ -58,7 +58,7 @@
     </q-table>
     <div class="row q-mt-md">
       <span class="self-center title">Images </span>
-      <q-badge class="q-ml-xs badge" color="primary" text-color="black" :label="images.length" />
+      <q-badge class="q-ml-xs badge" color="primary" :label="images.length" />
     </div>
     <div class="row q-mt-md q-col-gutter-lg">
       <div
@@ -74,7 +74,7 @@
           <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 2px; right: 2px">
             <q-tooltip>{{ image.fileName }} - {{ prettyBytes(image.fileSize) }} </q-tooltip>
           </q-icon>
-          <q-btn flat round icon="star" v-if="image.isCover" class="absolute all-pointer-events" size="sm" color="primary" style="top: 2px; left: 2px">
+          <q-btn flat round icon="star" v-if="image.isCover" class="absolute all-pointer-events" size="sm" style="top: 2px; left: 2px">
             <q-tooltip style="font-size: small">Cover</q-tooltip>
           </q-btn>
         </q-img>
