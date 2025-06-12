@@ -17,15 +17,12 @@ const paperworkStore = usePaperworkStore();
 const categoryStore = useCategoryStore();
 const router = useRouter();
 onMounted(async () => {
-  console.log('Logout component mounted');
   try {
     await authClient.signOut();
-    console.log('Logout successfully');
     // reset all stores
     userStore.$reset();
     paperworkStore.$reset();
     categoryStore.$reset();
-    console.log('Logout successfully 2');
     router.push('/login');
   } catch (error) {
     console.error('Error during logout:', error);

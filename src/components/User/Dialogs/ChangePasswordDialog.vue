@@ -76,14 +76,12 @@ const $route = useRoute();
 const $router = useRouter();
 
 function changePassword() {
-  console.log('changePassword');
   const changePasswordRequestData = {
-    userId: userStore.userInfo.userId,
+    userId: userStore.userInfo.id,
     currentPassword: currentPassword.value,
     newPassword: newPassword.value,
     confirmNewPassword: confirmPassword.value,
   } as ChangePasswordRequestModel;
-  console.log('changePasswordRequestData', changePasswordRequestData);
   userStore
     .changePassword(changePasswordRequestData)
     .then((response: GenericResponseData | undefined) => {

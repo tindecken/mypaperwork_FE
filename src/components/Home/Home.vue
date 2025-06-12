@@ -72,11 +72,8 @@ onMounted(async () => {
   try {
     const session = await authClient.getSession();
     if (session && session.data) {
-      console.log('Found existing session:', session);
-
       // Extract user info from the session
       const userResponse = session.data.user;
-      console.log('User info from session:', userResponse);
       const userInfo: UserInfoInterface = {
         email: userResponse.email,
         name: userResponse.name,

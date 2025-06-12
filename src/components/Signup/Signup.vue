@@ -103,11 +103,9 @@ const handleSubmit = async () => {
   try {
     loading.value = true;
     // Here you would typically make an API call to signup the user
-    console.log('Form submitted:', formData.value);
     userStore
       .register(formData.value)
       .then((res: GenericResponseData | undefined) => {
-        console.log('res', res);
         const redirectUrl = `/${$route.query.redirect || 'home'}`;
         void $router.replace(redirectUrl);
         $q.notify({

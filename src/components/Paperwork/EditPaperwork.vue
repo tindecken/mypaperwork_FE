@@ -195,7 +195,6 @@ onMounted(() => {
   paperworkStore
     .getPaperworksById($route.params.id as string)
     .then((response: GenericResponseData | undefined) => {
-      console.log('Fetched paperwork:', response?.data);
       paperwork.value = response?.data as PaperworkDetails;
       name.value = paperwork.value?.name;
       note.value = paperwork.value?.note || '';
@@ -219,7 +218,6 @@ onMounted(() => {
             console.warn('customFields has unexpected type:', typeof paperwork.value.customFields);
             customFields.value = [];
           }
-          console.log('Parsed customFields:', customFields.value);
         } catch (error) {
           console.error('Error handling customFields:', error);
           customFields.value = [];
@@ -238,7 +236,6 @@ onMounted(() => {
     });
 });
 async function onDownloadAttachment(attachmentId: string, attachmentFileName: string) {
-  console.log('paperworkId', $route.params.id);
   const body: DownloadAttachmentRequestModel = {
     paperworkId: $route.params.id as string,
     documentId: attachmentId,
@@ -289,8 +286,6 @@ async function showImages(currentImage: ImageInterface, images: ImageInterface[]
     alt: image.fileName,
   }));
   const index = images.findIndex((image) => image.id === currentImage.id);
-  console.log('imageUrls', imageUrls);
-  console.log('index:', index);
   const $viewer = viewerApi({
     images: imageUrls,
     options: {
@@ -361,7 +356,6 @@ function onRemoveAttachment(attachmentId: string) {
     component: ConfirmDeleteAttachmentDialog,
   })
     .onOk(async () => {
-      console.log('Removing attachmentId:', attachmentId);
       const request: RemoveAttachmentRequestModel = {
         paperworkId: $route.params.id as string,
         documentId: attachmentId,
