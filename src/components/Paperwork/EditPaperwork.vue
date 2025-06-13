@@ -319,6 +319,9 @@ function savePaperwork() {
     customFields: (() => {
       // Filter out empty fields
       const filteredFields = customFields.value.filter((field) => field.key.trim() !== '' && field.value.trim() !== '');
+      if (filteredFields.length === 0) {
+        return null;
+      }
       return JSON.stringify(filteredFields); // Return the filtered array directly
     })(),
   };
