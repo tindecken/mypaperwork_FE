@@ -1,5 +1,5 @@
 export interface GenericResponseData {
-  data?: object;
+  data?: any;
   error?: object;
   message: string;
   totalRecords?: number;

@@ -58,7 +58,7 @@ const loginWithGoogle = async () => {
   await authClient.signIn.social(
     {
       provider: 'google',
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      callbackURL: process.env.BASEURL,
     },
     {
       onSuccess: () => {

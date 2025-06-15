@@ -5,6 +5,8 @@ import handleError from 'src/utils/handleError';
 import { UserInfoInterface } from 'src/Models/UserInfoInterface';
 import { authClient } from 'src/utils/auth-client';
 import { RegisterRequestModel } from 'src/Models/Authentication/RegisterRequestModel';
+import { api } from 'src/boot/axios';
+import { ChangePasswordRequestModel } from 'src/Models/User/ChangePasswordRequestModel';
 
 export const useUserStore = defineStore('user', {
   state: () => {
@@ -14,6 +16,7 @@ export const useUserStore = defineStore('user', {
         name: '',
         id: '',
         role: '',
+        isExistingPassword: false,
       } as UserInfoInterface,
     };
   },
@@ -42,6 +45,7 @@ export const useUserStore = defineStore('user', {
           name: userResponse.name,
           id: userResponse.id,
           role: null, // Set default value since role doesn't exist in the response
+          isExistingPassword: true,
         };
 
         this.$patch({
@@ -87,6 +91,7 @@ export const useUserStore = defineStore('user', {
             name: userInfo.name,
             id: userInfo.id,
             role: '',
+            isExistingPassword: false
           },
         });
         // Return a GenericResponseData object for consistency
@@ -103,5 +108,29 @@ export const useUserStore = defineStore('user', {
         };
       }
     },
+    async checkexistingpassword() {
+      try {
+        const axiosResponse = await api.get('/users/checkexistingpassword', {
+          withCredentials: true,
+        })
+        const responseData = (await axiosResponse.data) as GenericResponseData;
+        // Safely extract login method from response data
+        this.userInfo.isExistingPassword = responseData.data as boolean;
+        return responseData;
+      } catch (error: any) {
+        handleError(error);
+      }
+    },
+    async changePassword(model: ChangePasswordRequestModel) {
+      try {
+        await authClient.changePassword({
+          currentPassword: model.currentPassword,
+          newPassword: model.newPassword,
+          revokeOtherSessions: true, // revoke all other sessions the user is signed into
+        });
+      } catch (error: any) {
+        handleError(error);
+      }
+    }
   },
 });

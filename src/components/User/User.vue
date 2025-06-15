@@ -2,9 +2,9 @@
   <q-btn flat :label="userStore.userInfo.name">
     <q-menu>
       <q-list style="min-width: 100px">
-        <q-item clickable v-close-popup @click="changePassword()">
+        <q-item clickable v-close-popup @click="password()">
           <q-item-section>
-            <span><q-icon name="sym_o_password" class="q-mr-sm" />Change Password</span>
+            <span><q-icon name="sym_o_password" class="q-mr-sm" />Password</span>
           </q-item-section>
         </q-item>
 
@@ -34,6 +34,7 @@ import { useQuasar, Dark } from 'quasar';
 import { useUserStore } from 'stores/userStore';
 import { useRoute, useRouter } from 'vue-router';
 import ChangePasswordDialog from './Dialogs/ChangePasswordDialog.vue';
+import SetPasswordDialog from './Dialogs/SetPasswordDialog.vue';
 import { useGlobalStore } from 'src/stores/globalStore';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
@@ -55,20 +56,36 @@ const logout = async () => {
   const redirectUrl = `/${$route.query.redirect || 'login'}`;
   void $router.replace(redirectUrl);
 };
-const changePassword = () => {
-  $q.dialog({
-    component: ChangePasswordDialog,
-    componentProps: {},
-  })
-    .onOk(() => {
-      // TODO: handle ok
+const password = () => {
+  if (userStore.userInfo.isExistingPassword) {
+    $q.dialog({
+      component: SetPasswordDialog,
+      componentProps: {},
     })
-    .onCancel(() => {
-      // TODO
+      .onOk(() => {
+        // TODO: handle ok
+      })
+      .onCancel(() => {
+        // TODO
+      })
+      .onDismiss(() => {
+        // TODO
+      });
+  } else {
+    $q.dialog({
+      component: ChangePasswordDialog,
+      componentProps: {},
     })
-    .onDismiss(() => {
-      // TODO
-    });
+      .onOk(() => {
+        // TODO: handle ok
+      })
+      .onCancel(() => {
+        // TODO
+      })
+      .onDismiss(() => {
+        // TODO
+      });
+  }
 };
 function switchTheme() {
   globalStore.switchDarkTheme();

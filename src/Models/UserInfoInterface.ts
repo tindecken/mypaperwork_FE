@@ -3,4 +3,5 @@ export interface UserInfoInterface {
   name: string;
   role: string | null;
   id: string;
+  isExistingPassword: boolean;
 }

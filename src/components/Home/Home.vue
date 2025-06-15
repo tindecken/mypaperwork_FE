@@ -72,6 +72,7 @@ onMounted(async () => {
   try {
     const session = await authClient.getSession();
     if (session && session.data) {
+      console.log('session', session);
       // Extract user info from the session
       const userResponse = session.data.user;
       const userInfo: UserInfoInterface = {
@@ -79,7 +80,10 @@ onMounted(async () => {
         name: userResponse.name,
         id: userResponse.id,
         role: null, // Set default value since role doesn't exist in the response
+        isExistingPassword: false,
       };
+      const loginMethod = await userStore.checkexistingpassword();
+      userInfo.isExistingPassword = loginMethod?.data as boolean;
 
       // Update user store with session data
       userStore.$patch({
