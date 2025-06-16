@@ -59,7 +59,7 @@ const logout = async () => {
 const password = () => {
   if (userStore.userInfo.isExistingPassword) {
     $q.dialog({
-      component: SetPasswordDialog,
+      component: ChangePasswordDialog,
       componentProps: {},
     })
       .onOk(() => {
@@ -73,7 +73,7 @@ const password = () => {
       });
   } else {
     $q.dialog({
-      component: ChangePasswordDialog,
+      component: SetPasswordDialog,
       componentProps: {},
     })
       .onOk(() => {

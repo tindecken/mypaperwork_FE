@@ -53,7 +53,6 @@
 <script setup lang="ts">
 import { ref, Ref, computed } from 'vue';
 import { useQuasar } from 'quasar';
-import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '../../../stores/userStore';
 import { useGlobalStore } from '../../../stores/globalStore';
 import { QForm, useDialogPluginComponent } from 'quasar';
@@ -72,26 +71,20 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
 const emits = defineEmits([...useDialogPluginComponent.emits]);
 const userStore = useUserStore();
 const $q = useQuasar();
-const $route = useRoute();
-const $router = useRouter();
 
 function changePassword() {
   const changePasswordRequestData = {
-    userId: userStore.userInfo.id,
     currentPassword: currentPassword.value,
     newPassword: newPassword.value,
     confirmNewPassword: confirmPassword.value,
   } as ChangePasswordRequestModel;
   userStore
     .changePassword(changePasswordRequestData)
-    .then((response: GenericResponseData | undefined) => {
+    .then(() => {
       $q.notify({
         type: 'positive',
-        message: `${response?.message}. Return login page.`,
+        message: 'Password changed successfully.',
       });
-      userStore.$reset();
-      const redirectUrl = `/${$route.query.redirect || 'login'}`;
-      void $router.replace(redirectUrl);
       onDialogOK();
     })
     .catch((err: GenericResponseData | any) => {

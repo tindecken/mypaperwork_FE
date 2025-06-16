@@ -7,6 +7,7 @@ import { authClient } from 'src/utils/auth-client';
 import { RegisterRequestModel } from 'src/Models/Authentication/RegisterRequestModel';
 import { api } from 'src/boot/axios';
 import { ChangePasswordRequestModel } from 'src/Models/User/ChangePasswordRequestModel';
+import { SetPasswordRequestModel } from 'src/Models/User/SetPasswordRequestModel';
 
 export const useUserStore = defineStore('user', {
   state: () => {
@@ -126,8 +127,21 @@ export const useUserStore = defineStore('user', {
         await authClient.changePassword({
           currentPassword: model.currentPassword,
           newPassword: model.newPassword,
-          revokeOtherSessions: true, // revoke all other sessions the user is signed into
+          revokeOtherSessions: false, // revoke all other sessions the user is signed into
         });
+      } catch (error: any) {
+        handleError(error);
+      }
+    },
+    async setPassword(model: SetPasswordRequestModel) {
+      try {
+        const axiosResponse = await api.post('/users/setpassword', model, {
+          withCredentials: true,
+        })
+        const responseData = (await axiosResponse.data) as GenericResponseData;
+        // Safely extract login method from response data
+        this.userInfo.isExistingPassword = true;
+        return responseData;
       } catch (error: any) {
         handleError(error);
       }
