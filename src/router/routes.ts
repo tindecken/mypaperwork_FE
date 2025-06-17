@@ -84,7 +84,20 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true,
     },
   },
-
+  {
+    path: '/forgot-password',
+    component: () => import('src/components/ForgotPassword/ForgotPassword.vue'),
+    meta: {
+      requiresUnAuth: true,
+    },
+  },
+  {
+    path: '/reset-password',
+    component: () => import('src/components/ResetPassword/ResetPassword.vue'),
+    meta: {
+      requiresUnAuth: true,
+    },
+  },
   {
     path: '/:catchAll(.*)*',
     redirect: '/login',

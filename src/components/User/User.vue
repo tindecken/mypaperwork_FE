@@ -15,8 +15,8 @@
         </q-item>
         <q-item clickable v-ripple @click="switchTheme()" class="cursor-pointer">
           <q-item-section
-            ><span v-if="globalStore.darkTheme"><q-icon name="sym_o_light_mode" class="q-mr-sm" />Light Mode</span>
-            <span v-else><q-icon name="sym_o_dark_mode" class="q-mr-sm" />Dark Mode</span>
+            ><span v-if="globalStore.darkTheme"><q-icon name="sym_o_light_mode" class="q-mr-sm" />Light</span>
+            <span v-else><q-icon name="sym_o_dark_mode" class="q-mr-sm" />Dark</span>
           </q-item-section>
         </q-item>
         <q-item clickable v-close-popup @click="logout">

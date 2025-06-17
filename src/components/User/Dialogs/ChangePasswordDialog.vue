@@ -1,13 +1,13 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout view="hHh lpR fFf" style="max-height: 340px; min-height: 100px !important; min-width: 300px" container :class="isDark ? 'bg-grey-9' : 'bg-grey-3'">
+    <q-layout view="hHh lpR fFf" style="max-height: 320px; min-height: 100px !important; min-width: 300px" container :class="isDark ? 'bg-grey-9' : 'bg-grey-3'">
       <q-header reveal bordered class="row justify-between bg-primary">
         <div class="self-center text-subtitle1 q-pl-sm">Change password</div>
         <q-btn class="self-center" dense flat icon="close" @click="onDialogHide">
           <q-tooltip style="font-size: small">Close</q-tooltip>
         </q-btn>
       </q-header>
-      <q-page-container class="q-pa-sm">
+      <q-page-container class="q-pa-sm q-mt-sm">
         <q-form autofocus @submit="changePassword" @validation-success="isFormValid = true" @validation-error="isFormValid = false" ref="form" class="q-mt-sm">
           <div class="row">
             <q-input label="Current Password" outlined dense v-model="currentPassword" :rules="[(val) => !!val || '* Required']" lazy-rules :type="isPwd ? 'password' : 'text'" class="col">
@@ -41,8 +41,8 @@
             </q-input>
           </div>
           <div class="row justify-end q-mt-md">
-            <q-btn flat label="Cancel" @click="onDialogCancel()" v-close-popup class="q-mr-sm" />
-            <q-btn outline label="Change" :disable="!isFormValid" type="submit" color="primary" />
+            <q-btn outline label="Change" :disable="!isFormValid" type="submit" color="primary" class="q-mr-sm" />
+            <q-btn flat label="Cancel" @click="onDialogCancel()" v-close-popup />
           </div>
         </q-form>
       </q-page-container>
