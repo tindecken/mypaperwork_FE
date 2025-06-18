@@ -9,9 +9,13 @@
       <q-page padding class="row justify-center">
         <div class="col-auto" style="max-width: 400px; width: 100%; padding: 20px">
           <q-form @submit="onSubmit" class="q-gutter-y-md">
-            <p class="text-subtitle1 q-mb-md">Enter your new password and click Reset to reset your password.</p>
-            <q-input outlined v-model="resetPassword" label="New Password" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Password is required']" />
-            <q-btn label="Reset" type="submit" outline class="full-width q-py-sm" unelevated />
+            <p class="text-subtitle1 q-mb-md">Enter your new password.</p>
+            <q-input outlined v-model="resetPassword" label="New Password" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Password is required']">
+              <template v-slot:prepend>
+                <q-icon name="sym_o_password" />
+              </template>
+            </q-input>
+            <q-btn label="Set" type="submit" outline class="full-width q-py-sm" unelevated />
           </q-form>
         </div>
       </q-page>
@@ -55,5 +59,20 @@ async function onSubmit() {
     newPassword: resetPassword.value,
     token: token,
   });
+  console.log('error', error);
+  if (error) {
+    console.log(error);
+    $q.notify({
+      type: 'negative',
+      message: error.message || 'An error occurred',
+    });
+    return;
+  } else {
+    $q.notify({
+      position: 'top',
+      type: 'positive',
+      message: 'Password reset successful. Please login.',
+    });
+  }
 }
 </script>

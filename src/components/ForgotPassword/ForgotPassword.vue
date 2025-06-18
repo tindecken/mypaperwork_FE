@@ -19,8 +19,12 @@
             (val: string) => (val && val.length > 0) || 'Email is required',
             (val: string) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(val) || 'Please enter a valid email'
           ]"
-            />
-            <q-btn label="Send" type="submit" outline class="full-width q-py-sm" unelevated />
+            >
+              <template v-slot:prepend>
+                <q-icon name="sym_o_email" />
+              </template>
+            </q-input>
+            <q-btn icon="sym_o_send" label="Send" type="submit" outline class="full-width q-py-sm" unelevated> </q-btn>
           </q-form>
         </div>
       </q-page>
@@ -35,7 +39,7 @@ import { useQuasar } from 'quasar';
 const $q = useQuasar();
 const email = ref('');
 async function onSubmit() {
-  const { data, error } = await authClient.requestPasswordReset({
+  const { error } = await authClient.requestPasswordReset({
     email: email.value,
     redirectTo: process.env.BASEURL + '/#/reset-password',
   });
@@ -50,7 +54,7 @@ async function onSubmit() {
     $q.notify({
       position: 'top',
       type: 'positive',
-      message: data.message,
+      message: 'Password reset email sent. Please check your inbox.',
     });
   }
 }
