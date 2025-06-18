@@ -1,12 +1,20 @@
 <template>
   <q-layout view="hHh LpR fFf" class="login-layout">
-    <q-page-container class="login-page-container">
-      <div class="col-auto" style="max-width: 400px; width: 100%; padding: 20px">
-        <q-form @submit="onSubmit" class="q-gutter-y-md">
-          <q-input outlined v-model="resetPassword" label="New Password" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Password is required']" />
-          <q-btn label="Reset" type="submit" outline class="full-width q-py-sm" unelevated />
-        </q-form>
-      </div>
+    <q-header elevated class="bg-primary text-white">
+      <q-toolbar>
+        <q-toolbar-title>Reset Password</q-toolbar-title>
+      </q-toolbar>
+    </q-header>
+    <q-page-container>
+      <q-page padding class="row justify-center">
+        <div class="col-auto" style="max-width: 400px; width: 100%; padding: 20px">
+          <q-form @submit="onSubmit" class="q-gutter-y-md">
+            <p class="text-subtitle1 q-mb-md">Enter your new password and click Reset to reset your password.</p>
+            <q-input outlined v-model="resetPassword" label="New Password" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Password is required']" />
+            <q-btn label="Reset" type="submit" outline class="full-width q-py-sm" unelevated />
+          </q-form>
+        </div>
+      </q-page>
     </q-page-container>
   </q-layout>
 </template>
