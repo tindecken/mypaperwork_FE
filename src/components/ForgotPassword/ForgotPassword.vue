@@ -41,7 +41,6 @@ const email = ref('');
 async function onSubmit() {
   const { error } = await authClient.requestPasswordReset({
     email: email.value,
-    redirectTo: process.env.BASEURL + '/#/reset-password',
   });
 
   if (error) {
