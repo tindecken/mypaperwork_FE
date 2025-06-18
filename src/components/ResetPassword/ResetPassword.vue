@@ -10,9 +10,12 @@
         <div class="col-auto" style="max-width: 400px; width: 100%; padding: 20px">
           <q-form @submit="onSubmit" class="q-gutter-y-md">
             <p class="text-subtitle1 q-mb-md">Enter your new password.</p>
-            <q-input outlined v-model="resetPassword" label="New Password" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Password is required']">
+            <q-input :type="isPwd ? 'password' : 'text'" outlined v-model="resetPassword" label="New Password" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Password is required']">
               <template v-slot:prepend>
                 <q-icon name="sym_o_password" />
+              </template>
+              <template v-slot:append>
+                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
               </template>
             </q-input>
             <q-btn label="Set" type="submit" outline class="full-width q-py-sm" unelevated />
@@ -32,7 +35,7 @@ const $q = useQuasar();
 const globalStore = useGlobalStore();
 const isDark = computed(() => globalStore.darkTheme);
 const resetPassword = ref('');
-
+const isPwd = ref(true);
 async function onSubmit() {
   // Get the hash fragment excluding the # character
   const hashFragment = window.location.hash.substring(1);
