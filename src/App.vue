@@ -3,64 +3,40 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from 'src/stores/userStore';
 import { onBeforeMount, watch } from 'vue';
 import { Dark } from 'quasar';
-import { useGlobalStore } from 'src/stores/globalStore';
+import { useThemeStore } from 'src/stores/themeStore';
 
-const globalStore = useGlobalStore();
-const userStore = useUserStore();
-
-globalStore.$subscribe(() => {
+const themeStore = useThemeStore();
+themeStore.$subscribe(() => {
   localStorage.setItem(
-    'global',
+    'theme',
     JSON.stringify({
-      darkTheme: globalStore.darkTheme,
-      selectedTheme: globalStore.selectedTheme,
-      themes: globalStore.themes,
-    })
-  );
-  Dark.set(globalStore.darkTheme);
-});
-userStore.$subscribe(() => {
-  localStorage.setItem(
-    'user',
-    JSON.stringify({
-      userInfo: userStore.userInfo,
+      selectedTheme: themeStore.selectedTheme,
+      themes: themeStore.themes,
     })
   );
 });
 
 watch(
-  globalStore,
-  (newGlobalStore) => {
-    if (newGlobalStore.selectedTheme) {
-      document.body.setAttribute('data-theme', newGlobalStore.selectedTheme.value);
+  themeStore,
+  (newThemeStore) => {
+    if (newThemeStore.selectedTheme) {
+      document.body.setAttribute('data-theme', newThemeStore.selectedTheme.value);
     }
+    Dark.set(newThemeStore.darkTheme);
   },
   { deep: true }
 );
 
 onBeforeMount(() => {
-  const userStorage = localStorage.getItem('user');
-  if (userStorage) {
-    const userObj = JSON.parse(userStorage);
-    userStore.userInfo.email = userObj.userInfo.email;
-    userStore.userInfo.name = userObj.userInfo.name;
-    userStore.userInfo.id = userObj.userInfo.id;
-    userStore.userInfo.role = userObj.userInfo.role;
-  }
-  const globalStorage = localStorage.getItem('global');
-
-  if (globalStorage) {
-    if (JSON.parse(globalStorage).hasOwnProperty('darkTheme')) {
-      globalStore.darkTheme = JSON.parse(globalStorage).darkTheme;
+  const themeStorage = localStorage.getItem('theme');
+  if (themeStorage) {
+    if (JSON.parse(themeStorage).hasOwnProperty('selectedTheme')) {
+      themeStore.selectedTheme = JSON.parse(themeStorage).selectedTheme;
     }
-    if (JSON.parse(globalStorage).hasOwnProperty('themes')) {
-      globalStore.themes = JSON.parse(globalStorage).themes;
-    }
-    if (JSON.parse(globalStorage).hasOwnProperty('selectedTheme')) {
-      globalStore.selectedTheme = JSON.parse(globalStorage).selectedTheme;
+    if (JSON.parse(themeStorage).hasOwnProperty('themes')) {
+      themeStore.themes = JSON.parse(themeStorage).themes;
     }
   }
 });

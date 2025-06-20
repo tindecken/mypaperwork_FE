@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useQuasar } from 'quasar';
@@ -34,7 +34,9 @@ import AppFooter from 'src/components/AppFooter/AppFooter.vue';
 import LeftDrawer from 'src/components/LeftDrawer/LeftDrawer.vue';
 import { authClient } from 'src/utils/auth-client';
 import { UserInfoInterface } from 'src/Models/UserInfoInterface';
+import { useThemeStore } from 'src/stores/themeStore';
 
+const themeStore = useThemeStore();
 const categoryStore = useCategoryStore();
 const $router = useRouter();
 const userStore = useUserStore();
@@ -66,7 +68,10 @@ paperworkStore
       message: err.message || err.title || err,
     });
   });
-
+onBeforeMount(async () => {
+  console.log('onBeforeMount');
+  await themeStore.getThemes();
+});
 onMounted(async () => {
   // Check for existing session from auth client
   try {
