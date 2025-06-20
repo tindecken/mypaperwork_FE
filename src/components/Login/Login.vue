@@ -62,7 +62,7 @@ const loginWithGoogle = async () => {
     },
     {
       onSuccess: () => {
-        console.log('Google login successful');
+        console.log('Google login successful:');
       },
       onError: (error) => {
         console.error('Google login failed:', error);

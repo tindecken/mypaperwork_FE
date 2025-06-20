@@ -72,7 +72,6 @@ onMounted(async () => {
   try {
     const session = await authClient.getSession();
     if (session && session.data) {
-      console.log('session', session);
       // Extract user info from the session
       const userResponse = session.data.user;
       const userInfo: UserInfoInterface = {
@@ -90,8 +89,12 @@ onMounted(async () => {
         userInfo: userInfo,
       });
     }
-  } catch (error) {
-    console.error('Error retrieving session:', error);
+  } catch (error: any) {
+    $q.loading.hide();
+    $q.notify({
+      type: 'negative',
+      message: error.message || 'Error retrieving session',
+    });
   }
 
   $q.loading.show({

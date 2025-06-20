@@ -4,4 +4,8 @@ export interface UserInfoInterface {
   role: string | null;
   id: string;
   isExistingPassword: boolean;
+  theme: {
+    name: string;
+    mode: string;
+  };
 }

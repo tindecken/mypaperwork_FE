@@ -18,6 +18,10 @@ export const useUserStore = defineStore('user', {
         id: '',
         role: '',
         isExistingPassword: false,
+        theme: {
+          name: '',
+          mode: '',
+        },
       } as UserInfoInterface,
     };
   },
@@ -47,6 +51,10 @@ export const useUserStore = defineStore('user', {
           id: userResponse.id,
           role: null, // Set default value since role doesn't exist in the response
           isExistingPassword: true,
+          theme: {
+            name: '',
+            mode: '',
+          },
         };
 
         this.$patch({
@@ -92,7 +100,11 @@ export const useUserStore = defineStore('user', {
             name: userInfo.name,
             id: userInfo.id,
             role: '',
-            isExistingPassword: false
+            isExistingPassword: false,
+            theme: {
+              name: '',
+              mode: '',
+            },
           },
         });
         // Return a GenericResponseData object for consistency
