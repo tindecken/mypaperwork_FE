@@ -7,7 +7,7 @@ import { ThemeModel } from 'src/Models/Theme/ThemeModel';
 export const useThemeStore = defineStore('theme', {
   state: () => ({
     darkTheme: false as boolean,
-    selectedTheme: { label: 'High Contrast', value: 'high-contrast', mode: 'light' } as ThemeModel,
+    selectedTheme: { id: '', label: 'High Contrast', value: 'high-contrast', mode: 'light' } as ThemeModel,
     themes: [] as ThemeModel[],
   }),
   actions: {
@@ -27,9 +27,6 @@ export const useThemeStore = defineStore('theme', {
         handleError(error);
       }
     },
-    changeTheme(newTheme: { label: string; value: string; mode: string }) {
-      this.selectedTheme = newTheme;
-    },
     // get user theme
     async getUserTheme(): Promise<GenericResponseData | undefined> {
       try {
@@ -37,9 +34,15 @@ export const useThemeStore = defineStore('theme', {
           withCredentials: false,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
+        const themeData: ThemeModel = {
+          id: responseData.data.id,
+          label: responseData.data.label,
+          value: responseData.data.value,
+          mode: responseData.data.isDark === 0 ? 'light' : 'dark',
+        }
         // Reload categories after creating a new paperwork
         this.$patch({
-          selectedTheme: responseData.data as ThemeModel,
+          selectedTheme: themeData,
         });
         return responseData;
       } catch (error: any) {
@@ -53,9 +56,15 @@ export const useThemeStore = defineStore('theme', {
           withCredentials: false,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
+        const themeData: ThemeModel = {
+          id: responseData.data.id,
+          label: responseData.data.label,
+          value: responseData.data.value,
+          mode: responseData.data.isDark === 0 ? 'light' : 'dark',
+        }
         // Reload categories after creating a new paperwork
         this.$patch({
-          selectedTheme: responseData.data as ThemeModel,
+          selectedTheme: themeData,
         });
         return responseData;
       } catch (error: any) {
