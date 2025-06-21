@@ -1,9 +1,9 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 300px !important" :class="isDark ? 'bg-dark' : 'bg-white'" :style="isDark ? 'border: 1px solid white' : 'border: 1px solid black'">
+    <q-layout style="max-width: 598px; min-height: 300px !important" class="bg-primary">
       <div class="row">
         <div class="col-grow">
-          <q-bar :class="isDark ? 'bg-grey-9' : 'bg-grey-7'">
+          <q-bar :class="'bg-primary'">
             <span class="text-h6 text-white">Edit Category</span>
             <q-space />
             <q-btn dense flat icon="close" v-close-popup>
@@ -54,9 +54,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { useUserStore } from 'src/stores/userStore';
-import { computed } from 'vue';
 import { useQuasar } from 'quasar';
-import { useGlobalStore } from 'src/stores/globalStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { EditCategoryRequestModel } from 'src/Models/Category/EditCategoryRequestModel';
 import { Category } from 'src/Models/Category/CategoryInterface';
@@ -64,14 +62,12 @@ import { DeleteCategoryRequestModel } from 'src/Models/Category/DeleteCategoryRe
 
 const categoryStore = useCategoryStore();
 const userStore = useUserStore();
-const globalStore = useGlobalStore();
 const $q = useQuasar();
 const router = useRouter();
 
 const props = defineProps<{ category: Category }>();
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
-const isDark = computed(() => globalStore.darkTheme);
 const note = ref(props.category.note);
 const name = ref(props.category.name);
 const confirmDelete = ref(false);

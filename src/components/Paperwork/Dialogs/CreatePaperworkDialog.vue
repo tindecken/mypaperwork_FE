@@ -1,9 +1,9 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 410px !important" :class="isDark ? 'bg-dark' : 'bg-white'" :style="isDark ? 'border: 1px solid white' : 'border: 1px solid black'">
+    <q-layout style="max-width: 598px; min-height: 410px !important" class="bg-grey-9">
       <div class="row">
         <div class="col-grow">
-          <q-bar :class="isDark ? 'bg-grey-9' : 'bg-grey-7'">
+          <q-bar class="bg-grey-9">
             <span class="text-h6 text-white">Paperwork</span>
             <q-space />
             <q-btn dense flat icon="close" v-close-popup>
@@ -68,7 +68,7 @@
           <div class="row q-mt-sm">
             <q-uploader
               hide-upload-btn
-              :color="isDark ? 'grey-9' : 'grey-6'"
+              color="grey-9"
               ref="uploader"
               class="col-grow"
               label="Images or Files (max 20 files, max size: 2mb per file)"
@@ -98,20 +98,17 @@ import { useQuasar } from 'quasar';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { CreatePaperworkRequestModel } from 'src/Models/Paperwork/CreatePaperworkRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
-import { useGlobalStore } from 'src/stores/globalStore';
 import heic2any from 'heic2any';
 import { IMAGE_FILE_TYPE } from 'src/constants/imageType';
 
 const categoryStore = useCategoryStore();
 const paperworkStore = usePaperworkStore();
-const globalStore = useGlobalStore();
 const categories = computed(() => categoryStore.categories);
 const selectedCategory: Ref<Category> = ref(categoryStore.categories.filter((cat) => cat.name === 'Uncategorized')[0]);
 const $q = useQuasar();
 
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
-const isDark = computed(() => globalStore.darkTheme);
 const note = ref('');
 const name = ref('');
 const issueAt: Ref<string | null> = ref(null);

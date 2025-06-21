@@ -35,7 +35,6 @@
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { useGlobalStore } from 'src/stores/globalStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { computed, ref, Ref } from 'vue';
 import { Category } from 'src/Models/Category/CategoryInterface';

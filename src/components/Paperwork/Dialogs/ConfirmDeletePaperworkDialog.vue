@@ -1,9 +1,9 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 150px !important" :class="isDark ? 'bg-dark' : 'bg-white'" :style="isDark ? 'border: 1px solid white' : 'border: 1px solid black'">
+    <q-layout style="max-width: 598px; min-height: 150px !important" class="bg-grey-9">
       <div class="row">
         <div class="col-grow">
-          <q-bar :class="isDark ? 'bg-grey-9' : 'bg-grey-7'">
+          <q-bar class="bg-grey-9">
             <span class="text-h6 text-white">Confirm Delete</span>
             <q-space />
             <q-btn dense flat icon="close" v-close-popup>
@@ -25,11 +25,6 @@
 
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import { computed } from 'vue';
-import { useGlobalStore } from 'src/stores/globalStore';
-
-const globalStore = useGlobalStore();
-const isDark = computed(() => globalStore.darkTheme);
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 

@@ -27,13 +27,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useGlobalStore } from 'src/stores/globalStore';
+import { ref } from 'vue';
 import { authClient } from 'src/utils/auth-client';
 import { useQuasar } from 'quasar';
 const $q = useQuasar();
-const globalStore = useGlobalStore();
-const isDark = computed(() => globalStore.darkTheme);
 const resetPassword = ref('');
 const isPwd = ref(true);
 async function onSubmit() {
@@ -62,7 +59,6 @@ async function onSubmit() {
     newPassword: resetPassword.value,
     token: token,
   });
-  console.log('error', error);
   if (error) {
     console.log(error);
     $q.notify({

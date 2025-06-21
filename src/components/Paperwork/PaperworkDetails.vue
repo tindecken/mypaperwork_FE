@@ -80,9 +80,6 @@
         </q-img>
       </div>
     </div>
-    <div class="row q-mt-lg" v-if="isShowedJson">
-      <vue-json-pretty :deep="3" showLineNumber :data="(paperwork as unknown as JSONDataType)" />
-    </div>
   </q-layout>
 </template>
 
@@ -94,9 +91,6 @@ import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useDocumentStore } from 'src/stores/documentStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
-import { JSONDataType } from 'vue-json-pretty/types/utils';
-import VueJsonPretty from 'vue-json-pretty';
-import 'vue-json-pretty/lib/styles.css';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { AttachmentInterface } from 'src/Models/Document/AttachmentInterface';
 import { DownloadAttachmentRequestModel } from 'src/Models/Document/DownloadAttachmentRequestModel';
@@ -104,7 +98,6 @@ import { ImageInterface } from 'src/Models/Document/ImageInterface';
 import { api as viewerApi } from 'v-viewer';
 import 'viewerjs/dist/viewer.css';
 import prettyBytes from 'pretty-bytes';
-import { useGlobalStore } from 'src/stores/globalStore';
 import { getImageUrl } from 'src/utils/getImageUrl';
 
 const $route = useRoute();
@@ -122,8 +115,6 @@ const imagesUrls: Ref<string[]> = ref([]);
 const customFields = ref<Array<{ key: string; value: string }>>([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
 const issueAt = ref(paperwork.value?.issuedAt.toString());
-const globalStore = useGlobalStore();
-const isShowedJson = computed(() => globalStore.isShowedJson);
 const truncate = ref(true);
 const columns = [
   {

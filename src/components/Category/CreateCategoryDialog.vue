@@ -1,9 +1,9 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 300px !important" :class="isDark ? 'bg-dark' : 'bg-white'" :style="isDark ? 'border: 1px solid white' : 'border: 1px solid black'">
+    <q-layout style="max-width: 598px; min-height: 300px !important" class="'bg-primary'">
       <div class="row">
         <div class="col-grow">
-          <q-bar :class="isDark ? 'bg-grey-9' : 'bg-grey-7'">
+          <q-bar :class="'bg-primary'">
             <span class="text-h6 text-white">Create Category</span>
             <q-space />
             <q-btn dense flat icon="close" v-close-popup>
@@ -36,20 +36,16 @@ import { QInput, useDialogPluginComponent } from 'quasar';
 import { ref } from 'vue';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { useUserStore } from 'src/stores/userStore';
-import { computed } from 'vue';
 import { useQuasar } from 'quasar';
-import { useGlobalStore } from 'src/stores/globalStore';
 import { CreateCategoryRequestModel } from 'src/Models/Category/CreateCategoryRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 
 const categoryStore = useCategoryStore();
 const userStore = useUserStore();
-const globalStore = useGlobalStore();
 const $q = useQuasar();
 
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
-const isDark = computed(() => globalStore.darkTheme);
 const note = ref('');
 const name = ref('');
 async function createCategory() {

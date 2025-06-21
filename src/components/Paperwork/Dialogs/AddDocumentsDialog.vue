@@ -1,9 +1,9 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 150px !important" :class="isDark ? 'bg-dark' : 'bg-white'" :style="isDark ? 'border: 1px solid white' : 'border: 1px solid black'">
+    <q-layout style="max-width: 598px; min-height: 150px !important" class="bg-grey-9">
       <div class="row">
         <div class="col-grow">
-          <q-bar :class="isDark ? 'bg-grey-9' : 'bg-grey-7'">
+          <q-bar class="bg-grey-9">
             <span class="text-h6 text-white">Add Documents</span>
             <q-space />
             <q-btn dense flat icon="close" v-close-popup>
@@ -17,7 +17,7 @@
           <div class="row q-mt-sm">
             <q-uploader
               hide-upload-btn
-              :color="isDark ? 'grey-9' : 'grey-6'"
+              color="grey-6"
               ref="uploader"
               class="col-grow"
               label="Images or Files (max 20 files, max size: 2mb per file)"
@@ -41,17 +41,12 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 import { ref } from 'vue';
-import { computed } from 'vue';
 import { useQuasar } from 'quasar';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
-import { useGlobalStore } from 'src/stores/globalStore';
 import { useDocumentStore } from 'stores/documentStore';
 import { UploadDocumentsRequestModel } from 'src/Models/Document/UploadDocumentsequestModel';
 import heic2any from 'heic2any';
 import { IMAGE_FILE_TYPE } from 'src/constants/imageType';
-
-const globalStore = useGlobalStore();
-const isDark = computed(() => globalStore.darkTheme);
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 const $q = useQuasar();

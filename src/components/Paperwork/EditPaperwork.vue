@@ -123,9 +123,6 @@
         </div>
       </div>
     </div>
-    <div class="row q-mt-lg" v-if="isShowedJson">
-      <vue-json-pretty :deep="3" showLineNumber :data="images" />
-    </div>
   </q-layout>
 </template>
 
@@ -137,8 +134,6 @@ import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useDocumentStore } from 'src/stores/documentStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { PaperworkDetails } from 'src/Models/Paperwork/PaperworkDetails';
-import VueJsonPretty from 'vue-json-pretty';
-import 'vue-json-pretty/lib/styles.css';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { AttachmentInterface } from 'src/Models/Document/AttachmentInterface';
 import { DownloadAttachmentRequestModel } from 'src/Models/Document/DownloadAttachmentRequestModel';
@@ -146,7 +141,6 @@ import { ImageInterface } from 'src/Models/Document/ImageInterface';
 import { api as viewerApi } from 'v-viewer';
 import 'viewerjs/dist/viewer.css';
 import prettyBytes from 'pretty-bytes';
-import { useGlobalStore } from 'src/stores/globalStore';
 import ConfirmDeleteImageDialog from './Dialogs/ConfirmDeleteImageDialog.vue';
 import ConfirmDeleteAttachmentDialog from './Dialogs/ConfirmDeleteAttachmentDialog.vue';
 import AddDocumentsDialog from './Dialogs/AddDocumentsDialog.vue';
@@ -174,8 +168,6 @@ const images: Ref<ImageInterface[]> = ref([]);
 const imagesUrls: Ref<string[]> = ref([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
 const issueAt = ref(paperwork.value?.issuedAt.toString());
-const globalStore = useGlobalStore();
-const isShowedJson = computed(() => globalStore.isShowedJson);
 const columns = [
   {
     name: 'fileName',

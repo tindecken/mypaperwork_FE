@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout view="hHh lpR fFf" style="max-height: 340px; min-height: 100px !important; min-width: 300px" container :class="isDark ? 'bg-grey-9' : 'bg-grey-3'">
+    <q-layout view="hHh lpR fFf" style="max-height: 340px; min-height: 100px !important; min-width: 300px" container class="bg-primary">
       <q-header reveal bordered class="row justify-between bg-primary">
         <div class="self-center text-subtitle1 q-pl-sm">Set Password</div>
         <q-btn class="self-center" dense flat icon="close" @click="onDialogHide">
@@ -44,23 +44,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, computed } from 'vue';
+import { ref, Ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { useUserStore } from '../../../stores/userStore';
-import { useGlobalStore } from '../../../stores/globalStore';
 import { QForm, useDialogPluginComponent } from 'quasar';
 import { SetPasswordRequestModel } from 'src/Models/User/SetPasswordRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 
-const globalStore = useGlobalStore();
-const isDark = computed(() => globalStore.darkTheme);
 const isPwd = ref(true);
 const isFormValid = ref(false);
 const form = ref() as Ref<QForm>;
 const newPassword = ref('');
 const confirmPassword = ref('');
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent();
-const emits = defineEmits([...useDialogPluginComponent.emits]);
+defineEmits([...useDialogPluginComponent.emits]);
 const userStore = useUserStore();
 const $q = useQuasar();
 

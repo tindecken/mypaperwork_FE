@@ -15,7 +15,7 @@
         </q-item>
         <q-item clickable v-ripple @click="switchTheme()" class="cursor-pointer">
           <q-item-section
-            ><span v-if="globalStore.darkTheme"><q-icon name="sym_o_light_mode" class="q-mr-sm" />Light</span>
+            ><span v-if="Dark.isActive"><q-icon name="sym_o_light_mode" class="q-mr-sm" />Light</span>
             <span v-else><q-icon name="sym_o_dark_mode" class="q-mr-sm" />Dark</span>
           </q-item-section>
         </q-item>
@@ -35,7 +35,6 @@ import { useUserStore } from 'stores/userStore';
 import { useRoute, useRouter } from 'vue-router';
 import ChangePasswordDialog from './Dialogs/ChangePasswordDialog.vue';
 import SetPasswordDialog from './Dialogs/SetPasswordDialog.vue';
-import { useGlobalStore } from 'src/stores/globalStore';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { authClient } from 'src/utils/auth-client';
@@ -43,7 +42,6 @@ import { authClient } from 'src/utils/auth-client';
 const $route = useRoute();
 const $router = useRouter();
 const userStore = useUserStore();
-const globalStore = useGlobalStore();
 const paperworkStore = usePaperworkStore();
 const categoryStore = useCategoryStore();
 
@@ -88,7 +86,6 @@ const password = () => {
   }
 };
 function switchTheme() {
-  globalStore.switchDarkTheme();
-  Dark.set(globalStore.darkTheme);
+  // TO BE IMPLEMENTED
 }
 </script>

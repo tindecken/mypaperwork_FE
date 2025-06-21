@@ -1,9 +1,9 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 150px !important" :class="isDark ? 'bg-dark' : 'bg-white'" :style="isDark ? 'border: 1px solid white' : 'border: 1px solid black'">
+    <q-layout style="max-width: 598px; min-height: 150px !important" class="bg-grey-9">
       <div class="row">
         <div class="col-grow">
-          <q-bar :class="isDark ? 'bg-grey-9' : 'bg-grey-7'">
+          <q-bar class="bg-grey-9">
             <span class="text-h6 text-white">Update Categories</span>
             <q-space />
             <q-btn dense flat icon="close" v-close-popup>
@@ -33,10 +33,8 @@ import { useDialogPluginComponent } from 'quasar';
 import { PropType, ref } from 'vue';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
-import { computed } from 'vue';
 import { useQuasar } from 'quasar';
 import { Category } from 'src/Models/Category/CategoryInterface';
-import { useGlobalStore } from 'src/stores/globalStore';
 import { UpdateCategoriesRequestModel } from 'src/Models/Paperwork/UpdateCategoriesRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 
@@ -50,8 +48,6 @@ const props = defineProps({
     required: true,
   },
 });
-const globalStore = useGlobalStore();
-const isDark = computed(() => globalStore.darkTheme);
 defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 const $q = useQuasar();
