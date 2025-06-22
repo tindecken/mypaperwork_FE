@@ -23,8 +23,8 @@ watch(
   (newThemeStore) => {
     if (newThemeStore.selectedTheme) {
       document.body.setAttribute('data-theme', newThemeStore.selectedTheme.value);
+      Dark.set(newThemeStore.selectedTheme.mode === 'dark');
     }
-    Dark.set(newThemeStore.darkTheme);
   },
   { deep: true }
 );

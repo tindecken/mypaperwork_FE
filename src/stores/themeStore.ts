@@ -52,8 +52,8 @@ export const useThemeStore = defineStore('theme', {
     // update user theme
     async updateUserTheme(themeId: string): Promise<GenericResponseData | undefined> {
       try {
-        const axiosResponse = await api.post('/themes/set', themeId, {
-          withCredentials: false,
+        const axiosResponse = await api.post('/themes/set', { themeId }, {
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         const themeData: ThemeModel = {

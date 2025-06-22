@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-xs-4 col-sm-3 col-md-2 col-xl-2 col-lg-2 col-xl-1">
-      <q-select dense outlined v-model="selectedTheme" :options="themeOptions" label="Select Theme" @update:model-value="updateUserTheme($event.value)" />
+      <q-select dense outlined v-model="selectedTheme" :options="themeOptions" option-value="id" label="Select Theme" @update:model-value="updateUserTheme($event.id)" />
     </div>
   </div>
 </template>
@@ -17,7 +17,8 @@ const themeStore = useThemeStore();
 const selectedTheme = computed(() => themeStore.selectedTheme);
 const themeOptions = computed(() => themeStore.themes);
 
-function updateUserTheme(newTheme: ThemeModel) {
-  themeStore.updateUserTheme(newTheme);
+function updateUserTheme(themeId: string) {
+  console.log('updateUserTheme', themeId);
+  themeStore.updateUserTheme(themeId);
 }
 </script>
