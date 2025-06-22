@@ -15,7 +15,7 @@
         </q-item>
         <q-item clickable v-ripple @click="toogleDarkLightTheme()" class="cursor-pointer">
           <q-item-section
-            ><span v-if="themeStore.selectedTheme.isDark === 0"><q-icon name="sym_o_light_mode" class="q-mr-sm" />Light</span>
+            ><span v-if="themeStore.selectedTheme.isDark !== 0"><q-icon name="sym_o_light_mode" class="q-mr-sm" />Light</span>
             <span v-else><q-icon name="sym_o_dark_mode" class="q-mr-sm" />Dark</span>
           </q-item-section>
         </q-item>

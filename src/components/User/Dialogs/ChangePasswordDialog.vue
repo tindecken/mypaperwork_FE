@@ -1,13 +1,13 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout view="hHh lpR fFf" style="max-height: 320px; min-height: 100px !important; min-width: 300px" container class="bg-primary">
-      <q-header reveal bordered class="row justify-between bg-primary">
+    <q-layout view="hHh lpR fFf" :style="{ 'max-height': '320px', 'min-height': '100px !important', 'min-width': '300px', border: `1px solid ${themeStore.selectedTheme.isDark === 1 ? '#ccc' : '#333'}` }" container>
+      <q-header reveal class="row justify-between bg-primary">
         <div class="self-center text-subtitle1 q-pl-sm">Change password</div>
         <q-btn class="self-center" dense flat icon="close" @click="onDialogHide">
           <q-tooltip style="font-size: small">Close</q-tooltip>
         </q-btn>
       </q-header>
-      <q-page-container class="q-pa-sm q-mt-sm">
+      <q-page-container class="q-pa-sm q-mt-sm" :class="{ 'bg-primary': themeStore.selectedTheme.isDark === 1, 'bg-light-green-1': themeStore.selectedTheme.isDark === 0 }">
         <q-form autofocus @submit="changePassword" @validation-success="isFormValid = true" @validation-error="isFormValid = false" ref="form" class="q-mt-sm">
           <div class="row">
             <q-input label="Current Password" outlined dense v-model="currentPassword" :rules="[(val) => !!val || '* Required']" lazy-rules :type="isPwd ? 'password' : 'text'" class="col">
@@ -41,7 +41,7 @@
             </q-input>
           </div>
           <div class="row justify-end q-mt-md">
-            <q-btn outline label="Change" :disable="!isFormValid" type="submit" color="primary" class="q-mr-sm" />
+            <q-btn outline label="Change" :disable="!isFormValid" type="submit" class="q-mr-sm" />
             <q-btn flat label="Cancel" @click="onDialogCancel()" v-close-popup />
           </div>
         </q-form>
@@ -54,6 +54,7 @@
 import { ref, Ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { useUserStore } from '../../../stores/userStore';
+import { useThemeStore } from '../../../stores/themeStore';
 import { QForm, useDialogPluginComponent } from 'quasar';
 import { ChangePasswordRequestModel } from 'src/Models/User/ChangePasswordRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
@@ -66,6 +67,7 @@ const confirmPassword = ref('');
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent();
 const emits = defineEmits([...useDialogPluginComponent.emits]);
 const userStore = useUserStore();
+const themeStore = useThemeStore();
 const $q = useQuasar();
 
 function changePassword() {
