@@ -11,7 +11,9 @@ import { authClient } from 'src/utils/auth-client';
 import { useUserStore } from 'src/stores/userStore';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
+import { useThemeStore } from 'src/stores/themeStore';
 
+const themeStore = useThemeStore();
 const userStore = useUserStore();
 const paperworkStore = usePaperworkStore();
 const categoryStore = useCategoryStore();
@@ -23,6 +25,7 @@ onMounted(async () => {
     userStore.$reset();
     paperworkStore.$reset();
     categoryStore.$reset();
+    themeStore.$reset();
     router.push('/login');
   } catch (error) {
     console.error('Error during logout:', error);

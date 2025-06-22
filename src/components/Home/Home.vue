@@ -68,9 +68,8 @@ paperworkStore
       message: err.message || err.title || err,
     });
   });
-onBeforeMount(async () => {
-  console.log('onBeforeMount');
-  await themeStore.getThemes();
+onBeforeMount(() => {
+  themeStore.getThemes();
 });
 onMounted(async () => {
   // Check for existing session from auth client
@@ -83,7 +82,7 @@ onMounted(async () => {
         email: userResponse.email,
         name: userResponse.name,
         id: userResponse.id,
-        role: null, // Set default value since role doesn't exist in the response
+        role: null,
         isExistingPassword: false,
       };
       const loginMethod = await userStore.checkexistingpassword();
@@ -105,7 +104,16 @@ onMounted(async () => {
   $q.loading.show({
     message: 'Getting paperworks...',
   });
-
+  themeStore
+    .getUserTheme()
+    .then(() => {})
+    .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
+    });
   categoryStore
     .getCategories()
     .then(() => {

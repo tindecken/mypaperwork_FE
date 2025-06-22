@@ -317,7 +317,6 @@ function savePaperwork() {
       return JSON.stringify(filteredFields); // Return the filtered array directly
     })(),
   };
-  console.log('updateRequest', updateRequest);
   paperworkStore
     .updatePaperwork(updateRequest)
     .then(() => {

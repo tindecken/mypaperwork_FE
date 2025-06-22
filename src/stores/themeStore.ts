@@ -6,8 +6,7 @@ import { ThemeModel } from 'src/Models/Theme/ThemeModel';
 
 export const useThemeStore = defineStore('theme', {
   state: () => ({
-    darkTheme: false as boolean,
-    selectedTheme: { id: '', label: 'High Contrast', value: 'high-contrast', mode: 'light' } as ThemeModel,
+    selectedTheme: { id: '', label: 'High Contrast', value: 'high-contrast', isDark: 0 } as ThemeModel,
     themes: [] as ThemeModel[],
   }),
   actions: {
@@ -31,20 +30,37 @@ export const useThemeStore = defineStore('theme', {
     async getUserTheme(): Promise<GenericResponseData | undefined> {
       try {
         const axiosResponse = await api.get('/themes/getUserTheme', {
-          withCredentials: false,
+          withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
         const themeData: ThemeModel = {
           id: responseData.data.id,
           label: responseData.data.label,
           value: responseData.data.value,
-          mode: responseData.data.isDark === 0 ? 'light' : 'dark',
+          isDark: responseData.data.isDark,
         }
         // Reload categories after creating a new paperwork
         this.$patch({
           selectedTheme: themeData,
         });
         return responseData;
+      } catch (error: any) {
+        handleError(error);
+      }
+    },
+    async swtichDarkLightTheme() {
+      try {
+        // Get the current mode and find the opposite mode
+        const currentMode = this.selectedTheme.isDark;
+        const oppositeMode = currentMode === 0 ? 1 : 0;
+
+        // Find a theme with the same value but opposite mode
+        const oppositeTheme = this.themes.find((theme) =>
+          theme.value === this.selectedTheme.value &&
+          theme.isDark === oppositeMode);
+        if (oppositeTheme) {
+          await this.updateUserTheme(oppositeTheme.id);
+        }
       } catch (error: any) {
         handleError(error);
       }
@@ -60,7 +76,7 @@ export const useThemeStore = defineStore('theme', {
           id: responseData.data.id,
           label: responseData.data.label,
           value: responseData.data.value,
-          mode: responseData.data.isDark === 0 ? 'light' : 'dark',
+          isDark: responseData.data.isDark,
         }
         // Reload categories after creating a new paperwork
         this.$patch({

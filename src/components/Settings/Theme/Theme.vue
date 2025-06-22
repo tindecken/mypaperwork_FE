@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-xs-4 col-sm-3 col-md-2 col-xl-2 col-lg-2 col-xl-1">
-      <q-select dense outlined v-model="selectedTheme" :options="themeOptions" option-value="id" label="Select Theme" @update:model-value="updateUserTheme($event.id)" />
+      <q-select dense outlined :model-value="selectedTheme" :options="themeOptions" option-value="id" label="Select Theme" @update:model-value="updateUserTheme($event.id)" />
     </div>
   </div>
 </template>
@@ -9,7 +9,6 @@
 import { useTitle } from '@vueuse/core';
 import { computed } from 'vue';
 import { useThemeStore } from 'src/stores/themeStore';
-import { ThemeModel } from 'src/Models/Theme/ThemeModel';
 
 useTitle('Settings');
 
@@ -18,7 +17,6 @@ const selectedTheme = computed(() => themeStore.selectedTheme);
 const themeOptions = computed(() => themeStore.themes);
 
 function updateUserTheme(themeId: string) {
-  console.log('updateUserTheme', themeId);
   themeStore.updateUserTheme(themeId);
 }
 </script>

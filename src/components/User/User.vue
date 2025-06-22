@@ -13,9 +13,9 @@
             ><span><q-icon name="sym_o_settings" class="q-mr-sm" />Settings</span></q-item-section
           >
         </q-item>
-        <q-item clickable v-ripple @click="switchTheme()" class="cursor-pointer">
+        <q-item clickable v-ripple @click="toogleDarkLightTheme()" class="cursor-pointer">
           <q-item-section
-            ><span v-if="Dark.isActive"><q-icon name="sym_o_light_mode" class="q-mr-sm" />Light</span>
+            ><span v-if="themeStore.selectedTheme.isDark === 0"><q-icon name="sym_o_light_mode" class="q-mr-sm" />Light</span>
             <span v-else><q-icon name="sym_o_dark_mode" class="q-mr-sm" />Dark</span>
           </q-item-section>
         </q-item>
@@ -32,6 +32,7 @@
 <script setup lang="ts">
 import { useQuasar, Dark } from 'quasar';
 import { useUserStore } from 'stores/userStore';
+import { useThemeStore } from 'src/stores/themeStore';
 import { useRoute, useRouter } from 'vue-router';
 import ChangePasswordDialog from './Dialogs/ChangePasswordDialog.vue';
 import SetPasswordDialog from './Dialogs/SetPasswordDialog.vue';
@@ -44,6 +45,7 @@ const $router = useRouter();
 const userStore = useUserStore();
 const paperworkStore = usePaperworkStore();
 const categoryStore = useCategoryStore();
+const themeStore = useThemeStore();
 
 const $q = useQuasar();
 const logout = async () => {
@@ -85,7 +87,7 @@ const password = () => {
       });
   }
 };
-function switchTheme() {
-  // TO BE IMPLEMENTED
+function toogleDarkLightTheme() {
+  themeStore.swtichDarkLightTheme();
 }
 </script>
