@@ -1,34 +1,35 @@
 <template>
-  <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 150px !important" class="bg-grey-9">
-      <div class="row">
-        <div class="col-grow">
-          <q-bar class="bg-grey-9">
-            <span class="text-h6 text-white">Confirm Delete</span>
-            <q-space />
-            <q-btn dense flat icon="close" v-close-popup>
-              <q-tooltip style="font-size: small">Close</q-tooltip>
-            </q-btn>
-          </q-bar>
-        </div>
-      </div>
-      <div class="row q-pa-md">
+  <DialogBase 
+    ref="dialogRef" 
+    max-width="598px" 
+    min-height="150px !important" 
+    header-class="bg-grey-9"
+    content-class="bg-grey-9"
+    footer-class="bg-grey-9"
+    :has-footer="false">
+    <template v-slot:title>
+      <span class="text-h6 text-white">Confirm Delete</span>
+    </template>
+    <template v-slot:content>
+      <div class="q-pa-md">
         <span class="text-body1">Are you sure you want to delete this image ?</span>
       </div>
-      <div class="row q-pa-md justify-end">
-        <q-btn flat label="Cancel" @click="onDialogHide()"></q-btn>
-        <q-btn color="red-7" class="q-ml-sm" flat label="Delete" @click="onDelete()"></q-btn>
+      <div class="q-pa-md justify-end row">
+        <q-btn flat label="Cancel" v-close-popup class="q-mr-sm" />
+        <q-btn color="red-7" flat label="Delete" @click="onDelete()" />
       </div>
-    </q-layout>
-  </q-dialog>
+    </template>
+  </DialogBase>
 </template>
 
 <script setup lang="ts">
-import { useDialogPluginComponent } from 'quasar';
-defineEmits([...useDialogPluginComponent.emits]);
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
+import { ref } from 'vue';
+import DialogBase from 'src/components/Dialog/DialogBase.vue';
+
+defineEmits(['ok', 'hide', 'cancel']);
+const dialogRef = ref();
 
 function onDelete() {
-  onDialogOK();
+  dialogRef.value.onDialogOK();
 }
 </script>

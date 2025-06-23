@@ -1,17 +1,16 @@
 <template>
-  <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 410px !important" class="bg-grey-9">
-      <div class="row">
-        <div class="col-grow">
-          <q-bar class="bg-grey-9">
-            <span class="text-h6 text-white">Paperwork</span>
-            <q-space />
-            <q-btn dense flat icon="close" v-close-popup>
-              <q-tooltip style="font-size: small">Close</q-tooltip>
-            </q-btn>
-          </q-bar>
-        </div>
-      </div>
+  <DialogBase 
+    ref="dialogRef" 
+    max-width="598px" 
+    min-height="410px !important"
+    header-class="bg-grey-9"
+    content-class="bg-grey-9"
+    footer-class="bg-grey-9"
+    :has-footer="false">
+    <template v-slot:title>
+      <span class="text-h6 text-white">Paperwork</span>
+    </template>
+    <template v-slot:content>
       <div class="row q-pa-md">
         <q-form @submit="createPaperwork()" class="col-grow">
           <div class="row">
@@ -84,12 +83,13 @@
           </div>
         </q-form>
       </div>
-    </q-layout>
-  </q-dialog>
+    </template>
+  </DialogBase>
 </template>
 
 <script setup lang="ts">
-import { QInput, useDialogPluginComponent } from 'quasar';
+import { QInput } from 'quasar';
+import DialogBase from 'src/components/Dialog/DialogBase.vue';
 import { Ref, ref } from 'vue';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
@@ -107,8 +107,9 @@ const categories = computed(() => categoryStore.categories);
 const selectedCategory: Ref<Category> = ref(categoryStore.categories.filter((cat) => cat.name === 'Uncategorized')[0]);
 const $q = useQuasar();
 
-defineEmits([...useDialogPluginComponent.emits]);
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
+// Use standard Vue emits instead
+defineEmits(['ok', 'hide', 'cancel']);
+const dialogRef = ref();
 const note = ref('');
 const name = ref('');
 const issueAt: Ref<string | null> = ref(null);
@@ -139,7 +140,7 @@ async function createPaperwork() {
         type: 'positive',
         message: response?.message,
       });
-      onDialogOK(response?.data);
+      dialogRef.value.onDialogOK(response?.data);
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();
@@ -147,7 +148,7 @@ async function createPaperwork() {
         type: 'negative',
         message: err.message || err.title || err,
       });
-      onDialogHide();
+      dialogRef.value.onDialogHide();
     });
 }
 function checkIfDuplicateExists(arr: any[]): boolean {

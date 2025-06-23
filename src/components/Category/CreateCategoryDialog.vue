@@ -1,18 +1,16 @@
 <template>
-  <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 300px !important" class="'bg-primary'">
-      <div class="row">
-        <div class="col-grow">
-          <q-bar :class="'bg-primary'">
-            <span class="text-h6 text-white">Create Category</span>
-            <q-space />
-            <q-btn dense flat icon="close" v-close-popup>
-              <q-tooltip style="font-size: small">Close</q-tooltip>
-            </q-btn>
-          </q-bar>
-        </div>
-      </div>
-      <div class="row q-pa-md">
+  <DialogBase 
+    ref="dialogRef"
+    max-width="598px" 
+    min-height="300px !important"
+    header-class="bg-primary"
+    content-class="bg-primary"
+    :has-footer="false">
+    <template v-slot:title>
+      <span class="text-h6 text-white">Create Category</span>
+    </template>
+    <template v-slot:content>
+      <div class="q-pa-md">
         <q-form @submit="createCategory()" class="col-grow">
           <div class="row">
             <q-input class="col-grow" outlined dense v-model="name" label="Name *" :rules="[(val) => !!val || 'Name is required', (val) => val.length <= 100 || 'Maximum 100 chars']"> </q-input>
@@ -22,30 +20,31 @@
           </div>
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="q-mt-sm row justify-end">
-            <q-btn flat color="primary" type="submit" label="Create" />
-            <q-btn class="q-mr-sm" flat color="primary" label="Cancel" @click="onDialogHide()" />
+            <q-btn flat color="primary" type="submit" label="Create" class="q-ml-sm" />
+            <q-btn flat color="primary" label="Cancel" v-close-popup />
           </div>
         </q-form>
       </div>
-    </q-layout>
-  </q-dialog>
+    </template>
+  </DialogBase>
 </template>
 
 <script setup lang="ts">
-import { QInput, useDialogPluginComponent } from 'quasar';
+import { QInput } from 'quasar';
 import { ref } from 'vue';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { useUserStore } from 'src/stores/userStore';
 import { useQuasar } from 'quasar';
 import { CreateCategoryRequestModel } from 'src/Models/Category/CreateCategoryRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
+import DialogBase from 'src/components/Dialog/DialogBase.vue';
 
 const categoryStore = useCategoryStore();
 const userStore = useUserStore();
 const $q = useQuasar();
 
-defineEmits([...useDialogPluginComponent.emits]);
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
+defineEmits(['ok', 'hide', 'cancel']);
+const dialogRef = ref();
 const note = ref('');
 const name = ref('');
 async function createCategory() {
@@ -67,7 +66,7 @@ async function createCategory() {
         message: 'Category created successfully!',
       });
       await categoryStore.getCategories();
-      onDialogOK();
+      dialogRef.value.onDialogOK();
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();
