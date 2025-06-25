@@ -1,15 +1,6 @@
 <template>
-  <DialogBase 
-    ref="dialogRef" 
-    max-width="598px" 
-    min-height="410px !important"
-    header-class="bg-grey-9"
-    content-class="bg-grey-9"
-    footer-class="bg-grey-9"
-    :has-footer="false">
-    <template v-slot:title>
-      <span class="text-h6 text-white">Paperwork</span>
-    </template>
+  <DialogBase ref="dialogRef" max-width="598px" min-height="590px !important" max-height="625px !important" :hasFooter="false">
+    <template v-slot:title>Create Paperwork</template>
     <template v-slot:content>
       <div class="row q-pa-md">
         <q-form @submit="createPaperwork()" class="col-grow">

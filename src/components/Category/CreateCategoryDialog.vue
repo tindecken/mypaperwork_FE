@@ -1,11 +1,5 @@
 <template>
-  <DialogBase 
-    ref="dialogRef"
-    max-width="598px" 
-    min-height="300px !important"
-    header-class="bg-primary"
-    content-class="bg-primary"
-    :has-footer="false">
+  <DialogBase ref="dialogRef" max-width="598px" min-height="300px !important" max-height="360px !important" :has-footer="false">
     <template v-slot:title>
       <span class="text-h6 text-white">Create Category</span>
     </template>

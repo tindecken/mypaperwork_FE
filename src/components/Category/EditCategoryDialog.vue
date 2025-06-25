@@ -1,17 +1,9 @@
 <template>
-  <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 300px !important" class="bg-primary">
-      <div class="row">
-        <div class="col-grow">
-          <q-bar :class="'bg-primary'">
-            <span class="text-h6 text-white">Edit Category</span>
-            <q-space />
-            <q-btn dense flat icon="close" v-close-popup>
-              <q-tooltip style="font-size: small">Close</q-tooltip>
-            </q-btn>
-          </q-bar>
-        </div>
-      </div>
+  <DialogBase ref="dialogRef" max-width="598px" min-height="300px !important" max-height="360px !important" :has-footer="false">
+    <template v-slot:title>
+      <span class="text-h6 text-white">Edit Category</span>
+    </template>
+    <template v-slot:content>
       <div class="row q-pa-md">
         <q-form @submit="editCategory()" class="col-grow">
           <div class="row">
@@ -27,7 +19,7 @@
               <q-dialog v-model="confirmDelete" persistent>
                 <q-card>
                   <q-card-section class="row items-center">
-                    <q-avatar icon="delete" color="primary" text-color="white" size="2rem" /><span class="q-ml-sm text-h6">Confirm deleting</span>
+                    <q-avatar icon="delete" color="primary" text-color="white" size="2rem" /><span class="q-ml-sm text-h6">Confirm Deleting</span>
                     <span class="q-ml-sm q-mt-md">Are you sure to delete this category? It will delete all the paperworks associated with this category.</span>
                   </q-card-section>
                   <q-card-actions align="right">
@@ -39,18 +31,19 @@
             </div>
             <div class="row justify-end">
               <q-btn flat type="submit" label="Edit" />
-              <q-btn class="q-mr-sm" flat label="Cancel" @click="onDialogHide()" />
+              <q-btn class="q-mr-sm" flat label="Cancel" @click="onCancel()" />
             </div>
           </div>
         </q-form>
       </div>
-    </q-layout>
-  </q-dialog>
+    </template>
+  </DialogBase>
 </template>
 
 <script setup lang="ts">
-import { QInput, useDialogPluginComponent } from 'quasar';
-import { ref } from 'vue';
+import { QInput } from 'quasar';
+import DialogBase from 'src/components/Dialog/DialogBase.vue';
+import { ref, ComponentPublicInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { useUserStore } from 'src/stores/userStore';
@@ -66,8 +59,8 @@ const $q = useQuasar();
 const router = useRouter();
 
 const props = defineProps<{ category: Category }>();
-defineEmits([...useDialogPluginComponent.emits]);
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
+defineEmits(['ok', 'hide']);
+const dialogRef = ref<(ComponentPublicInstance & { onDialogCancel: () => void; onDialogOK: () => void }) | null>(null);
 const note = ref(props.category.note);
 const name = ref(props.category.name);
 const confirmDelete = ref(false);
@@ -91,7 +84,7 @@ async function editCategory() {
         message: 'Edit category successfully!',
       });
       await categoryStore.getCategories();
-      onDialogOK();
+      dialogRef.value?.onDialogOK();
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();
@@ -118,7 +111,7 @@ async function onDeleteCategory() {
     // route to home page
     router.push('/');
     await categoryStore.getCategories();
-    onDialogOK();
+    dialogRef.value?.onDialogOK();
   } catch (err: any) {
     $q.notify({
       type: 'negative',
@@ -127,5 +120,9 @@ async function onDeleteCategory() {
   } finally {
     $q.loading.hide();
   }
+}
+function onCancel() {
+  console.log('onCancel');
+  dialogRef.value?.onDialogCancel();
 }
 </script>

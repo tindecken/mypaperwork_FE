@@ -10,6 +10,7 @@
         border: themeStore && `1px solid ${themeStore.selectedTheme.isDark === 1 ? '#ccc' : '#333'}`,
       }"
       container
+      :class="{ 'bg-light-green-1': !isDark }"
     >
       <!-- Header -->
       <q-header reveal class="row justify-between" :class="headerClass || 'bg-primary'">
@@ -17,7 +18,7 @@
           <!-- Title slot -->
           <slot name="title">Dialog Title</slot>
         </div>
-        <q-btn class="self-center" dense flat icon="close" @click="onDialogHide">
+        <q-btn class="self-center" dense flat icon="close" @click="onDialogCancel()">
           <q-tooltip style="font-size: small">Close</q-tooltip>
         </q-btn>
       </q-header>
@@ -27,9 +28,8 @@
         <!-- Content slot -->
         <slot name="content"></slot>
       </q-page-container>
-
       <!-- Footer -->
-      <q-footer v-if="hasFooter" reveal class="q-pa-sm" :class="footerClass">
+      <footer v-if="hasFooter" reveal class="q-pa-sm" :class="footerClass">
         <div class="row justify-end q-mt-sm">
           <!-- Actions slot -->
           <slot name="actions">
@@ -37,7 +37,7 @@
             <q-btn outline label="OK" @click="onDialogOK()" :disable="okDisabled" />
           </slot>
         </div>
-      </q-footer>
+      </footer>
     </q-layout>
   </q-dialog>
 </template>
@@ -46,6 +46,8 @@
 import { useDialogPluginComponent } from 'quasar';
 import { useThemeStore } from '../../stores/themeStore';
 import { computed } from 'vue';
+
+const isDark = computed(() => useThemeStore().selectedTheme.isDark === 1);
 
 // Define props
 const props = defineProps({
