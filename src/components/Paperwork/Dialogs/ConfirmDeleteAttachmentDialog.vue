@@ -1,12 +1,5 @@
 <template>
-  <DialogBase 
-    ref="dialogRef" 
-    max-width="598px" 
-    min-height="150px !important" 
-    header-class="bg-grey-9"
-    content-class="bg-grey-9"
-    footer-class="bg-grey-9"
-    :has-footer="false">
+  <DialogBase ref="dialogRef" max-height="180px" max-width="598px" min-height="150px !important" :has-footer="false">
     <template v-slot:title>
       <span class="text-h6 text-white">Confirm Delete</span>
     </template>
