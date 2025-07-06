@@ -1,12 +1,5 @@
 <template>
-  <DialogBase 
-    ref="dialogRef"
-    max-height="340px" 
-    min-height="100px !important" 
-    min-width="300px"
-    header-class="bg-primary"
-    content-class="bg-primary"
-    :ok-disabled="!isFormValid">
+  <DialogBase ref="dialogRef" max-height="260px" min-height="260px !important" min-width="300px" :has-footer="true" :ok-disabled="!isFormValid">
     <template v-slot:title>Set Password</template>
     <template v-slot:content>
       <q-form autofocus @submit="setPassword" @validation-success="isFormValid = true" @validation-error="isFormValid = false" ref="form" class="q-mt-sm">
