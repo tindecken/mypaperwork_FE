@@ -34,10 +34,10 @@
         <div class="row q-mt-xs">
           <div class="col-12">
             <div v-for="(field, index) in customFields" :key="index" class="row q-col-gutter-md q-mb-sm">
-              <div class="col-5 col-xl-2">
+              <div class="col-5 col-xl-2 col-lg-3">
                 <q-input outlined v-model="field.key" label="Name" dense :rules="[(val) => val.length <= 100 || 'Maximum 100 characters']" class="full-width" />
               </div>
-              <div class="col-5 col-xl-3">
+              <div class="col-5 col-xl-3 col-lg-4">
                 <q-input outlined v-model="field.value" label="Value" dense :rules="[(val) => val.length <= 256 || 'Maximum 256 characters']" class="full-width" />
               </div>
               <div class="col-2 items-start pt-3">
@@ -126,7 +126,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted, computed } from 'vue';
+import { ref, Ref, onMounted } from 'vue';
 import { QInput, useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';

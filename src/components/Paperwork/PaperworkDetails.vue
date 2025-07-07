@@ -22,10 +22,10 @@
     <div class="row q-col-gutter-md q-mt-xs" v-if="customFields && customFields.length > 0">
       <div v-for="(field, index) in customFields" :key="index" class="col-12 q-mb-sm">
         <div class="row q-col-gutter-md">
-          <div class="col-6">
+          <div class="col-6 col-xl-2 col-lg-3">
             <q-input readonly outlined dense v-model="field.key" label="Name" />
           </div>
-          <div class="col-6">
+          <div class="col-6 col-xl-3 col-lg-4">
             <q-input readonly outlined dense v-model="field.value" label="Value" />
           </div>
         </div>
