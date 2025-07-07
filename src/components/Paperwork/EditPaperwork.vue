@@ -43,15 +43,15 @@
               </div>
             </div>
             <div class="row q-mt-md">
-              <q-btn outline icon="add" label="Add" @click="addCustomField()" />
+              <q-btn flat icon="sym_o_add" label="Add" @click="addCustomField()" />
             </div>
           </div>
         </div>
 
         <div class="row justify-end q-mt-sm">
           <div class="col-auto">
-            <q-btn flat outline label="Save" type="submit" />
-            <q-btn flat outline class="q-ml-sm" label="Cancel" @click="cancel()" />
+            <q-btn flat icon="sym_o_save" label="Save" type="submit" />
+            <q-btn flat icon="sym_o_close" class="q-ml-sm" label="Cancel" @click="cancel()" />
           </div>
         </div>
       </q-form>
@@ -59,14 +59,14 @@
     <div class="header q-pa-md q-mt-md q-mb-md">
       <div class="row">
         <span class="row self-center title">Categories</span>
-        <q-btn flat outline class="q-ml-md" label="Update" @click="updateCategories()" />
+        <q-btn flat icon="sym_o_update" class="q-ml-md" label="Update" @click="updateCategories()" />
       </div>
       <q-chip class="row q-mt-md" outlined v-for="cat in categories" :key="cat.id" outline icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
     </div>
     <div class="header q-pa-md q-mt-md q-mb-md">
       <div class="row">
         <span class="row title"
-          >Documents
+          >Documents and Images
           <q-badge class="q-ml-xs badge" color="primary" :label="attachments.length + images.length" />
           <q-btn flat class="q-ml-md" outline icon="sym_o_attach_file_add" label="Add" @click="addDocuments()" />
         </span>
@@ -440,6 +440,7 @@ function addDocuments() {
     },
   })
     .onOk(async () => {
+      console.log('AddDocumentsDialog onOk()');
       paperworkStore
         .getPaperworksById($route.params.id as string)
         .then((response: GenericResponseData | undefined) => {

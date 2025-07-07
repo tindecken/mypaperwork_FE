@@ -1,5 +1,5 @@
 <template>
-  <DialogBase ref="dialogRef" max-width="598px" min-height="300px !important" max-height="360px !important" :has-footer="false">
+  <DialogBase ref="dialogBaseRef" max-width="598px" min-height="300px !important" max-height="360px !important" :has-footer="false">
     <template v-slot:title>
       <span class="text-h6 text-white">Edit Category</span>
     </template>
@@ -15,23 +15,25 @@
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="q-mt-sm row justify-between">
             <div>
-              <q-btn class="q-mr-sm" flat label="Delete" @click="confirmDelete = true" />
+              <q-btn icon="sym_o_delete" class="q-mr-sm" flat color="negative" @click="confirmDelete = true">
+                <q-tooltip>Delete</q-tooltip>
+              </q-btn>
               <q-dialog v-model="confirmDelete" persistent>
                 <q-card>
                   <q-card-section class="row items-center">
-                    <q-avatar icon="delete" color="primary" text-color="white" size="2rem" /><span class="q-ml-sm text-h6">Confirm Deleting</span>
+                    <q-avatar icon="sym_o_delete" color="primary" text-color="white" size="2rem" /><span class="q-ml-sm text-h6">Confirm Deleting</span>
                     <span class="q-ml-sm q-mt-md">Are you sure to delete this category? It will delete all the paperworks associated with this category.</span>
                   </q-card-section>
                   <q-card-actions align="right">
-                    <q-btn flat label="Delete" @click="onDeleteCategory()" />
+                    <q-btn flat color="negative" label="Delete" @click="onDeleteCategory()" />
                     <q-btn flat label="Cancel" v-close-popup />
                   </q-card-actions>
                 </q-card>
               </q-dialog>
             </div>
             <div class="row justify-end">
-              <q-btn flat type="submit" label="Edit" />
-              <q-btn class="q-mr-sm" flat label="Cancel" @click="onCancel()" />
+              <q-btn flat icon="sym_o_save" color="primary" type="submit" label="Save" />
+              <q-btn class="q-mr-sm" flat icon="sym_o_close" label="Cancel" @click="onCancel()" />
             </div>
           </div>
         </q-form>
@@ -43,7 +45,7 @@
 <script setup lang="ts">
 import { QInput } from 'quasar';
 import DialogBase from 'src/components/Dialog/DialogBase.vue';
-import { ref, ComponentPublicInstance } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { useUserStore } from 'src/stores/userStore';
@@ -59,8 +61,7 @@ const $q = useQuasar();
 const router = useRouter();
 
 const props = defineProps<{ category: Category }>();
-defineEmits(['ok', 'hide']);
-const dialogRef = ref<(ComponentPublicInstance & { onDialogCancel: () => void; onDialogOK: () => void }) | null>(null);
+const dialogBaseRef = ref();
 const note = ref(props.category.note);
 const name = ref(props.category.name);
 const confirmDelete = ref(false);
@@ -84,7 +85,7 @@ async function editCategory() {
         message: 'Edit category successfully!',
       });
       await categoryStore.getCategories();
-      dialogRef.value?.onDialogOK();
+      dialogBaseRef.value.onDialogOK();
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();
@@ -111,7 +112,7 @@ async function onDeleteCategory() {
     // route to home page
     router.push('/');
     await categoryStore.getCategories();
-    dialogRef.value?.onDialogOK();
+    dialogBaseRef.value.onDialogOK();
   } catch (err: any) {
     $q.notify({
       type: 'negative',
@@ -122,7 +123,6 @@ async function onDeleteCategory() {
   }
 }
 function onCancel() {
-  console.log('onCancel');
-  dialogRef.value?.onDialogCancel();
+  dialogBaseRef.value.onDialogCancel();
 }
 </script>

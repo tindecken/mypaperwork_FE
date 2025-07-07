@@ -1,18 +1,10 @@
 <template>
-  <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 150px !important" class="bg-grey-9">
-      <div class="row">
-        <div class="col-grow">
-          <q-bar class="bg-grey-9">
-            <span class="text-h6 text-white">Add Documents</span>
-            <q-space />
-            <q-btn dense flat icon="close" v-close-popup>
-              <q-tooltip style="font-size: small">Close</q-tooltip>
-            </q-btn>
-          </q-bar>
-        </div>
-      </div>
-      <div class="row q-pa-md">
+  <DialogBase ref="dialogBaseRef" max-height="300px" max-width="598px" :has-footer="true">
+    <template v-slot:title>
+      <span class="text-h6 text-white">Add Documents and Images</span>
+    </template>
+    <template v-slot:content>
+      <div class="q-pa-md">
         <q-form @submit="addDocuments()" class="col-grow">
           <div class="row q-mt-sm">
             <q-uploader
@@ -28,18 +20,17 @@
               @added="onAdded($event)"
             />
           </div>
-          <div class="row justify-end q-mt-sm">
-            <q-btn flat label="Cancel" @click="onDialogHide()"></q-btn>
-            <q-btn color="red-7" class="q-ml-sm" flat label="Add" type="submit"></q-btn>
-          </div>
         </q-form>
       </div>
-    </q-layout>
-  </q-dialog>
+    </template>
+    <template v-slot:actions>
+      <q-btn flat label="Cancel" v-close-popup class="q-mr-sm" />
+      <q-btn color="primary" class="q-ml-sm" flat label="Add" @click="addDocuments()"></q-btn>
+    </template>
+  </DialogBase>
 </template>
 
 <script setup lang="ts">
-import { useDialogPluginComponent } from 'quasar';
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
@@ -47,8 +38,9 @@ import { useDocumentStore } from 'stores/documentStore';
 import { UploadDocumentsRequestModel } from 'src/Models/Document/UploadDocumentsequestModel';
 import heic2any from 'heic2any';
 import { IMAGE_FILE_TYPE } from 'src/constants/imageType';
-defineEmits([...useDialogPluginComponent.emits]);
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
+import DialogBase from 'src/components/Dialog/DialogBase.vue';
+
+const dialogBaseRef = ref();
 const $q = useQuasar();
 const documentStore = useDocumentStore();
 const uploader = ref();
@@ -97,7 +89,7 @@ async function addDocuments() {
         type: 'positive',
         message: 'Add document(s) successfully.',
       });
-      onDialogOK();
+      dialogBaseRef.value.onDialogOK();
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();
@@ -105,7 +97,7 @@ async function addDocuments() {
         type: 'negative',
         message: err.message || err.title || err,
       });
-      onDialogHide();
+      dialogBaseRef.value.onDialogHide();
     });
 }
 async function onAdded(files: any) {

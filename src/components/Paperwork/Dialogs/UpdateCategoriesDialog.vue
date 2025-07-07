@@ -1,35 +1,26 @@
 <template>
-  <q-dialog ref="dialogRef" @hide="onDialogHide" persistent>
-    <q-layout style="max-width: 598px; min-height: 150px !important" class="bg-grey-9">
-      <div class="row">
-        <div class="col-grow">
-          <q-bar class="bg-grey-9">
-            <span class="text-h6 text-white">Update Categories</span>
-            <q-space />
-            <q-btn dense flat icon="close" v-close-popup>
-              <q-tooltip style="font-size: small">Close</q-tooltip>
-            </q-btn>
-          </q-bar>
-        </div>
-      </div>
-      <div class="row q-pa-md">
-        <q-form @submit="updateCategories()" class="col-grow">
+  <DialogBase ref="dialogBaseRef" max-height="300px" max-width="598px" :has-footer="true">
+    <template v-slot:title>
+      <span class="text-h6 text-white">Update Categories</span>
+    </template>
+    <template v-slot:content>
+      <div class="q-pa-md">
+        <q-form style="max-height: 150px; overflow-y: auto">
           <div class="row">Select categories to update:</div>
           <div class="row q-mt-sm">
             <q-option-group option-label="name" option-value="id" :options="categoriesOptions" type="checkbox" v-model="selectedCategories" />
           </div>
-          <div class="row justify-end">
-            <q-btn flat label="Cancel" @click="onDialogHide()"></q-btn>
-            <q-btn color="red-7" class="q-ml-sm" flat label="Update" type="submit"></q-btn>
-          </div>
         </q-form>
       </div>
-    </q-layout>
-  </q-dialog>
+    </template>
+    <template v-slot:actions>
+      <q-btn flat label="Cancel" v-close-popup class="q-mr-sm" />
+      <q-btn color="primary" class="q-ml-sm" flat label="Update" @click="updateCategories()"></q-btn>
+    </template>
+  </DialogBase>
 </template>
 
 <script setup lang="ts">
-import { useDialogPluginComponent } from 'quasar';
 import { PropType, ref } from 'vue';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
@@ -37,6 +28,7 @@ import { useQuasar } from 'quasar';
 import { Category } from 'src/Models/Category/CategoryInterface';
 import { UpdateCategoriesRequestModel } from 'src/Models/Paperwork/UpdateCategoriesRequestModel';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
+import DialogBase from 'src/components/Dialog/DialogBase.vue';
 
 const props = defineProps({
   existingCategories: {
@@ -48,8 +40,7 @@ const props = defineProps({
     required: true,
   },
 });
-defineEmits([...useDialogPluginComponent.emits]);
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
+const dialogBaseRef = ref();
 const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
 const categoryStore = useCategoryStore();
@@ -74,7 +65,7 @@ async function updateCategories() {
         message: `${response?.message}`,
       });
       $q.loading.hide();
-      onDialogOK();
+      dialogBaseRef.value.onDialogOK();
     })
     .catch((err: GenericResponseData | any) => {
       $q.notify({

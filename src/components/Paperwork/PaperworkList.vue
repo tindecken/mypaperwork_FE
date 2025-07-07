@@ -115,6 +115,7 @@ function deletePaperwork(pw: Paperwork) {
     component: ConfirmDeletePaperworkDialog,
   })
     .onOk(async () => {
+      console.log('deletePaperwork onOk()');
       $q.loading.show();
       paperworkStore
         .deletePaperwork(pw.id)

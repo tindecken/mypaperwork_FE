@@ -15,7 +15,7 @@
           <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="q-mt-sm row justify-end">
             <q-btn flat color="primary" type="submit" label="Create" class="q-ml-sm" />
-            <q-btn flat color="primary" label="Cancel" v-close-popup />
+            <q-btn flat label="Cancel" v-close-popup />
           </div>
         </q-form>
       </div>

@@ -70,7 +70,7 @@
             />
           </div>
           <div class="row justify-end">
-            <q-btn class="q-mt-sm" outline label="Create" type="submit" style="height: 50px; width: 100px" />
+            <q-btn class="q-mt-sm" color="primary" outline icon="sym_o_add" label="Create" type="submit" style="height: 50px; width: 120px" />
           </div>
         </q-form>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <DialogBase ref="dialogRef" max-height="180px" max-width="598px" min-height="150px !important" :has-footer="false">
+  <DialogBase ref="dialogBaseRef" max-height="180px" max-width="598px" min-height="150px !important" :has-footer="false">
     <template v-slot:title>
       <span class="text-h6 text-white">Confirm Delete</span>
     </template>
@@ -9,7 +9,7 @@
       </div>
       <div class="q-pa-md justify-end row">
         <q-btn flat label="Cancel" v-close-popup class="q-mr-sm" />
-        <q-btn color="red-7" flat label="Delete" @click="onDelete()" />
+        <q-btn color="primary" flat label="Delete" @click="onDelete()" />
       </div>
     </template>
   </DialogBase>
@@ -19,10 +19,9 @@
 import { ref } from 'vue';
 import DialogBase from 'src/components/Dialog/DialogBase.vue';
 
-defineEmits(['ok', 'hide', 'cancel']);
-const dialogRef = ref();
+const dialogBaseRef = ref();
 
 function onDelete() {
-  dialogRef.value.onDialogOK();
+  dialogBaseRef.value.onDialogOK();
 }
 </script>

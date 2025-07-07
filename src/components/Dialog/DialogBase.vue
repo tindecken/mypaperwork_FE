@@ -111,7 +111,6 @@ defineEmits([...useDialogPluginComponent.emits]);
 
 // Expose the dialog methods for child components
 defineExpose({
-  dialogRef,
   onDialogHide,
   onDialogOK,
   onDialogCancel,
