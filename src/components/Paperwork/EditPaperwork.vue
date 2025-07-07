@@ -24,26 +24,25 @@
         <div class="row justify-end q-col-gutter-md q-mt-xs">
           <q-input type="textarea" autogrow outlined class="col-12" v-model="note" label="Note (max 2000 chars)" :rules="[(val) => val.length <= 2000 || 'Maximum 2000 chars']" />
         </div>
-
         <!-- Custom Fields Section -->
-        <div class="row justify-start q-mt-md">
-          <span class="col title">Custom Fields</span>
+        <div class="header q-pa-md q-mt-md q-mb-md">
+          <div class="row">
+            <span class="row self-center title">Custom Fields</span>
+            <q-btn flat icon="sym_o_add" label="Add" @click="addCustomField()" class="q-ml-md" />
+          </div>
         </div>
         <div class="row q-mt-xs">
           <div class="col-12">
             <div v-for="(field, index) in customFields" :key="index" class="row q-col-gutter-md q-mb-sm">
-              <div class="col-5">
+              <div class="col-5 col-xl-2">
                 <q-input outlined v-model="field.key" label="Name" dense :rules="[(val) => val.length <= 100 || 'Maximum 100 characters']" class="full-width" />
               </div>
-              <div class="col-5">
+              <div class="col-5 col-xl-3">
                 <q-input outlined v-model="field.value" label="Value" dense :rules="[(val) => val.length <= 256 || 'Maximum 256 characters']" class="full-width" />
               </div>
               <div class="col-2 items-start pt-3">
                 <q-btn flat round icon="sym_o_delete" @click="removeCustomField(index)" size="md" />
               </div>
-            </div>
-            <div class="row q-mt-md">
-              <q-btn flat icon="sym_o_add" label="Add" @click="addCustomField()" />
             </div>
           </div>
         </div>
@@ -110,7 +109,7 @@
               <q-menu>
                 <q-list style="min-width: 100px" dense>
                   <q-item clickable v-close-popup @click="setCover(image.id)">
-                    <q-item-section>Set Cover</q-item-section>
+                    <q-item-section>Set as cover</q-item-section>
                   </q-item>
                   <q-separator />
                   <q-item clickable v-close-popup @click="onRemoveImage(image.id)">

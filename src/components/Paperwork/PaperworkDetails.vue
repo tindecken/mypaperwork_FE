@@ -3,8 +3,8 @@
     <div class="row justify-end">
       <span class="col title">Infos</span>
       <div class="col-auto">
-        <q-btn flat label="Edit" @click="editPaperwork()" />
-        <q-btn flat class="q-ml-sm" label="Back" @click="back()" />
+        <q-btn flat icon="sym_o_edit" label="Edit" @click="editPaperwork()" />
+        <q-btn flat icon="sym_o_arrow_back" class="q-ml-sm" label="Back" @click="back()" />
       </div>
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
