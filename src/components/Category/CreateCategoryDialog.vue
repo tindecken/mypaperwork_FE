@@ -12,10 +12,9 @@
           <div class="row q-mt-md">
             <q-input type="textarea" class="col-grow" outlined dense v-model="note" label="Note (max 2000 chars)" :rules="[(val) => val.length <= 2000 || 'Maximum 2000 chars']"> </q-input>
           </div>
-          <q-separator class="row q-mt-sm" color="amber" size="1px" />
           <div class="q-mt-sm row justify-end">
-            <q-btn flat color="primary" type="submit" label="Create" class="q-ml-sm" />
-            <q-btn flat label="Cancel" v-close-popup />
+            <q-btn color="primary" flat icon="sym_o_add" type="submit" label="Create" class="q-ml-sm" />
+            <q-btn flat icon="sym_o_close" label="Cancel" v-close-popup />
           </div>
         </q-form>
       </div>

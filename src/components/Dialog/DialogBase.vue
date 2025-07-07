@@ -10,7 +10,7 @@
         border: themeStore && `1px solid ${themeStore.selectedTheme.isDark === 1 ? '#ccc' : '#333'}`,
       }"
       container
-      :class="{ 'bg-light-green-1': !isDark }"
+      :class="{ 'bg-light-green-1': !isDark, 'bg-grey-10': isDark }"
     >
       <!-- Header -->
       <q-header reveal class="row justify-between" :class="headerClass || 'bg-primary'">
