@@ -32,9 +32,9 @@
       </div>
     </div>
     <div class="row q-mt-md title">
-      <span class="self-center">Categories:</span>
-      <q-chip outlined v-for="cat in categories" :key="cat.id" outline icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
+      <span class="self-center">Categories</span>
     </div>
+    <q-chip outlined v-for="cat in categories" :key="cat.id" outline icon="event" :class="{ 'truncate-chip-labels': truncate }" class="q-mt-md"> {{ cat.name }}</q-chip>
     <span class="row q-mt-md title"
       >Attachments
       <q-badge class="q-ml-xs badge" color="primary" :label="attachments.length" />
