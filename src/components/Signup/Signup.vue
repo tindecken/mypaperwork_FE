@@ -52,7 +52,7 @@
               </q-input>
 
               <div class="row justify-center q-mt-md">
-                <q-btn type="submit" label="Sign up" :loading="loading" class="full-width" />
+                <q-btn icon="sym_o_app_registration" flat type="submit" label="Sign up" :loading="loading" class="full-width" />
               </div>
             </q-form>
           </q-card-section>

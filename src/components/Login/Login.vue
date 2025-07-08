@@ -12,12 +12,12 @@
           </q-input>
 
           <div class="text-left">
-            <a href="#/forgot-password" class="text-primary">Forgot password?</a>
+            <a href="#/forgot-password">Forgot password?</a>
           </div>
 
           <q-btn label="Continue" type="submit" outline class="full-width q-py-sm" unelevated />
 
-          <div class="text-left q-my-md">Don't have an account? <a href="#/signup" class="text-primary">Sign up</a></div>
+          <div class="text-left q-my-md">Don't have an account? <a href="#/signup">Sign up</a></div>
 
           <div class="row items-center q-my-md">
             <div class="col"><q-separator /></div>
