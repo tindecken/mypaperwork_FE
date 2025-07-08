@@ -13,8 +13,8 @@
             <q-input type="textarea" class="col-grow" outlined dense v-model="note" label="Note (max 2000 chars)" :rules="[(val) => val.length <= 2000 || 'Maximum 2000 chars']"> </q-input>
           </div>
           <div class="q-mt-sm row justify-end">
-            <q-btn color="primary" flat icon="sym_o_add" type="submit" label="Create" class="q-ml-sm" />
-            <q-btn flat icon="sym_o_close" label="Cancel" v-close-popup />
+            <q-btn flat icon="sym_o_add" type="submit" label="Create" />
+            <q-btn flat icon="sym_o_close" label="Cancel" v-close-popup class="q-ml-sm" />
           </div>
         </q-form>
       </div>

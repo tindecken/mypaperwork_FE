@@ -24,8 +24,8 @@
       </div>
     </template>
     <template v-slot:actions>
-      <q-btn flat label="Cancel" v-close-popup class="q-mr-sm" />
-      <q-btn color="primary" class="q-ml-sm" flat label="Add" @click="addDocuments()"></q-btn>
+      <q-btn icon="sym_o_add" class="q-ml-sm" flat label="Add" @click="addDocuments()"></q-btn>
+      <q-btn icon="sym_o_close" flat label="Cancel" v-close-popup class="q-mr-sm" />
     </template>
   </DialogBase>
 </template>

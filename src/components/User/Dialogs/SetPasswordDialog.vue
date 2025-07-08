@@ -31,7 +31,7 @@
     </template>
     <template v-slot:actions>
       <q-btn flat label="Cancel" v-close-popup class="q-mr-sm" />
-      <q-btn flat label="Set" :disable="!isFormValid" @click="setPassword" color="primary" />
+      <q-btn flat label="Set" :disable="!isFormValid" @click="setPassword" />
     </template>
   </DialogBase>
 </template>

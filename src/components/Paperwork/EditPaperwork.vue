@@ -66,7 +66,7 @@
       <div class="row">
         <span class="row title"
           >Documents and Images
-          <q-badge class="q-ml-xs badge" color="primary" :label="attachments.length + images.length" />
+          <q-badge class="q-ml-xs badge" :label="attachments.length + images.length" />
           <q-btn flat class="q-ml-md" outline icon="sym_o_attach_file_add" label="Add" @click="addDocuments()" />
         </span>
       </div>

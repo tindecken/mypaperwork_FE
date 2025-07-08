@@ -37,8 +37,8 @@
       </q-form>
     </template>
     <template v-slot:actions>
-      <q-btn outline label="Change" :disable="!isFormValid" @click="changePassword" class="q-mr-sm" />
-      <q-btn flat label="Cancel" v-close-popup />
+      <q-btn icon="sym_o_save" label="Change" :disable="!isFormValid" @click="changePassword" class="q-mr-sm" />
+      <q-btn icon="sym_o_close" flat label="Cancel" v-close-popup />
     </template>
   </DialogBase>
 </template>
