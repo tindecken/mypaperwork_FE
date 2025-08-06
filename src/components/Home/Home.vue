@@ -128,7 +128,11 @@ onMounted(async () => {
     });
 });
 async function goHome() {
+  $q.loading.show({
+    message: 'Getting paperworks...',
+  });
   await paperworkStore.getPaperworks();
+  $q.loading.hide();
   $router.push('/home');
 }
 const leftDrawerOpen = ref($q.platform.is.mobile ? false : true);
