@@ -43,19 +43,9 @@ const userStore = useUserStore();
 const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
 
-paperworkStore
-  .getPaperworks()
-  .then(() => {
-    $q.loading.hide();
-  })
-  .catch((err: GenericResponseData | any) => {
-    $q.loading.hide();
-    $q.notify({
-      type: 'negative',
-      message: err.message || err.title || err,
-    });
-  });
-
+$q.loading.show({
+  message: 'Getting paperworks...',
+});
 paperworkStore
   .getPaperworks()
   .then(() => {
