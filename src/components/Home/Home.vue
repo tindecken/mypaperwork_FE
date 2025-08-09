@@ -15,9 +15,6 @@
     <q-page-container>
       <router-view></router-view>
     </q-page-container>
-    <q-footer reveal bordered class="bg-primary text-white" style="height: 24px">
-      <app-footer></app-footer>
-    </q-footer>
   </q-layout>
 </template>
 
@@ -30,7 +27,6 @@ import { useUserStore } from 'src/stores/userStore';
 import { useCategoryStore } from 'src/stores/categoryStore';
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import User from 'src/components/User/User.vue';
-import AppFooter from 'src/components/AppFooter/AppFooter.vue';
 import LeftDrawer from 'src/components/LeftDrawer/LeftDrawer.vue';
 import { authClient } from 'src/utils/auth-client';
 import { UserInfoInterface } from 'src/Models/UserInfoInterface';

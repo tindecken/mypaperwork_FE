@@ -36,7 +36,7 @@
                   <span class="text-subtitle2">Custom Fields</span>
                 </div>
                 <div class="col-auto">
-                  <q-btn flat dense icon="add" label="Add custom fields" @click="addCustomField" />
+                  <q-btn flat dense icon="add" label="Add" @click="addCustomField" />
                 </div>
               </div>
               <!-- List of custom fields -->
