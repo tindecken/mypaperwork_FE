@@ -26,7 +26,7 @@
         </div>
         <!-- Custom Fields Section -->
         <div class="header q-pa-md q-mt-md q-mb-md">
-          <div class="row">
+          <div class="row" :class="$q.screen.xs ? 'justify-between' : 'justify-start'">
             <span class="row self-center title">Custom Fields</span>
             <q-btn flat icon="sym_o_add" label="Add" @click="addCustomField()" class="q-ml-md" />
           </div>
@@ -56,16 +56,16 @@
       </q-form>
     </div>
     <div class="header q-pa-md q-mt-md q-mb-md">
-      <div class="row">
+      <div class="row" :class="$q.screen.xs ? 'justify-between' : 'justify-start'">
         <span class="row self-center title">Categories</span>
         <q-btn flat icon="sym_o_update" class="q-ml-md" label="Update" @click="updateCategories()" />
       </div>
       <q-chip class="row q-mt-md" outlined v-for="cat in categories" :key="cat.id" outline icon="event" :class="{ 'truncate-chip-labels': truncate }"> {{ cat.name }}</q-chip>
     </div>
     <div class="header q-pa-md q-mt-md q-mb-md">
-      <div class="row">
+      <div class="row" :class="$q.screen.xs ? 'justify-between' : 'justify-start'">
         <span class="row title"
-          >Documents and Images
+          >Documents & Images
           <q-badge class="q-ml-xs badge" :label="attachments.length + images.length" />
           <q-btn flat class="q-ml-md" outline icon="sym_o_attach_file_add" label="Add" @click="addDocuments()" />
         </span>
