@@ -43,31 +43,6 @@ const userStore = useUserStore();
 const $q = useQuasar();
 const paperworkStore = usePaperworkStore();
 
-paperworkStore
-  .getPaperworks()
-  .then(() => {
-    $q.loading.hide();
-  })
-  .catch((err: GenericResponseData | any) => {
-    $q.loading.hide();
-    $q.notify({
-      type: 'negative',
-      message: err.message || err.title || err,
-    });
-  });
-
-paperworkStore
-  .getPaperworks()
-  .then(() => {
-    $q.loading.hide();
-  })
-  .catch((err: GenericResponseData | any) => {
-    $q.loading.hide();
-    $q.notify({
-      type: 'negative',
-      message: err.message || err.title || err,
-    });
-  });
 onBeforeMount(() => {
   themeStore.getThemes();
 });
@@ -92,6 +67,22 @@ onMounted(async () => {
       userStore.$patch({
         userInfo: userInfo,
       });
+
+      $q.loading.show({
+        message: 'Getting paperworks...',
+      });
+      paperworkStore
+        .getPaperworks()
+        .then(() => {
+          $q.loading.hide();
+        })
+        .catch((err: GenericResponseData | any) => {
+          $q.loading.hide();
+          $q.notify({
+            type: 'negative',
+            message: err.message || err.title || err,
+          });
+        });
     }
   } catch (error: any) {
     $q.loading.hide();
