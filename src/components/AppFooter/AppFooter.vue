@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-between">
-    <div class="col">{{ $q.screen.name }} - {{ $q.screen.sizes }}</div>
+    <div class="col"></div>
   </div>
 </template>
 <script setup lang="ts">
