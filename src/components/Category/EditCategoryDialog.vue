@@ -13,8 +13,8 @@
             <q-input type="textarea" class="col-grow" outlined dense v-model="note" label="Note (max 2000 chars)" :rules="[(val) => val.length <= 2000 || 'Maximum 2000 chars']"> </q-input>
           </div>
           <div class="q-mt-sm row justify-between">
-            <div>
-              <q-btn icon="sym_o_delete" class="q-mr-sm" flat @click="confirmDelete = true">
+            <div class="col-xs-1">
+              <q-btn icon="sym_o_delete" class="q-mr-sm q-pa-none" flat @click="confirmDelete = true">
                 <q-tooltip>Delete</q-tooltip>
               </q-btn>
               <q-dialog v-model="confirmDelete" persistent>
@@ -32,7 +32,7 @@
             </div>
             <div class="row justify-end">
               <q-btn flat icon="sym_o_save" type="submit" label="Save" />
-              <q-btn class="q-mr-sm" flat icon="sym_o_close" label="Cancel" @click="onCancel()" />
+              <q-btn class="q-ml-sm" flat icon="sym_o_close" label="Cancel" @click="onCancel()" />
             </div>
           </div>
         </q-form>
