@@ -34,28 +34,33 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { authClient } from 'src/utils/auth-client';
 import { useQuasar } from 'quasar';
+import { useUserStore } from 'src/stores/userStore';
+import { GenericResponseData } from 'src/Models/GenericResponseData';
+
+const userStore = useUserStore();
 const $q = useQuasar();
 const email = ref('');
 async function onSubmit() {
-  const { error } = await authClient.requestPasswordReset({
-    email: email.value,
-    redirectTo: process.env.BASEURL + '/#/reset-password',
+  $q.loading.show({
+    message: 'Requesting ...',
   });
-
-  if (error) {
-    $q.notify({
-      type: 'negative',
-      message: typeof error === 'string' ? error : error.message || 'An error occurred',
+  userStore
+    .forgotPassword(email.value)
+    .then((response: GenericResponseData | undefined) => {
+      console.log('response', response);
+      $q.loading.hide();
+      $q.notify({
+        type: 'positive',
+        message: response?.message,
+      });
+    })
+    .catch((err: GenericResponseData | any) => {
+      $q.loading.hide();
+      $q.notify({
+        type: 'negative',
+        message: err.message || err.title || err,
+      });
     });
-    return;
-  } else {
-    $q.notify({
-      position: 'top',
-      type: 'positive',
-      message: 'Password reset email sent. Please check your inbox.',
-    });
-  }
 }
 </script>

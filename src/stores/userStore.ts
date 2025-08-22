@@ -134,6 +134,18 @@ export const useUserStore = defineStore('user', {
         handleError(error);
       }
     },
+    async forgotPassword(email: string): Promise<GenericResponseData | undefined> {
+      try {
+        const axiosResponse = await api.post('/users/forgotPassword', {
+          email: email,
+          withCredentials: true,
+        });
+        const responseData = (await axiosResponse.data) as GenericResponseData;
+        return responseData;
+      } catch (error: any) {
+        handleError(error);
+      }
+    },
     async changePassword(model: ChangePasswordRequestModel) {
       try {
         await authClient.changePassword({
