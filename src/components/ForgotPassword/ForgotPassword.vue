@@ -26,6 +26,7 @@
             </q-input>
             <q-btn icon="sym_o_send" label="Send" type="submit" outline class="full-width q-py-sm" unelevated> </q-btn>
           </q-form>
+          <p v-if="responseMessage" class="text-secondary text-subtitle1 q-mt-md">{{ responseMessage }}</p>
         </div>
       </q-page>
     </q-page-container>
@@ -41,7 +42,9 @@ import { GenericResponseData } from 'src/Models/GenericResponseData';
 const userStore = useUserStore();
 const $q = useQuasar();
 const email = ref('');
+const responseMessage = ref('');
 async function onSubmit() {
+  responseMessage.value = '';
   $q.loading.show({
     message: 'Requesting ...',
   });
@@ -50,17 +53,21 @@ async function onSubmit() {
     .then((response: GenericResponseData | undefined) => {
       console.log('response', response);
       $q.loading.hide();
-      $q.notify({
-        type: 'positive',
-        message: response?.message,
-      });
+      const message = 'A password reset email has been sent to your email address, please follow the instructions in the email to reset your password.';
+      // $q.notify({
+      //   type: 'positive',
+      //   message,
+      // });
+      responseMessage.value = message;
     })
     .catch((err: GenericResponseData | any) => {
       $q.loading.hide();
+      const message = err.message ?? err.title ?? 'An error occurred while sending the password reset email.';
       $q.notify({
         type: 'negative',
-        message: err.message || err.title || err,
+        message,
       });
+      responseMessage.value = message;
     });
 }
 </script>
