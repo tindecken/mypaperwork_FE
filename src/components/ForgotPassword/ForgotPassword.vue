@@ -2,6 +2,7 @@
   <q-layout view="hHh LpR fFf" class="login-layout">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
+        <q-btn flat dense icon="sym_o_home" label="Home" to="/home" class="q-ml-md" />
         <q-toolbar-title>Forgot Password</q-toolbar-title>
       </q-toolbar>
     </q-header>

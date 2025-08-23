@@ -2,6 +2,7 @@
   <q-layout view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
+        <q-btn flat dense icon="sym_o_home" label="Home" to="/home" class="q-mr-md" />
         <q-toolbar-title>Sign up</q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -52,7 +53,7 @@
               </q-input>
 
               <div class="row justify-center q-mt-md">
-                <q-btn icon="sym_o_app_registration" flat type="submit" label="Sign up" :loading="loading" class="full-width" />
+                <q-btn icon="sym_o_app_registration" type="submit" outline label="Sign up" :loading="loading" class="full-width" />
               </div>
             </q-form>
           </q-card-section>

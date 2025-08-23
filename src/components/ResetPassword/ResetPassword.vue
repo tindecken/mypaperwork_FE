@@ -2,6 +2,7 @@
   <q-layout view="hHh LpR fFf" class="login-layout">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
+        <q-btn flat dense icon="sym_o_home" label="Home" to="/home" class="q-mr-md" />
         <q-toolbar-title>Reset Password</q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -20,6 +21,9 @@
             </q-input>
             <q-btn label="Set" type="submit" outline class="full-width q-py-sm" unelevated />
           </q-form>
+          <div class="q-mt-md" v-if="responseMessage">
+            <p class="text-secondary text-subtitle1">{{ responseMessage }}</p>
+          </div>
         </div>
       </q-page>
     </q-page-container>
@@ -33,7 +37,9 @@ import { useQuasar } from 'quasar';
 const $q = useQuasar();
 const resetPassword = ref('');
 const isPwd = ref(true);
+const responseMessage = ref('');
 async function onSubmit() {
+  responseMessage.value = '';
   // Get the hash fragment excluding the # character
   const hashFragment = window.location.hash.substring(1);
 
@@ -60,18 +66,15 @@ async function onSubmit() {
     token: token,
   });
   if (error) {
+    if (error.message === 'invalid token') {
+      responseMessage.value = 'The token is invalid or expired.';
+    } else {
+      responseMessage.value = error.message || 'An error occurred';
+    }
     console.log(error);
-    $q.notify({
-      type: 'negative',
-      message: error.message || 'An error occurred',
-    });
     return;
   } else {
-    $q.notify({
-      position: 'top',
-      type: 'positive',
-      message: 'Password reset successful. Please login.',
-    });
+    responseMessage.value = 'Password reset successful. Please login with your new password.';
   }
 }
 </script>
