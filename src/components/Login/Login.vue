@@ -2,7 +2,7 @@
   <q-layout view="hHh LpR fFf" class="login-layout">
     <q-page-container class="login-page-container">
       <div class="col-auto login-container" style="max-width: 400px; width: 100%; padding: 20px">
-        <q-form @submit="onClickLogin" @reset="onReset" class="q-gutter-y-md">
+        <q-form id="recaptcha-response" @submit="onClickLogin" @reset="onReset" class="q-gutter-y-md">
           <q-input outlined v-model="email" label="Email address" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Email is required']" />
 
           <q-input outlined v-model="password" label="Password" :type="isPwd ? 'password' : 'text'" lazy-rules :rules="[(val: string) => (val && val.length > 0) || 'Password is required']">
