@@ -9,7 +9,19 @@
     <meta name="msapplication-tap-highlight" content="no" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>" />
-
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lc762QrAAAAAKirnJl-fWoIcUQytz2ZgKFUyZ8p"></script>
+    <script>
+      function onSubmit(e) {
+        e.preventDefault();
+        grecaptcha.ready(function () {
+          grecaptcha.execute('6Lc762QrAAAAAKirnJl-fWoIcUQytz2ZgKFUyZ8p', { action: 'submit' }).then(function (token) {
+            // Add the token to your form and submit it to your backend
+            document.getElementById('recaptcha-response').value = token;
+            document.getElementById('demo-form').submit();
+          });
+        });
+      }
+    </script>
     <link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128x128.png" />
     <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png" />

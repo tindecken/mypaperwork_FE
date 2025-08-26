@@ -9,7 +9,7 @@
     <q-page-container>
       <q-page padding class="row justify-center">
         <div class="col-auto" style="max-width: 400px; width: 100%; padding: 20px">
-          <q-form @submit="onSubmit" class="q-gutter-y-md">
+          <q-form id="recaptcha-response" @submit="onSubmit" class="q-gutter-y-md">
             <p class="text-subtitle1 q-mb-md">Enter your email address and click Send to receive a password reset link.</p>
             <q-input
               outlined
