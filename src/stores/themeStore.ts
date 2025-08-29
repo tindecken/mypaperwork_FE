@@ -33,6 +33,7 @@ export const useThemeStore = defineStore('theme', {
           withCredentials: true,
         });
         const responseData = (await axiosResponse.data) as GenericResponseData;
+        if (!responseData.data) return undefined;
         const themeData: ThemeModel = {
           id: responseData.data.id,
           label: responseData.data.label,
