@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh LpR fFf">
-    <q-header bordered class="bg-primary text-white">
+    <q-header bordered class="bg-primary text-white safe-area-top safe-area-inset-top">
       <q-toolbar style="height: 24px">
         <q-btn dense flat round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" />
         <q-toolbar-title>
@@ -124,4 +124,9 @@ async function goHome() {
 }
 const leftDrawerOpen = ref($q.platform.is.mobile ? false : true);
 </script>
-<style lang="sass" scoped></style>
+<style lang="scss">
+// for your app's header
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+}
+</style>

@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh LpR fFf" class="login-layout">
-    <q-header elevated class="bg-primary text-white">
+    <q-header elevated class="bg-primary text-white safe-area-top">
       <q-toolbar>
         <q-btn flat dense icon="sym_o_home" label="Home" to="/home" class="q-ml-md" />
         <q-toolbar-title>Forgot Password</q-toolbar-title>
@@ -72,3 +72,10 @@ async function onSubmit() {
     });
 }
 </script>
+
+<style lang="sass">
+// for your app's header
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+}
+</style>

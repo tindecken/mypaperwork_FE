@@ -127,7 +127,7 @@
 
 <script setup lang="ts">
 import { ref, Ref, onMounted } from 'vue';
-import { QInput, useQuasar } from 'quasar';
+import { QInput, useQuasar, QTableColumn } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useDocumentStore } from 'src/stores/documentStore';
@@ -167,7 +167,7 @@ const images: Ref<ImageInterface[]> = ref([]);
 const imagesUrls: Ref<string[]> = ref([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
 const issueAt = ref(paperwork.value?.issuedAt.toString());
-const columns = [
+const columns: QTableColumn[] = [
   {
     name: 'fileName',
     required: true,
@@ -177,7 +177,7 @@ const columns = [
     sortable: true,
   },
   { name: 'fileSize', align: 'right', label: 'Size', field: 'fileSize', sortable: true, format: (val: number) => `${prettyBytes(val)}`, style: 'width: 50px' },
-  { name: 'actions', label: 'Actions', align: 'left' },
+  { name: 'actions', label: 'Actions', align: 'left', field: 'actions' },
 ];
 onMounted(() => {
   $q.loading.show({

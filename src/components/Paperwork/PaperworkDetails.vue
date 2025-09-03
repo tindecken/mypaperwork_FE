@@ -85,7 +85,7 @@
 
 <script setup lang="ts">
 import { ref, Ref, onMounted, computed, watch } from 'vue';
-import { useQuasar } from 'quasar';
+import { useQuasar, QTableColumn } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { usePaperworkStore } from 'src/stores/paperworkStore';
 import { useDocumentStore } from 'src/stores/documentStore';
@@ -116,7 +116,7 @@ const customFields = ref<Array<{ key: string; value: string }>>([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
 const issueAt = ref(paperwork.value?.issuedAt.toString());
 const truncate = ref(true);
-const columns = [
+const columns: QTableColumn[] = [
   {
     name: 'fileName',
     required: true,
@@ -126,7 +126,7 @@ const columns = [
     sortable: true,
   },
   { name: 'fileSize', align: 'right' as const, label: 'Size', field: 'fileSize', sortable: true, format: (val: number) => `${prettyBytes(val)}`, style: 'width: 50px' },
-  { name: 'actions', label: 'Actions', field: 'actions', align: 'left' as const },
+  { name: 'actions', label: 'Actions', field: 'actions', align: 'left' },
 ];
 // watch works directly on a ref
 const paperworkId = computed(() => $route.params.id as string);

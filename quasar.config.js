@@ -11,7 +11,7 @@
 const { configure } = require('quasar/wrappers');
 const path = require('path');
 require('dotenv').config();
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
   return {
     eslint: {
       // fix: true,
@@ -99,8 +99,8 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
-      port: 1000,
-      https: false,
+      port: ctx.mode.spa ? 1000 : ctx.mode.pwa ? 9000 : 9090,
+      https: true,
       open: false, // opens browser window automatically
     },
 
@@ -122,6 +122,9 @@ module.exports = configure(function (/* ctx */) {
         loadingBar: {
           color: 'secondary',
           size: '3px',
+        },
+        capacitor: {
+          iosStatusBarPadding: true,
         },
       },
 
