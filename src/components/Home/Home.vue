@@ -124,9 +124,3 @@ async function goHome() {
 }
 const leftDrawerOpen = ref($q.platform.is.mobile ? false : true);
 </script>
-<style lang="scss">
-// for your app's header
-:root {
-  --safe-area-inset-top: env(safe-area-inset-top, 0px);
-}
-</style>
