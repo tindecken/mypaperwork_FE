@@ -8,6 +8,12 @@
       </div>
     </div>
     <div class="row justify-end q-col-gutter-md q-mt-xs">
+      <span class="text-italic">Created: {{ createdAt }}</span>
+    </div>
+    <div class="row justify-end q-col-gutter-md">
+      <span class="text-italic">Updated: {{ updatedAt }}</span>
+    </div>
+    <div class="row justify-end q-col-gutter-md q-mt-xs">
       <q-input readonly outlined class="col-6" v-model="name" label="Name *" />
       <q-input readonly outlined class="col-6" v-model="issueAt" label="Issue At" />
     </div>
@@ -114,6 +120,7 @@ const images: Ref<ImageInterface[]> = ref([]);
 const imagesUrls: Ref<string[]> = ref([]);
 const customFields = ref<Array<{ key: string; value: string }>>([]);
 const createdAt = ref(paperwork.value?.createdAt.toString());
+const updatedAt = ref(paperwork.value?.updatedAt.toString());
 const issueAt = ref(paperwork.value?.issuedAt.toString());
 const truncate = ref(true);
 const columns: QTableColumn[] = [
@@ -137,6 +144,7 @@ const processPaperworkData = (response: GenericResponseData | undefined) => {
   name.value = paperwork.value?.name;
   note.value = paperwork.value?.note || '';
   createdAt.value = paperwork.value?.createdAt?.toString();
+  updatedAt.value = paperwork.value?.updatedAt?.toString();
   issueAt.value = paperwork.value?.issuedAt?.toString();
   categories.value = paperwork.value?.categories;
   attachments.value = paperwork.value?.attachments || [];
