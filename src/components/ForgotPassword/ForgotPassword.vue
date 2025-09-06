@@ -73,9 +73,4 @@ async function onSubmit() {
 }
 </script>
 
-<style lang="sass">
-// for your app's header
-:root {
-  --safe-area-inset-top: env(safe-area-inset-top, 0px);
-}
-</style>
+<style lang="sass"></style>
