@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh LpR fFf">
-    <q-header bordered class="bg-primary text-white safe-area-top safe-area-inset-top">
+    <q-header bordered class="bg-primary text-white safe-areas">
       <q-toolbar style="height: 24px">
         <q-btn dense flat round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" />
         <q-toolbar-title>
@@ -9,8 +9,8 @@
         <user></user>
       </q-toolbar>
     </q-header>
-    <q-drawer v-model="leftDrawerOpen" side="left" bordered :width="250">
-      <left-drawer></left-drawer>
+    <q-drawer v-model="leftDrawerOpen" side="left" bordered :width="250" class="safe-areas">
+      <left-drawer class="safe-areas"></left-drawer>
     </q-drawer>
     <q-page-container>
       <router-view></router-view>
@@ -124,3 +124,23 @@ async function goHome() {
 }
 const leftDrawerOpen = ref($q.platform.is.mobile ? false : true);
 </script>
+<style scoped>
+/* Apply safe-area padding to any element marked with .safe-areas.
+   We use env() directly so it works even if CSS variables are not set. */
+.safe-areas,
+.q-header.safe-areas {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+@supports (left: env(safe-area-inset-left)) {
+  .safe-areas {
+    --safe-area-left: env(safe-area-inset-left);
+    --safe-area-right: env(safe-area-inset-right);
+    --safe-area-top: env(safe-area-inset-top);
+    --safe-area-bottom: env(safe-area-inset-bottom);
+  }
+}
+</style>

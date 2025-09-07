@@ -46,6 +46,9 @@ import { AuthenticateRequestModel } from 'src/Models/Authentication/Authenticate
 import { GenericResponseData } from 'src/Models/GenericResponseData';
 import { authClient } from 'src/utils/auth-client';
 
+// Detect Capacitor at runtime without importing types to avoid dependency issues
+const isNative = (window as any)?.Capacitor?.isNativePlatform?.() === true;
+
 const $q = useQuasar();
 const $route = useRoute();
 const $router = useRouter();
@@ -58,7 +61,8 @@ const loginWithGoogle = async () => {
   await authClient.signIn.social(
     {
       provider: 'google',
-      callbackURL: process.env.BASEURL,
+      // Use custom deep link in native app, web BASEURL otherwise
+      callbackURL: isNative ? 'mypaperwork://auth/callback' : process.env.BASEURL,
     },
     {
       onSuccess: () => {

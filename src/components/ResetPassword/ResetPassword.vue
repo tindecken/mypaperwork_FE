@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh LpR fFf" class="login-layout">
-    <q-header elevated class="bg-primary text-white">
+    <q-header elevated class="bg-primary text-white safe-areas">
       <q-toolbar>
         <q-btn flat dense icon="sym_o_home" label="Home" to="/home" class="q-mr-md" />
         <q-toolbar-title>Reset Password</q-toolbar-title>
@@ -78,3 +78,23 @@ async function onSubmit() {
   }
 }
 </script>
+<style scoped>
+/* Apply safe-area padding to any element marked with .safe-areas.
+   We use env() directly so it works even if CSS variables are not set. */
+.safe-areas,
+.q-header.safe-areas {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+@supports (left: env(safe-area-inset-left)) {
+  .safe-areas {
+    --safe-area-left: env(safe-area-inset-left);
+    --safe-area-right: env(safe-area-inset-right);
+    --safe-area-top: env(safe-area-inset-top);
+    --safe-area-bottom: env(safe-area-inset-bottom);
+  }
+}
+</style>
