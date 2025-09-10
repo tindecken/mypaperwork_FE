@@ -9,8 +9,8 @@
         <user></user>
       </q-toolbar>
     </q-header>
-    <q-drawer v-model="leftDrawerOpen" side="left" bordered :width="250" class="safe-areas">
-      <left-drawer class="safe-areas"></left-drawer>
+    <q-drawer v-model="leftDrawerOpen" side="left" bordered :width="250">
+      <left-drawer></left-drawer>
     </q-drawer>
     <q-page-container>
       <router-view></router-view>
